@@ -1,0 +1,104 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Poppins:wght@300;400;500;600;700&display=swap");
+
+// --- Variables ---
+:root {
+  // Brand Colors
+  --cl-bg: #ffffff; // White background
+  --cl-text: #3c1e14; // Deep henna dark brown
+  --cl-primary: #943126; // Rich henna reddish/terracotta
+  --cl-secondary: #e6cec3; // Muted beige/henna dilute
+
+  // Typography
+  --font-heading: "Instrument Serif", serif;
+  --font-body: "Poppins", sans-serif;
+
+  // Space/Borders for Brutalist aesthetic
+  --border-thick: 3px solid var(--cl-text);
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+}
+
+// --- Reset / Global ---
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--cl-bg);
+  color: var(--cl-text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+// Typography Global
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  line-height: 1.1;
+  font-weight: normal; // Instrument Serif looks best normal
+  color: var(--cl-text);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font-body);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+// Brutalist Utilities
+.border-b {
+  border-bottom: var(--border-thick);
+}
+.border-t {
+  border-top: var(--border-thick);
+}
+.border-l {
+  border-left: var(--border-thick);
+}
+.border-r {
+  border-right: var(--border-thick);
+}
+
+.btn-primary {
+  background-color: var(--cl-primary);
+  color: var(--cl-bg);
+  padding: 1rem 2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: var(--border-thick);
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--cl-text);
+    color: var(--cl-bg);
+  }
+}
+
+.title-massive {
+  font-size: clamp(3rem, 10vw, 8rem);
+  letter-spacing: -0.02em;
+}
+
+// Layout Utils
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
