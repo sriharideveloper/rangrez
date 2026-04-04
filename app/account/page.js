@@ -1,304 +1,151 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { createClient } from "../../lib/supabase/client";
+import { signOut } from "../actions/auth";
+import { LogOut, Package, User, Settings } from "lucide-react";
 
 export default function Account() {
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState("Details");
+  const [loading, setLoading] = useState(true);
 
-  const tabs = ["Details", "Orders", "Settings"];
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (data?.user) {
+        setUser(data.user);
+        const { data: p } = await supabase.from("profiles").select("*").eq("id", data.user.id).single();
+        setProfile(p);
+        const { data: o } = await supabase.from("orders").select("*").eq("user_id", data.user.id).order("created_at", { ascending: false });
+        setOrders(o || []);
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  const tabs = [
+    { id: "Details", icon: <User size={18} /> },
+    { id: "Orders", icon: <Package size={18} /> },
+    { id: "Settings", icon: <Settings size={18} /> },
+  ];
+
+  // Mock orders for display
+  const displayOrders = orders.length > 0 ? orders : [
+    { id: "RGZ-20491", created_at: "2026-04-02", total: 1499, status: "delivered" },
+    { id: "RGZ-20388", created_at: "2026-03-15", total: 2450, status: "shipped" },
+    { id: "RGZ-19842", created_at: "2026-01-10", total: 499, status: "processing" },
+  ];
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} style={{ width: 40, height: 40, border: "var(--border-thick)", borderTopColor: "var(--cl-primary)", borderRadius: "50%" }} />
+      </div>
+    );
+  }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        backgroundColor: "var(--cl-bg)",
-        minHeight: "100vh",
-      }}
-    >
+    <div style={{ minHeight: "100vh" }}>
       {/* Header */}
-      <div
-        className="border-b"
-        style={{
-          padding: "4rem 2rem",
-          textAlign: "center",
-          backgroundColor: "var(--cl-secondary)",
-        }}
-      >
-        <h1 className="title-massive" style={{ textTransform: "uppercase" }}>
-          My Account
-        </h1>
+      <div className="border-b" style={{ padding: "3rem 2rem", textAlign: "center", background: "var(--cl-secondary)" }}>
+        <h1 className="title-massive">Account</h1>
       </div>
 
-      <div
-        className="container"
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          flex: 1,
-          width: "100%",
-          maxWidth: "1200px",
-        }}
-      >
-        {/* Sidebar Nav */}
-        <aside
-          style={{
-            flex: "0 0 250px",
-            padding: "4rem 2rem 4rem 0",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-          }}
-        >
+      <div style={{ display: "flex", flexWrap: "wrap", maxWidth: "1200px", margin: "0 auto" }}>
+        {/* Sidebar */}
+        <aside style={{ flex: "0 0 240px", padding: "2rem 1.5rem 2rem 0", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
           {tabs.map((tab) => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
               style={{
-                textAlign: "left",
-                padding: "1rem",
-                fontSize: "1.2rem",
-                textTransform: "uppercase",
-                fontWeight: activeTab === tab ? "700" : "400",
-                backgroundColor:
-                  activeTab === tab ? "var(--cl-primary)" : "transparent",
-                color: activeTab === tab ? "var(--cl-bg)" : "var(--cl-text)",
-                border: activeTab === tab ? "var(--border-thick)" : "none",
-                borderLeft:
-                  activeTab !== tab
-                    ? "3px solid transparent"
-                    : "var(--border-thick)",
-                transition: "all 0.2s",
+                textAlign: "left", padding: "0.9rem 1rem", fontSize: "1rem",
+                textTransform: "uppercase", fontWeight: activeTab === tab.id ? 700 : 400,
+                background: activeTab === tab.id ? "var(--cl-primary)" : "transparent",
+                color: activeTab === tab.id ? "var(--cl-bg)" : "var(--cl-text)",
+                border: activeTab === tab.id ? "var(--border-thick)" : "none",
+                transition: "var(--transition-snap)",
+                display: "flex", alignItems: "center", gap: "0.75rem",
               }}
             >
-              {tab}
+              {tab.icon} {tab.id}
             </button>
           ))}
-          <button
-            style={{
-              textAlign: "left",
-              padding: "1rem",
-              fontSize: "1.2rem",
-              textTransform: "uppercase",
-              marginTop: "auto",
-              opacity: 0.6,
-              textDecoration: "underline",
-              textUnderlineOffset: "4px",
-            }}
-          >
-            Log Out
-          </button>
+          <form action={signOut} style={{ marginTop: "auto" }}>
+            <button
+              type="submit"
+              style={{ textAlign: "left", padding: "0.9rem 1rem", fontSize: "1rem", textTransform: "uppercase", opacity: 0.6, display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "2rem" }}
+            >
+              <LogOut size={18} /> Log Out
+            </button>
+          </form>
         </aside>
 
-        {/* Content Area */}
-        <main
-          className="border-l"
-          style={{
-            flex: "1 1 500px",
-            padding: "4rem",
-            backgroundColor: "var(--cl-bg)",
-          }}
-        >
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <h2
-              style={{
-                fontSize: "3rem",
-                marginBottom: "3rem",
-                textTransform: "uppercase",
-              }}
-            >
-              {activeTab}
-            </h2>
+        {/* Content */}
+        <main className="border-l" style={{ flex: 1, padding: "2rem 2.5rem", minWidth: "300px" }}>
+          <motion.div key={activeTab} initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
+            <h2 className="title-section" style={{ marginBottom: "2rem" }}>{activeTab}</h2>
 
-            {/* DETAILS TAB */}
             {activeTab === "Details" && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "3rem",
-                  maxWidth: "600px",
-                }}
-              >
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: "2rem",
-                  }}
-                >
+              <div style={{ display: "flex", flexDirection: "column", gap: "2rem", maxWidth: "500px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
                   <div>
-                    <label
-                      style={{
-                        fontSize: "0.85rem",
-                        opacity: 0.7,
-                        textTransform: "uppercase",
-                        fontWeight: "600",
-                      }}
-                    >
-                      First Name
-                    </label>
-                    <p
-                      style={{
-                        fontSize: "1.2rem",
-                        fontWeight: "500",
-                        marginTop: "0.25rem",
-                      }}
-                    >
-                      Jane
+                    <p className="text-label">Name</p>
+                    <p style={{ fontSize: "1.1rem", fontWeight: 500, marginTop: "0.25rem" }}>
+                      {profile?.full_name || user?.user_metadata?.full_name || user?.user_metadata?.name || "—"}
                     </p>
                   </div>
                   <div>
-                    <label
-                      style={{
-                        fontSize: "0.85rem",
-                        opacity: 0.7,
-                        textTransform: "uppercase",
-                        fontWeight: "600",
-                      }}
-                    >
-                      Last Name
-                    </label>
-                    <p
-                      style={{
-                        fontSize: "1.2rem",
-                        fontWeight: "500",
-                        marginTop: "0.25rem",
-                      }}
-                    >
-                      Doe
+                    <p className="text-label">Role</p>
+                    <p style={{ fontSize: "1.1rem", fontWeight: 500, marginTop: "0.25rem", textTransform: "capitalize" }}>
+                      {profile?.role || "Customer"}
                     </p>
                   </div>
                 </div>
                 <div>
-                  <label
-                    style={{
-                      fontSize: "0.85rem",
-                      opacity: 0.7,
-                      textTransform: "uppercase",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Email
-                  </label>
-                  <p
-                    style={{
-                      fontSize: "1.2rem",
-                      fontWeight: "500",
-                      marginTop: "0.25rem",
-                    }}
-                  >
-                    jane.doe@example.com
-                  </p>
+                  <p className="text-label">Email</p>
+                  <p style={{ fontSize: "1.1rem", fontWeight: 500, marginTop: "0.25rem" }}>{user?.email}</p>
                 </div>
                 <div>
-                  <label
-                    style={{
-                      fontSize: "0.85rem",
-                      opacity: 0.7,
-                      textTransform: "uppercase",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Shipping Address
-                  </label>
-                  <p
-                    style={{
-                      fontSize: "1.2rem",
-                      fontWeight: "500",
-                      marginTop: "0.25rem",
-                      lineHeight: "1.5",
-                    }}
-                  >
-                    123 Malabar Street, Apt 4B
-                    <br />
-                    Brooklyn, NY 11201
+                  <p className="text-label">Member Since</p>
+                  <p style={{ fontSize: "1.1rem", fontWeight: 500, marginTop: "0.25rem" }}>
+                    {user?.created_at ? new Date(user.created_at).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" }) : "—"}
                   </p>
                 </div>
-                <button
-                  className="btn-primary"
-                  style={{ alignSelf: "flex-start", marginTop: "1rem" }}
-                >
-                  Edit Details
-                </button>
+                {profile?.role === "admin" && (
+                  <div style={{ marginTop: "1rem" }}>
+                    <a href="/admin" className="brutalist-button brutalist-button--full" style={{ textAlign: "center", textDecoration: "none" }}>
+                      Enter Admin Dashboard
+                    </a>
+                  </div>
+                )}
               </div>
             )}
 
-            {/* ORDERS TAB */}
             {activeTab === "Orders" && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "2rem",
-                }}
-              >
-                {[
-                  {
-                    id: "#20491",
-                    date: "April 2, 2026",
-                    total: "₹1499",
-                    status: "Delivered",
-                  },
-                  {
-                    id: "#20388",
-                    date: "March 15, 2026",
-                    total: "₹2450",
-                    status: "Delivered",
-                  },
-                  {
-                    id: "#19842",
-                    date: "Jan 10, 2026",
-                    total: "₹499",
-                    status: "Processing",
-                  },
-                ].map((order, idx) => (
-                  <div
-                    key={idx}
-                    className="border-t border-b border-l border-r"
-                    style={{
-                      padding: "2rem",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      backgroundColor:
-                        idx % 2 === 0 ? "var(--cl-bg)" : "var(--cl-secondary)",
-                    }}
-                  >
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {displayOrders.map((order, idx) => (
+                  <div key={idx} style={{ border: "var(--border-thick)", padding: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", background: idx % 2 === 0 ? "var(--cl-bg)" : "var(--cl-surface)" }}>
                     <div>
-                      <h3 style={{ fontSize: "1.5rem", fontWeight: "600" }}>
-                        Order {order.id}
+                      <h3 style={{ fontSize: "1.2rem", fontWeight: 600, fontFamily: "var(--font-body)" }}>
+                        Order {order.id || `#${idx + 1}`}
                       </h3>
-                      <p style={{ opacity: 0.8, marginTop: "0.5rem" }}>
-                        {order.date}
+                      <p style={{ opacity: 0.6, marginTop: "0.25rem", fontSize: "0.9rem" }}>
+                        {new Date(order.created_at).toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" })}
                       </p>
                     </div>
                     <div style={{ textAlign: "right" }}>
-                      <p style={{ fontSize: "1.5rem", fontWeight: "600" }}>
-                        {order.total}
-                      </p>
-                      <span
-                        style={{
-                          display: "inline-block",
-                          marginTop: "0.5rem",
-                          padding: "0.25rem 0.75rem",
-                          fontSize: "0.85rem",
-                          textTransform: "uppercase",
-                          backgroundColor:
-                            order.status === "Delivered"
-                              ? "var(--cl-text)"
-                              : "var(--cl-primary)",
-                          color: "var(--cl-bg)",
-                          fontWeight: "600",
-                        }}
-                      >
+                      <p style={{ fontSize: "1.3rem", fontWeight: 700 }}>₹{order.total}</p>
+                      <span style={{
+                        display: "inline-block", marginTop: "0.3rem", padding: "0.2rem 0.6rem",
+                        fontSize: "0.75rem", textTransform: "uppercase", fontWeight: 700,
+                        background: order.status === "delivered" ? "var(--cl-success)" : order.status === "shipped" ? "var(--cl-accent)" : "var(--cl-primary)",
+                        color: "var(--cl-bg)",
+                      }}>
                         {order.status}
                       </span>
                     </div>
@@ -307,109 +154,15 @@ export default function Account() {
               </div>
             )}
 
-            {/* SETTINGS TAB */}
             {activeTab === "Settings" && (
-              <div
-                style={{
-                  maxWidth: "600px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "3rem",
-                }}
-              >
+              <div style={{ maxWidth: "500px", display: "flex", flexDirection: "column", gap: "2rem" }}>
                 <div>
-                  <h3 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>
-                    Change Password
-                  </h3>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "1rem",
-                    }}
-                  >
-                    <input
-                      type="password"
-                      placeholder="Current Password"
-                      style={{
-                        padding: "1rem",
-                        fontSize: "1rem",
-                        border: "var(--border-thick)",
-                        backgroundColor: "transparent",
-                        color: "var(--cl-text)",
-                        fontFamily: "var(--font-body)",
-                      }}
-                    />
-                    <input
-                      type="password"
-                      placeholder="New Password"
-                      style={{
-                        padding: "1rem",
-                        fontSize: "1rem",
-                        border: "var(--border-thick)",
-                        backgroundColor: "transparent",
-                        color: "var(--cl-text)",
-                        fontFamily: "var(--font-body)",
-                      }}
-                    />
-                    <button
-                      className="btn-primary"
-                      style={{ alignSelf: "flex-start", marginTop: "1rem" }}
-                    >
-                      Update Password
-                    </button>
+                  <h3 style={{ fontSize: "1.3rem", marginBottom: "1rem" }}>Change Password</h3>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                    <input type="password" placeholder="New Password" className="input-field" />
+                    <input type="password" placeholder="Confirm Password" className="input-field" />
+                    <button className="brutalist-button" style={{ alignSelf: "flex-start" }}>Update</button>
                   </div>
-                </div>
-
-                <div className="border-t" style={{ paddingTop: "2rem" }}>
-                  <h3 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>
-                    Email Preferences
-                  </h3>
-                  <label
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "1rem",
-                      cursor: "pointer",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      defaultChecked
-                      style={{
-                        accentColor: "var(--cl-primary)",
-                        width: "1.2rem",
-                        height: "1.2rem",
-                        border: "var(--border-thick)",
-                      }}
-                    />
-                    <span style={{ fontSize: "1rem", fontWeight: "400" }}>
-                      Receive marketing and promotional emails
-                    </span>
-                  </label>
-                  <label
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "1rem",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      defaultChecked
-                      style={{
-                        accentColor: "var(--cl-primary)",
-                        width: "1.2rem",
-                        height: "1.2rem",
-                        border: "var(--border-thick)",
-                      }}
-                    />
-                    <span style={{ fontSize: "1rem", fontWeight: "400" }}>
-                      Receive order status updates via SMS
-                    </span>
-                  </label>
                 </div>
               </div>
             )}

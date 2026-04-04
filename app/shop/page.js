@@ -1,340 +1,171 @@
 "use client";
 
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useCartStore } from "../../store/cartStore";
-
-const products = [
-  {
-    id: 1,
-    title: "Bridal Full Hand Set",
-    price: 1499,
-    style: "Bridal",
-    status: "Best Seller",
-    image:
-      "https://images.unsplash.com/photo-1542171120-745a907fe23f?auto=format&fit=crop&q=80&w=600",
-  },
-  {
-    id: 2,
-    title: "Geometric Minimalist Strip",
-    price: 349,
-    style: "Geometric",
-    status: "New",
-    image:
-      "https://images.unsplash.com/photo-1498877546374-32b03fb164ab?auto=format&fit=crop&q=80&w=600",
-  },
-  {
-    id: 3,
-    title: "Classic Arabic Floral",
-    price: 499,
-    style: "Arabic",
-    status: "In Stock",
-    image:
-      "https://images.unsplash.com/photo-1628581691234-807d9f7831f2?auto=format&fit=crop&q=80&w=600",
-  },
-  {
-    id: 4,
-    title: "Paisley Precision",
-    price: 549,
-    style: "Paisley",
-    status: "Low Stock",
-    image:
-      "https://images.unsplash.com/photo-1542171120-745a907fe23f?auto=format&fit=crop&q=80&w=600",
-  },
-  {
-    id: 5,
-    title: "Festival Mandala",
-    price: 899,
-    style: "Festival",
-    status: "In Stock",
-    image:
-      "https://images.unsplash.com/photo-1628581691234-807d9f7831f2?auto=format&fit=crop&q=80&w=600",
-  },
-  {
-    id: 6,
-    title: "Minimalist Lines",
-    price: 299,
-    style: "Geometric",
-    status: "New",
-    image:
-      "https://images.unsplash.com/photo-1498877546374-32b03fb164ab?auto=format&fit=crop&q=80&w=600",
-  },
-];
+import { getAllProducts } from "../../lib/supabase/products";
+import SpotlightCard from "../../components/SpotlightCard";
+import ScrollFloat from "../../components/ScrollFloat";
+import { SlidersHorizontal, X } from "lucide-react";
 
 export default function Shop() {
-  const { addItem } = useCartStore();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("featured");
+  const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+    async function loadProducts() {
+      const data = await getAllProducts();
+      setProducts(data);
+      setLoading(false);
+    }
+    loadProducts();
+  }, []);
+
+  const categories = useMemo(() => {
+    const cats = new Set(products.map(p => p.category));
+    return ["all", ...Array.from(cats).filter(Boolean)];
+  }, [products]);
+
+  const filteredProducts = useMemo(() => {
+    let result = filter === "all" ? products : products.filter(p => p.category === filter);
+    
+    switch (sortBy) {
+      case "price-asc": result.sort((a, b) => a.price - b.price); break;
+      case "price-desc": result.sort((a, b) => b.price - a.price); break;
+      case "new": result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); break;
+      default: result.sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0)); break;
+    }
+    return result;
+  }, [filter, sortBy, products]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        backgroundColor: "var(--cl-bg)",
-        minHeight: "100vh",
-      }}
-    >
-      {/* Header */}
-      <div
-        className="border-b"
-        style={{
-          padding: "4rem 2rem",
-          textAlign: "center",
-          backgroundColor: "var(--cl-secondary)",
-        }}
-      >
-        <h1 className="title-massive" style={{ textTransform: "uppercase" }}>
-          Shop Stencils
-        </h1>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <div className="border-b" style={{ padding: "3rem 2rem", textAlign: "center", background: "var(--cl-surface)" }}>
+        <h1 className="title-large" style={{ marginBottom: "1rem" }}>The Collection</h1>
+        <p style={{ maxWidth: "600px", margin: "0 auto", opacity: 0.8, fontSize: "1.1rem" }}>
+          Premium henna stencils designed for modern aesthetics and effortless application.
+        </p>
       </div>
 
-      <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>
-        {/* Left Column (Filters) - Desktop: 300px, Mobile: 100% */}
-        <aside
-          className="border-r"
-          style={{
-            width: "300px",
-            flexShrink: 0,
-            padding: "2rem",
-            backgroundColor: "var(--cl-bg)",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "1.2rem",
-              fontWeight: "600",
-              marginBottom: "2rem",
-              textTransform: "uppercase",
-            }}
-          >
-            Filters
-          </h2>
-
-          <div style={{ marginBottom: "2rem" }}>
-            <h3
-              style={{
-                fontSize: "1rem",
-                fontWeight: "600",
-                marginBottom: "1rem",
-              }}
-            >
-              Design Style
-            </h3>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.5rem",
-              }}
-            >
-              {[
-                "Floral",
-                "Geometric",
-                "Paisley",
-                "Arabic",
-                "Bridal",
-                "Festival",
-              ].map((style, i) => (
-                <label
-                  key={i}
+      <div style={{ display: "flex", flex: 1, position: "relative" }}>
+        {/* Desktop Sidebar */}
+        <aside style={{ width: "260px", padding: "2rem", borderRight: "var(--border-thick)", display: "none" }} className="md:block">
+          <h3 style={{ fontSize: "1rem", fontWeight: 700, textTransform: "uppercase", marginBottom: "1.5rem" }}>Filter by Category</h3>
+          <ul style={{ display: "flex", flexDirection: "column", gap: "0.75rem", listStyle: "none", padding: 0 }}>
+            {categories.map((cat) => (
+              <li key={cat}>
+                <button
+                  onClick={() => setFilter(cat)}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    cursor: "pointer",
+                    background: "none", border: "none", textTransform: "uppercase", fontSize: "0.85rem", fontWeight: filter === cat ? 700 : 400,
+                    opacity: filter === cat ? 1 : 0.6, cursor: "pointer", transition: "var(--transition-base)", display: "flex", alignItems: "center", gap: "0.5rem",
                   }}
                 >
-                  <input
-                    type="checkbox"
-                    style={{
-                      accentColor: "var(--cl-primary)",
-                      width: "1.2rem",
-                      height: "1.2rem",
-                      border: "var(--border-thick)",
-                    }}
-                  />
-                  <span style={{ fontSize: "1rem", fontWeight: "400" }}>
-                    {style}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3
-              style={{
-                fontSize: "1rem",
-                fontWeight: "600",
-                marginBottom: "1rem",
-              }}
-            >
-              Price Range
-            </h3>
-            <input
-              type="range"
-              min="0"
-              max="2000"
-              defaultValue="1000"
-              style={{ width: "100%", accentColor: "var(--cl-primary)" }}
-            />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "0.5rem",
-                fontSize: "0.9rem",
-              }}
-            >
-              <span>₹0</span>
-              <span>₹2000+</span>
-            </div>
-          </div>
+                  <span style={{ width: "12px", height: "12px", border: "1.5px solid var(--cl-text)", background: filter === cat ? "var(--cl-text)" : "transparent" }} />
+                  {cat}
+                </button>
+              </li>
+            ))}
+          </ul>
         </aside>
 
-        {/* Right Column (Grid) */}
-        <main style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-          {/* Utility Bar */}
-          <div
-            className="border-b"
-            style={{
-              padding: "1rem 2rem",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              backgroundColor: "var(--cl-bg)",
-            }}
-          >
-            <span style={{ fontSize: "0.9rem", fontWeight: "500" }}>
-              Showing {products.length} products
-            </span>
+        {/* Mobile Filter Overlay */}
+        {showFilters && (
+          <div style={{ position: "fixed", inset: 0, background: "var(--cl-bg)", zIndex: 100, padding: "2rem", overflowY: "auto" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "2rem" }}>
+              <h3 style={{ fontSize: "1.5rem", textTransform: "uppercase" }}>Filters</h3>
+              <button onClick={() => setShowFilters(false)}><X size={24} /></button>
+            </div>
+            <ul style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              {categories.map((cat) => (
+                <li key={cat}>
+                  <button onClick={() => { setFilter(cat); setShowFilters(false); }} className="brutalist-button brutalist-button--outline" style={{ width: "100%", textAlign: "left", background: filter === cat ? "var(--cl-text)" : "transparent", color: filter === cat ? "var(--cl-bg)" : "var(--cl-text)" }}>
+                    {cat}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Main Content */}
+        <div style={{ flex: 1, padding: "2rem", display: "flex", flexDirection: "column" }}>
+          {/* Toolbar */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
+            <button className="brutalist-button brutalist-button--outline md:hidden" onClick={() => setShowFilters(true)}>
+              <SlidersHorizontal size={16} /> Filters
+            </button>
+            <span style={{ fontSize: "0.85rem", fontWeight: 600, textTransform: "uppercase" }}>{filteredProducts.length} Products</span>
             <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
               style={{
-                padding: "0.5rem 1rem",
-                border: "var(--border-thick)",
-                backgroundColor: "transparent",
-                cursor: "pointer",
+                padding: "0.5rem 1rem", border: "var(--border-thick)", background: "var(--cl-bg)", color: "var(--cl-text)",
+                fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 600, textTransform: "uppercase", cursor: "pointer", outline: "none",
               }}
             >
-              <option>Sort by: Featured</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-              <option>Newest Arrivals</option>
+              <option value="featured">Featured First</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="new">Newest Arrivals</option>
             </select>
           </div>
 
-          {/* Product Grid */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-            }}
-          >
-            {products.map((product, idx) => (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                key={product.id}
-                className="border-b border-r"
-                style={{ display: "flex", flexDirection: "column" }}
-              >
-                <div
-                  style={{
-                    position: "relative",
-                    height: "350px",
-                    overflow: "hidden",
-                    borderBottom: "var(--border-thick)",
-                    backgroundColor: "var(--cl-secondary)",
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "1rem",
-                      left: "1rem",
-                      backgroundColor: "var(--cl-bg)",
-                      padding: "0.25rem 0.75rem",
-                      fontSize: "0.8rem",
-                      fontWeight: "600",
-                      textTransform: "uppercase",
-                      border: "2px solid var(--cl-text)",
-                      zIndex: 10,
-                    }}
-                  >
-                    {product.status}
-                  </div>
-                  {/* Image Placeholder */}
-                  <motion.img
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.4 }}
-                    src={product.image}
-                    alt={product.title}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
+          {/* Grid */}
+          {loading ? (
+             <div style={{ padding: "4rem", textAlign: "center" }}>Loading catalog...</div>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.5rem" }}>
+              {filteredProducts.map((p, i) => (
+                <motion.div key={p.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} layout>
+                  <SpotlightCard>
+                    <Link href={`/shop/${p.slug}`} style={{ display: "block", textDecoration: "none" }}>
+                      <div className="product-card">
+                        <div className="product-card__image">
+                          <img src={p.image_url} alt={p.title} loading="lazy" />
+                          {p.status !== "In Stock" && (
+                            <span style={{ position: "absolute", top: "1rem", right: "1rem", background: "var(--cl-primary)", color: "var(--cl-bg)", padding: "0.3rem 0.8rem", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", zIndex: 2 }}>
+                              {p.status}
+                            </span>
+                          )}
+                        </div>
+                        <div className="product-card__body">
+                          <div>
+                            <span style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", opacity: 0.6, letterSpacing: "0.05em", display: "block" }}>
+                              {p.category}
+                            </span>
+                            <h3 className="product-card__title">{p.title}</h3>
+                          </div>
+                          <div className="product-card__price">
+                            {p.compare_at_price && <span className="product-card__price-compare">₹{p.compare_at_price}</span>}
+                            <span className="product-card__price-current">₹{p.price}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </SpotlightCard>
+                </motion.div>
+              ))}
+              {filteredProducts.length === 0 && (
+                <div style={{ gridColumn: "1/-1", textAlign: "center", padding: "4rem 0", borderTop: "var(--border-thin)", marginTop: "2rem" }}>
+                  <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>No products found</h3>
+                  <p style={{ opacity: 0.6 }}>Try adjusting your filters.</p>
+                  <button onClick={() => { setFilter("all"); setSortBy("featured"); }} className="brutalist-button" style={{ marginTop: "1.5rem" }}>
+                    Clear Filters
+                  </button>
                 </div>
-                <div
-                  style={{
-                    padding: "1.5rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    flex: 1,
-                    backgroundColor: "var(--cl-bg)",
-                  }}
-                >
-                  <h3
-                    style={{
-                      fontSize: "1.2rem",
-                      fontFamily: "var(--font-body)",
-                      fontWeight: "600",
-                      marginBottom: "0.25rem",
-                    }}
-                  >
-                    {product.title}
-                  </h3>
-                  <p
-                    style={{
-                      opacity: 0.6,
-                      fontSize: "0.9rem",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    {product.style}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "1.2rem",
-                      fontWeight: "400",
-                      marginBottom: "2rem",
-                    }}
-                  >
-                    ₹{product.price}
-                  </p>
-
-                  <div style={{ marginTop: "auto" }}>
-                    <button
-                      onClick={() =>
-                        addItem({ ...product, quantity: 1, size: "Standard" })
-                      }
-                      className="btn-primary"
-                      style={{
-                        width: "100%",
-                        padding: "1rem",
-                        fontSize: "0.9rem",
-                      }}
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </main>
+              )}
+            </div>
+          )}
+        </div>
       </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        @media (min-width: 768px) { .md\\:block { display: block !important; } .md\\:hidden { display: none !important; } }
+      `}} />
     </div>
   );
 }

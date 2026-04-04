@@ -1,185 +1,92 @@
 "use client";
 
 import { motion } from "framer-motion";
+import ScrollFloat from "../../components/ScrollFloat";
 
 export default function About() {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        backgroundColor: "var(--cl-bg)",
-        minHeight: "100vh",
-      }}
-    >
-      {/* Hero Section */}
-      <section
-        style={{
-          backgroundColor: "var(--cl-primary)",
-          color: "var(--cl-bg)",
-          padding: "8rem 2rem",
-          textAlign: "center",
-          borderBottom: "var(--border-thick)",
-        }}
-      >
-        <motion.h1
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          className="title-massive"
-          style={{ textTransform: "uppercase" }}
-        >
-          Our Story
-        </motion.h1>
+    <div style={{ minHeight: "100vh" }}>
+      {/* Hero */}
+      <section style={{ background: "var(--cl-primary)", color: "var(--cl-bg)", padding: "6rem 2rem", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], x: [0, 40, 0] }}
+          transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
+          style={{ position: "absolute", top: "10%", right: "20%", width: "400px", height: "400px", borderRadius: "50%", background: "radial-gradient(circle, rgba(212,168,83,0.2), transparent 70%)", filter: "blur(60px)" }}
+        />
+        <h1 className="title-massive" style={{ position: "relative", zIndex: 2 }}>Our Story</h1>
       </section>
 
-      {/* Main Content */}
-      <section
-        className="container"
-        style={{ padding: "6rem var(--space-lg)", maxWidth: "1000px" }}
-      >
-        <motion.div
-          initial={{ y: 40, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          style={{ marginBottom: "5rem" }}
-        >
-          <h2
-            style={{
-              fontSize: "3rem",
-              marginBottom: "2rem",
-              textTransform: "uppercase",
-            }}
-          >
-            Genesis of Artistry
-          </h2>
-          <p
-            style={{
-              fontSize: "1.4rem",
-              lineHeight: "1.8",
-              fontWeight: "300",
-              marginBottom: "1.5rem",
-            }}
-          >
-            Born from the intricate lanes of Malabar and deeply influenced by
-            Arab luxury, Rangrez Henna was founded to bridge the gap between
-            traditional heritage and modern convenience. The ritual of Mehndi
-            has always been a profoundly slow, delicate process. We sought to
-            reimagine its application for the contemporary paced world without
-            sacrificing an ounce of its majestic detail.
+      {/* Genesis */}
+      <section style={{ padding: "5rem 2rem", maxWidth: "900px", margin: "0 auto" }}>
+        <ScrollFloat>
+          <h2 className="title-section" style={{ marginBottom: "1.5rem" }}>Genesis of Artistry</h2>
+          <p style={{ fontSize: "1.2rem", lineHeight: 1.8, fontWeight: 300, marginBottom: "1rem" }}>
+            Born from the intricate lanes of Malabar and deeply influenced by Arab luxury, Rangrez Henna was
+            founded to bridge the gap between traditional heritage and modern convenience. The ritual of Mehndi
+            has always been a profoundly slow, delicate process. We sought to reimagine its application for the
+            contemporary world without sacrificing an ounce of its majestic detail.
           </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ y: 40, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <h2
-            style={{
-              fontSize: "3rem",
-              marginBottom: "2rem",
-              textTransform: "uppercase",
-              textAlign: "right",
-            }}
-          >
-            Modern Solution
-          </h2>
-          <p
-            style={{
-              fontSize: "1.4rem",
-              lineHeight: "1.8",
-              fontWeight: "300",
-              textAlign: "right",
-              marginLeft: "auto",
-              maxWidth: "800px",
-            }}
-          >
-            By utilizing high-grade, reusable adhesives and precision-cut
-            silicone materials, we have created stencils that honor the freehand
-            mastery of generational artists. It is an unhinged dedication to
-            extreme cleanliness and geometric purity, ensuring every stain left
-            behind is perfectly balanced, crisp, and inherently premium.
+        </ScrollFloat>
+        <ScrollFloat delay={0.2}>
+          <h2 className="title-section" style={{ marginBottom: "1.5rem", textAlign: "right", marginTop: "4rem" }}>Modern Solution</h2>
+          <p style={{ fontSize: "1.2rem", lineHeight: 1.8, fontWeight: 300, textAlign: "right" }}>
+            By utilizing high-grade, reusable adhesives and precision-cut silicone materials, we have created
+            stencils that honor the freehand mastery of generational artists. It is an unhinged dedication to
+            extreme cleanliness and geometric purity, ensuring every stain left behind is perfectly balanced,
+            crisp, and inherently premium.
           </p>
-        </motion.div>
+        </ScrollFloat>
       </section>
 
-      {/* Brand Image / Visual Breaker */}
-      <section
-        style={{
-          height: "60vh",
-          width: "100%",
-          backgroundColor: "var(--cl-secondary)",
-          borderTop: "var(--border-thick)",
-          borderBottom: "var(--border-thick)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
+      {/* Image Break */}
+      <section style={{ height: "50vh", background: "var(--cl-secondary)", borderTop: "var(--border-thick)", borderBottom: "var(--border-thick)", overflow: "hidden", position: "relative" }}>
         <img
           src="https://images.unsplash.com/photo-1555169062-013468b47731?auto=format&fit=crop&q=80&w=1600"
           alt="Henna Process"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center",
-            mixBlendMode: "overlay",
-            opacity: 0.6,
-          }}
+          style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.5, mixBlendMode: "multiply" }}
         />
       </section>
 
+      {/* Stats */}
+      <section style={{ padding: "4rem 2rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2rem", maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
+          {[
+            { num: "50+", label: "Unique Designs" },
+            { num: "8x", label: "Reusable" },
+            { num: "10K+", label: "Happy Customers" },
+            { num: "100%", label: "Skin Safe" },
+          ].map((stat, i) => (
+            <ScrollFloat key={i} delay={i * 0.1}>
+              <div style={{ padding: "2rem", border: "var(--border-thick)" }}>
+                <p style={{ fontSize: "3rem", fontFamily: "var(--font-heading)", lineHeight: 1 }}>{stat.num}</p>
+                <p style={{ fontSize: "0.85rem", textTransform: "uppercase", fontWeight: 600, letterSpacing: "0.08em", marginTop: "0.5rem", opacity: 0.6 }}>
+                  {stat.label}
+                </p>
+              </div>
+            </ScrollFloat>
+          ))}
+        </div>
+      </section>
+
       {/* Values */}
-      <section
-        className="container"
-        style={{
-          padding: "6rem var(--space-lg)",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "4rem",
-          justifyContent: "space-between",
-        }}
-      >
-        {[
-          {
-            title: "Precision",
-            text: "Every stencil is cut with absolute mathematical accuracy to ensure the final stain is flawless.",
-          },
-          {
-            title: "Heritage",
-            text: "Roots in centuries-old traditions, adapted for effortless modern aesthetics.",
-          },
-          {
-            title: "Sustainability",
-            text: "Built to last. Washable and reusable for up to five full sessions without losing tackiness.",
-          },
-        ].map((val, idx) => (
-          <div
-            key={idx}
-            style={{
-              flex: "1 1 300px",
-              borderTop: "var(--border-thick)",
-              paddingTop: "2rem",
-            }}
-          >
-            <h3
-              style={{
-                fontSize: "2rem",
-                marginBottom: "1rem",
-                textTransform: "uppercase",
-              }}
-            >
-              {val.title}
-            </h3>
-            <p style={{ fontSize: "1.1rem", opacity: 0.8, lineHeight: "1.6" }}>
-              {val.text}
-            </p>
-          </div>
-        ))}
+      <section style={{ padding: "4rem 2rem", maxWidth: "1000px", margin: "0 auto" }}>
+        <ScrollFloat>
+          <h2 className="title-section" style={{ marginBottom: "3rem" }}>Our Values</h2>
+        </ScrollFloat>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
+          {[
+            { title: "Precision", text: "Every stencil is cut with absolute mathematical accuracy to ensure the final stain is flawless." },
+            { title: "Heritage", text: "Roots in centuries-old traditions, adapted for effortless modern aesthetics." },
+            { title: "Sustainability", text: "Built to last. Washable and reusable for up to eight full sessions without losing tackiness." },
+          ].map((val, i) => (
+            <ScrollFloat key={i} delay={i * 0.15}>
+              <div style={{ borderTop: "var(--border-thick)", paddingTop: "1.5rem" }}>
+                <h3 style={{ fontSize: "1.8rem", marginBottom: "0.75rem" }}>{val.title}</h3>
+                <p style={{ fontSize: "1rem", opacity: 0.7, lineHeight: 1.6 }}>{val.text}</p>
+              </div>
+            </ScrollFloat>
+          ))}
+        </div>
       </section>
     </div>
   );
