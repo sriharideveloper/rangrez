@@ -8,6 +8,7 @@ import BlogDetailClient from "./BlogDetailClient";
 // Static param generation for "Buttery Smooth" pre-rendering
 export async function generateStaticParams() {
   const blogs = await getAllBlogs();
+  if (!blogs || !Array.isArray(blogs)) return [];
   return blogs.map((blog) => ({
     slug: blog.slug,
   }));

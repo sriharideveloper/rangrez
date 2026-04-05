@@ -11,6 +11,7 @@ import { notFound } from "next/navigation";
 // Static param generation for "Buttery Smooth" pre-rendering
 export async function generateStaticParams() {
   const products = await getAllProducts();
+  if (!products || !Array.isArray(products)) return [];
   return products.map((product) => ({
     slug: product.slug,
   }));
