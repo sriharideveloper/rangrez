@@ -7,8 +7,13 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image({ params }) {
-  const { slug } = await params;
-  const blog = await getBlogBySlug(slug);
+  let blog = null;
+  try {
+    const { slug } = await params;
+    blog = await getBlogBySlug(slug);
+  } catch (err) {
+    console.error("Error fetching blog for OG image:", err);
+  }
 
   if (!blog) {
     return new ImageResponse(

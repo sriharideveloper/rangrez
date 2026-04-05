@@ -7,17 +7,28 @@ import BlogDetailClient from "./BlogDetailClient";
 
 // Static param generation for "Buttery Smooth" pre-rendering
 export async function generateStaticParams() {
-  const blogs = await getAllBlogs();
-  if (!blogs || !Array.isArray(blogs)) return [];
-  return blogs.map((blog) => ({
-    slug: blog.slug,
-  }));
+  try {
+    const blogs = await getAllBlogs();
+    if (!blogs || !Array.isArray(blogs)) return [];
+    return blogs.map((blog) => ({
+      slug: blog.slug,
+    }));
+  } catch (err) {
+    console.error("Error in generateStaticParams for blogs:", err);
+    return [];
+  }
 }
 
 // SEO Dynamic Metadata
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const blog = await getBlogBySlug(slug);
+  let slug = "";
+  let blog = null;
+  try {
+    slug = (await params).slug;
+    blog = await getBlogBySlug(slug);
+  } catch (err) {
+    console.error("Error generating metadata for blog", err);
+  }
   
   if (!blog) return { title: "Blog Not Found | Rangrez" };
   
@@ -38,8 +49,14 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function BlogDetailPage({ params }) {
-  const { slug } = await params;
-  const blog = await getBlogBySlug(slug);
+  let slug = "";
+  let blog = null;
+  try {
+    slug = (await params).slug;
+    blog = await getBlogBySlug(slug);
+  } catch (err) {
+    console.error("Critical error loading blog detail page", err);
+  }
 
   if (!blog) notFound();
 
