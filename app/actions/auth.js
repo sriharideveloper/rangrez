@@ -3,12 +3,17 @@
 import { createClient as createSSRClient } from "../../lib/supabase/server";
 import { createClient as createJSClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { z } from "zod";
 
 const signUpSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  fullName: z.string().min(1, "Full name is required").optional().or(z.literal("")),
+  fullName: z
+    .string()
+    .min(1, "Full name is required")
+    .optional()
+    .or(z.literal("")),
 });
 
 const signInSchema = z.object({
@@ -19,6 +24,11 @@ const signInSchema = z.object({
 
 export async function signUp(formData) {
   const supabase = await createSSRClient();
+  const headersList = await headers();
+  const host = headersList.get("x-forwarded-host") || headersList.get("host");
+  const protocol = headersList.get("x-forwarded-proto") || "https";
+  const origin = `${protocol}://${host}`;
+
   const rawData = {
     email: formData.get("email"),
     password: formData.get("password"),
@@ -37,6 +47,7 @@ export async function signUp(formData) {
     password,
     options: {
       data: { full_name: fullName },
+      emailRedirectTo: `${origin}/auth/callback`,
     },
   });
 
@@ -74,21 +85,30 @@ export async function signIn(formData) {
   // Ensure profile is updated/exists upon login
   const { user, session } = signInData;
   if (user && session) {
-    const fullName = user.user_metadata?.full_name || user.user_metadata?.name || "";
-    const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture || "";
-    
+    const fullName =
+      user.user_metadata?.full_name || user.user_metadata?.name || "";
+    const avatarUrl =
+      user.user_metadata?.avatar_url || user.user_metadata?.picture || "";
+
     // Explicitly create an authorized client since the SSR client's req.cookies don't have the token yet
     const authClient = createJSClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      { global: { headers: { Authorization: `Bearer ${session.access_token}` } } }
+      {
+        global: {
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        },
+      },
     );
 
-    await authClient.from("profiles").upsert({
-      id: user.id,
-      full_name: fullName,
-      avatar_url: avatarUrl,
-    }, { onConflict: "id" });
+    await authClient.from("profiles").upsert(
+      {
+        id: user.id,
+        full_name: fullName,
+        avatar_url: avatarUrl,
+      },
+      { onConflict: "id" },
+    );
   }
 
   redirect(redirectTo);
@@ -96,11 +116,15 @@ export async function signIn(formData) {
 
 export async function signInWithGoogle() {
   const supabase = await createSSRClient();
+  const headersList = await headers();
+  const host = headersList.get("x-forwarded-host") || headersList.get("host");
+  const protocol = headersList.get("x-forwarded-proto") || "https";
+  const origin = `${protocol}://${host}`;
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).origin.replace('.supabase.co', '') : ''}/auth/callback`,
+      redirectTo: `${origin}/auth/callback`,
       queryParams: {
         access_type: "offline",
         prompt: "consent",
@@ -125,8 +149,10 @@ export async function signOut() {
 
 export async function getUser() {
   const supabase = await createSSRClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) return null;
 
   const { data: profile } = await supabase
