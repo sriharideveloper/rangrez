@@ -5,6 +5,8 @@ import CartDrawer from "../components/CartDrawer";
 import Footer from "../components/Footer";
 import AnnouncementBar from "../components/AnnouncementBar";
 import SmoothScroller from "../components/SmoothScroller";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const instrumentSerif = Instrument_Serif({
   weight: ["400"],
@@ -58,6 +60,8 @@ export default function RootLayout({ children }) {
           <Footer />
           <CartDrawer />
         </SmoothScroller>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
