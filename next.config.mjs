@@ -1,12 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverActions: {
-    allowedOrigins: [
-      "localhost:3000",
-      "*.app.github.dev",
-      "miniature-space-bassoon-7j7p59jg7ww3r6j4-3000.app.github.dev",
-    ],
-  },
   transpilePackages: ["lucide-react", "framer-motion"],
   images: {
     remotePatterns: [
