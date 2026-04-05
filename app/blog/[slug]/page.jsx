@@ -21,12 +21,17 @@ export async function generateMetadata({ params }) {
   if (!blog) return { title: "Blog Not Found | Rangrez" };
   
   return {
-    title: `${blog.title} | Rangrez Blog`,
-    description: blog.excerpt || "Malabar Magic, stories and DIY secrets.",
+    title: `${blog.title} | Rangrez Tea Time`,
+    description: blog.excerpt || "Grab your tea and get ready for some Malabar truth bombs, henna hacks, and unapologetic real talk.",
     openGraph: {
-      title: blog.title,
-      description: blog.excerpt,
+      title: `${blog.title} | Rangrez Tea Time`,
+      description: blog.excerpt || "Grab your tea and get ready for some Malabar truth bombs, henna hacks, and unapologetic real talk.",
       images: [`/blog/${slug}/opengraph-image`],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${blog.title} | Rangrez Truth Bombs`,
+      description: blog.excerpt || "Read and weep (joy). Because we aren't gatekeeping today.",
     }
   };
 }

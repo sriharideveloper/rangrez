@@ -60,7 +60,7 @@ export default function ProductClient({ product, related, initialReviews }) {
   }, [product?.id]);
 
   const handleAdd = () => {
-    addItem({ ...product, image: product.image_url, size: selectedSize, quantity: qty });
+    addItem({ ...product, image: product.images?.[0] || product.image_url, size: selectedSize, quantity: qty });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -87,7 +87,8 @@ export default function ProductClient({ product, related, initialReviews }) {
     setSubmittingReview(false);
   };
 
-  const gallery = (product.gallery_urls?.length > 0) ? product.gallery_urls : [product.image_url];
+  const galleryRaw = Array.isArray(product.gallery_urls) ? product.gallery_urls : (Array.isArray(product.images) ? product.images : []);
+  const gallery = [product.image_url, ...galleryRaw].filter((v, i, a) => v && a.indexOf(v) === i);
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--cl-bg)" }}>

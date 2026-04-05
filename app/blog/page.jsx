@@ -108,16 +108,6 @@ export default function BlogListingPage() {
         </div>
       </section>
 
-      {/* ═══ CTA ═══ */}
-      <section style={{ padding: "8rem 2rem", textAlign: "center", borderTop: "var(--border-thick)" }}>
-          <h2 className="title-massive" style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}>WANT THE <br /> SECRET?</h2>
-          <p style={{ marginTop: "2rem", opacity: 0.5 }}>Sign up for our newsletter to get stories first.</p>
-          <div style={{ maxWidth: "500px", margin: "3rem auto", display: "flex", border: "var(--border-thick)" }}>
-             <input type="email" placeholder="Email address" style={{ flex: 1, padding: "1.2rem", background: "transparent", border: "none" }} />
-             <button className="brutalist-button" style={{ border: "none", boxShadow: "none" }}>Join the Vault</button>
-          </div>
-      </section>
-
     </div>
   );
 }

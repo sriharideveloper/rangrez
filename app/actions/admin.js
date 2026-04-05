@@ -5,6 +5,16 @@ import { revalidatePath } from "next/cache";
 
 export async function upsertProduct(productData) {
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Unauthorized" };
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+  if (profile?.role !== "admin") return { error: "Unauthorized" };
 
   const { id, ...updates } = productData;
   let response;
@@ -30,6 +40,17 @@ export async function upsertProduct(productData) {
 
 export async function deleteProduct(productId) {
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Unauthorized" };
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+  if (profile?.role !== "admin")
+    return { success: false, error: "Unauthorized" };
 
   const { error } = await supabase
     .from("products")

@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
-export async function middleware(request) {
+export async function proxy(request) {
   let requestHeaders = new Headers(request.headers);
 
   // ── FIX: ALIGN ORIGIN WITH X-FORWARDED-HOST FOR CODESPACES ──

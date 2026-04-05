@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -70,7 +70,7 @@ export default function Home() {
                     padding: "0.6rem 1.4rem", border: "var(--border-thin)", borderRadius: "100px", 
                     background: "var(--cl-surface)", color: "var(--cl-text)"
                   }}>
-                    Kochi Origin — Modern Precision
+                    Kochi Origin • Modern Precision
                   </span>
                   <div style={{ height: "1px", width: "30px", background: "var(--cl-primary)" }} />
                 </motion.div>
@@ -92,7 +92,20 @@ export default function Home() {
                   Stop fighting with shaky cones like it's a board exam. 
                   Get a bridal look in 2 minutes with laser-cut Malabar precision. 
                   <span style={{ fontWeight: 700, color: "var(--cl-text)" }}> High-quality stencils for the modern Malayali soul.</span>
-                </motion.p>
+                  </motion.p>
+                  
+                  <motion.div 
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.9 }}
+                    style={{ marginBottom: "2rem", display: "inline-flex", alignItems: "center", gap: "0.8rem", background: "var(--cl-surface)", padding: "0.6rem 1.2rem", borderRadius: "50px", border: "1px solid rgba(0,0,0,0.1)" }}>
+                    <div style={{ display: "flex" }}>
+                       <div style={{ width: "26px", height: "26px", borderRadius: "50%", background: "var(--cl-accent)", border: "2px solid var(--cl-bg)" }} />
+                       <div style={{ width: "26px", height: "26px", borderRadius: "50%", background: "var(--cl-primary)", border: "2px solid var(--cl-bg)", marginLeft: "-10px" }} />
+                       <div style={{ width: "26px", height: "26px", borderRadius: "50%", background: "var(--cl-text)", border: "2px solid var(--cl-bg)", marginLeft: "-10px", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--cl-bg)", fontSize: "0.5rem", fontWeight: "bold" }}>+</div>
+                    </div>
+                    <span style={{ fontSize: "0.85rem", fontWeight: 600, letterSpacing: "0.03em" }}>400+ HAPPY CUSTOMERS</span>
+                  </motion.div>
 
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem", alignItems: "center" }}>
                   <Link href="/shop" className="brutalist-button" style={{ padding: "1.6rem 4.5rem", fontSize: "1.2rem", background: "var(--cl-primary)", color: "#fff" }}>
@@ -162,7 +175,7 @@ export default function Home() {
 
         {/* ═══ KOCHI VIBES / ABOUT ═══ */}
         <section style={{ padding: "var(--section-padding) 2rem", background: "var(--cl-surface)", position: "relative", overflow: "hidden" }}>
-          <div className="arabic-decor" style={{ bottom: "-5%", left: "5%", transform: "rotate(-15deg)", opacity: 0.02 }}>روح الملايار</div>
+          <div className="arabic-decor" style={{ bottom: "-5%", left: "5%", transform: "rotate(-15deg)", opacity: 0.02 }}>روح مالابار</div>
           
           <div style={{ maxWidth: "1400px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "6rem", position: "relative", zIndex: 1 }}>
              <div>
@@ -172,7 +185,7 @@ export default function Home() {
                 </h2>
                 <p style={{ fontSize: "1.15rem", opacity: 0.7, lineHeight: 1.8 }}>
                    We didn't start in a boardroom. We started on a Kochi porch with a vision to make complex henna accessible to everyone. 
-                   No professional training needed—just peel, paste, and paint. 
+                   No professional training needed—just peel, paste, and paint. 
                    Today, we blend surgical-grade materials with traditional Arab aesthetics for the ultimate DIY experience.
                 </p>
              </div>
@@ -266,34 +279,37 @@ export default function Home() {
                    <h2 className="title-large">Verified Gossip</h2>
                    <p style={{ opacity: 0.5, marginTop: "1rem" }}>What the community is actually saying.</p>
                 </header>
-                <div style={{ columns: "250px", columnGap: "2rem" }}>
-                   {testimonials.map((t, i) => (
-                     <motion.div 
-                        key={i} 
-                        initial={{ opacity: 0, y: 20 }} 
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        style={{ breakInside: "avoid", marginBottom: "2rem", padding: "2.5rem", background: "var(--cl-bg)", border: "var(--border-thin)", borderRadius: "var(--radius-lg)" }}
-                     >
-                        <div style={{ display: "flex", gap: "2px", marginBottom: "1.5rem" }}>
-                           {[...Array(t.rating)].map((_, idx) => <Star key={idx} size={14} fill="var(--cl-accent)" strokeWidth={0} />)}
-                        </div>
-                        <p style={{ fontSize: "1rem", lineHeight: 1.6, fontStyle: "italic", marginBottom: "2rem" }}>"{t.content}"</p>
-                        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                           {t.avatar_url ? (
-                             <img src={t.avatar_url} alt={t.name} style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }} />
-                           ) : (
-                             <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--cl-primary)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "0.7rem" }}>
-                                {t.name?.[0]}
+                <div style={{ overflow: "hidden", display: "flex", width: "100%", paddingBottom: "2rem" }}>
+                   <motion.div
+                      animate={{ x: ["0%", "-50%"] }}
+                      transition={{ ease: "linear", duration: testimonials.length * 5 || 20, repeat: Infinity }}
+                      style={{ display: "flex", gap: "2rem", width: "max-content", paddingRight: "2rem" }}
+                   >
+                     {[...testimonials, ...testimonials].map((t, i) => (
+                       <div
+                          key={i}
+                          style={{ flex: "0 0 320px", padding: "2.5rem", background: "var(--cl-bg)", border: "var(--border-thin)", borderRadius: "var(--radius-lg)", display: "flex", flexDirection: "column" }}
+                       >
+                          <div style={{ display: "flex", gap: "2px", marginBottom: "1.5rem" }}>
+                             {[...Array(t.rating)].map((_, idx) => <Star key={`star-${i}-${idx}`} size={14} fill="var(--cl-accent)" strokeWidth={0} />)}
+                          </div>
+                          <p style={{ fontSize: "1rem", lineHeight: 1.6, fontStyle: "italic", marginBottom: "2rem", flex: 1 }}>"{t.content}"</p>
+                          <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginTop: "auto" }}>
+                             {t.avatar_url ? (
+                               <img src={t.avatar_url} alt={t.name} style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }} />
+                             ) : (
+                               <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--cl-primary)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "0.7rem" }}>
+                                  {t.name?.[0]}
+                               </div>
+                             )}
+                             <div>
+                                <p style={{ fontWeight: 800, fontSize: "0.85rem" }}>{t.name}</p>
+                                <p style={{ fontSize: "0.7rem", opacity: 0.5 }}>{t.role || "Artisan Client"}</p>
                              </div>
-                           )}
-                           <div>
-                              <p style={{ fontWeight: 800, fontSize: "0.85rem" }}>{t.name}</p>
-                              <p style={{ fontSize: "0.7rem", opacity: 0.5 }}>{t.role || "Artisan Client"}</p>
-                           </div>
-                        </div>
-                     </motion.div>
-                   ))}
+                          </div>
+                       </div>
+                     ))}
+                   </motion.div>
                 </div>
              </div>
           </section>
@@ -313,7 +329,7 @@ export default function Home() {
                  Shipping daily from our Kochi studio.
               </p>
               <Link href="/shop" className="brutalist-button" style={{ padding: "1.8rem 6rem", fontSize: "1.2rem", background: "var(--cl-primary)", border: "none", color: "#fff", boxShadow: "10px 10px 0 rgba(255,255,255,0.2)" }}>
-                  Join the Vault — Shop Now
+                  Join the Vault ✦ Visit Shop
               </Link>
            </div>
         </section>
@@ -322,3 +338,5 @@ export default function Home() {
     </ClickSpark>
   );
 }
+
+

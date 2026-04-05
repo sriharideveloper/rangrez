@@ -20,14 +20,14 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "Rangrez Henna | DIY Henna Stencils Kochi | Malayali Bridal Art",
+  title: "Rangrez Henna | DIY Henna Stencils | Stop Paying the 'Bride Tax'",
   description:
-    "Arab luxury meets Malabar vibes. High-quality, quick-setup DIY henna stencils from Kochi. Perfect for modern Malayalee weddings and festivals.",
+    "Zero tears, maximum aesthetic. Stop paying ₹5000 for a blurry circle! Get Malabar Magic on your hands in 5 minutes with our laser-cut DIY stencils.",
   keywords: "henna, stencils, Kochi Mehndi, Kerala Wedding, Malayali Bride, Malabar Henna, DIY Mehndi, Reusable Stencils, Rangrez",
   authors: [{ name: "Rangrez Team" }],
   openGraph: {
-    title: "Rangrez Henna | Professional DIY Stencils from Kochi",
-    description: "Laser-cut precision for the Malabar soul. Get bridal-quality henna in 5 minutes.",
+    title: "Rangrez Henna | Peel. Paste. Slay.",
+    description: "Wedding-ready henna without the salon trauma or tears. Grab your Kochi stencil today.",
     url: "https://rangrez-henna.com",
     siteName: "Rangrez Henna",
     locale: "en_IN",
@@ -35,7 +35,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rangrez Henna | DIY Kerala Bridal Art",
+    title: "Rangrez | DIY Kerala Bridal Art",
+    description: "Stop paying ₹5000 for a blurry circle! DIY Malabar magic in 5 minutes.",
   },
 };
 

@@ -56,20 +56,6 @@ export default function Footer() {
               <Mail size={16} /> hello@rangrezhenna.com
             </a>
           </div>
-          {/* Newsletter */}
-          <div style={{ marginTop: "1.5rem" }}>
-            <p style={{ fontSize: "0.8rem", textTransform: "uppercase", fontWeight: 600, letterSpacing: "0.05em", marginBottom: "0.75rem", color: "var(--cl-bg)" }}>Newsletter</p>
-            <div style={{ display: "flex", border: "2px solid rgba(255,255,255,0.3)" }}>
-              <input
-                type="email"
-                placeholder="Your email"
-                style={{ flex: 1, padding: "0.7rem", fontSize: "0.85rem", background: "transparent", border: "none", color: "var(--cl-bg)" }}
-              />
-              <button style={{ padding: "0.7rem 1rem", background: "var(--cl-primary)", color: "var(--cl-bg)", fontWeight: 600, fontSize: "0.8rem", textTransform: "uppercase" }}>
-                Go
-              </button>
-            </div>
-          </div>
         </div>
       </div>
 

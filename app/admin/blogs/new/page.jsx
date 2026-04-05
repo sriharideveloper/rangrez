@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { ChevronLeft, Save, Eye, Layout, Type, Image as ImageIcon, Tag as TagIcon, Sparkles } from "lucide-react";
+import { ChevronLeft, Save, Eye, Layout, Type, Image as ImageIcon, Tag as TagIcon, Sparkles, Bold, Italic, Link as LinkIcon, Heading1, Heading2, List, Upload } from "lucide-react";
 import { upsertBlog, getBlogBySlug } from "../../../../lib/supabase/blogs";
+import { uploadImageToStorage } from "../../../../lib/supabase/clientUpload";
 
 // Zero-dependency basic markdown renderer for speed and reliability
 function simpleMarkdown(text) {
@@ -27,7 +28,8 @@ export default function BlogEditor() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(false);
-  
+  const textareaRef = useRef(null);
+
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -37,6 +39,48 @@ export default function BlogEditor() {
     author: "Rangrez Team",
     tags: []
   });
+
+  const insertAtCursor = (prefix, suffix = "") => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = formData.content;
+    const selectedText = text.substring(start, end);
+
+    const newText = text.substring(0, start) + prefix + selectedText + suffix + text.substring(end);
+    setFormData((prev) => ({ ...prev, content: newText }));
+
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + prefix.length, end + prefix.length);
+    }, 0);
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // Insert a loading placeholder
+    const placeholder = `![Uploading ${file.name}...]()\n`;
+    insertAtCursor(placeholder);
+    
+    try {
+      const url = await uploadImageToStorage(file);
+      // Replace placeholder with actual markdown
+      setFormData(prev => ({
+        ...prev,
+        content: prev.content.replace(placeholder, `![${file.name}](${url})\n`)
+      }));
+    } catch (err) {
+      alert("Image upload failed: " + err.message);
+      setFormData(prev => ({
+        ...prev,
+        content: prev.content.replace(placeholder, "")
+      }));
+    }
+  };
 
   useEffect(() => {
     if (id && id !== "new") {
@@ -108,14 +152,32 @@ export default function BlogEditor() {
               />
             </div>
 
-            <div>
-              <label className="input-label"><ImageIcon size={14} /> Markdown Content</label>
-              <textarea 
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <label className="input-label" style={{ marginBottom: 0 }}><ImageIcon size={14} /> Story Content</label>
+                <div style={{ display: "flex", gap: "0.25rem", background: "var(--cl-surface)", padding: "0.25rem", border: "var(--border-thin)", borderRadius: "var(--radius-sm)" }}>
+                  <button type="button" onClick={() => insertAtCursor("**", "**")} style={{ padding: "0.25rem 0.5rem", cursor: "pointer", background: "transparent", border: "none" }} title="Bold"><Bold size={16} /></button>
+                  <button type="button" onClick={() => insertAtCursor("*", "*")} style={{ padding: "0.25rem 0.5rem", cursor: "pointer", background: "transparent", border: "none" }} title="Italic"><Italic size={16} /></button>
+                  <button type="button" onClick={() => insertAtCursor("# ", "")} style={{ padding: "0.25rem 0.5rem", cursor: "pointer", background: "transparent", border: "none" }} title="Heading 1"><Heading1 size={16} /></button>
+                  <button type="button" onClick={() => insertAtCursor("## ", "")} style={{ padding: "0.25rem 0.5rem", cursor: "pointer", background: "transparent", border: "none" }} title="Heading 2"><Heading2 size={16} /></button>
+                  <button type="button" onClick={() => insertAtCursor("- ", "")} style={{ padding: "0.25rem 0.5rem", cursor: "pointer", background: "transparent", border: "none" }} title="List"><List size={16} /></button>
+                  <button type="button" onClick={() => insertAtCursor("[Link Text](url)", "")} style={{ padding: "0.25rem 0.5rem", cursor: "pointer", background: "transparent", border: "none" }} title="Link"><LinkIcon size={16} /></button>
+                  
+                  <div style={{ width: "1px", background: "var(--cl-muted)", margin: "0 0.5rem" }}></div>
+                  
+                  <label style={{ padding: "0.25rem 0.75rem", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.5rem", background: "var(--cl-primary)", color: "var(--cl-bg)", fontSize: "0.8rem", fontWeight: 700, borderRadius: "var(--radius-sm)" }}>
+                    <Upload size={14} /> Upload Image
+                    <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: "none" }} />
+                  </label>
+                </div>
+              </div>
+              <textarea
+                ref={textareaRef}
                 value={formData.content}
                 onChange={(e) => setFormData({...formData, content: e.target.value})}
-                className="input-field" 
-                placeholder="# Start your story with markdown..." 
-                style={{ minHeight: "600px", fontFamily: "monospace", fontSize: "1rem", lineHeight: 1.6 }}
+                className="input-field"
+                placeholder="Start your story... Use @product-slug to tag products!"
+                style={{ minHeight: "600px", fontFamily: "var(--font-body)", fontSize: "1.1rem", lineHeight: 1.8, padding: "1.5rem" }}
               />
             </div>
           </div>
@@ -144,15 +206,33 @@ export default function BlogEditor() {
             </div>
 
             <div>
-              <label className="input-label">Featured Image URL</label>
-              <input 
-                value={formData.featured_image}
-                onChange={(e) => setFormData({...formData, featured_image: e.target.value})}
-                className="input-field" 
-                placeholder="https://..." 
-              />
-            </div>
-
+                <label className="input-label" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  Featured Image URL
+                  <label style={{ padding: "0.25rem 0.5rem", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.25rem", background: "var(--cl-surface)", border: "1px solid rgba(255,255,255,0.2)", color: "var(--cl-text)", fontSize: "0.7rem", fontWeight: 600, borderRadius: "4px" }}>
+                    <Upload size={12} /> Upload
+                    <input type="file" accept="image/*" onChange={async (e) => {
+                      const file = e.target.files[0];
+                      if (!file) return;
+                      try {
+                        const url = await uploadImageToStorage(file);
+                        setFormData({...formData, featured_image: url});
+                      } catch(err) {
+                        alert("Featured image upload failed: " + err.message);
+                      }
+                    }} style={{ display: "none" }} />
+                  </label>
+                </label>
+                <input
+                  value={formData.featured_image}
+                  onChange={(e) => setFormData({...formData, featured_image: e.target.value})}
+                  className="input-field"
+                  placeholder="https://..."
+                />
+                {formData.featured_image && (
+                  <div style={{ marginTop: "0.5rem", borderRadius: "8px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)", height: "120px", position: "relative" }}>
+                    <img src={formData.featured_image} alt="Featured Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  </div>
+                )}              </div>
             <div>
               <label className="input-label"><TagIcon size={14} /> Tags (comma separated)</label>
               <input 
@@ -177,7 +257,7 @@ export default function BlogEditor() {
         /* Preview Mode */
         <div style={{ maxWidth: "800px", margin: "0 auto", background: "var(--cl-bg)", border: "var(--border-thick)", padding: "4rem" }}>
            <p style={{ color: "var(--cl-primary)", fontWeight: 800, textTransform: "uppercase", fontSize: "0.8rem", marginBottom: "1rem" }}>
-              {formData.tags.join(" • ") || "DRAFT"}
+              {formData.tags.join(" â€¢ ") || "DRAFT"}
            </p>
            <h1 style={{ fontSize: "4rem", fontFamily: "var(--font-heading)", lineHeight: 1, marginBottom: "2rem" }}>{formData.title || "Untitled Preview"}</h1>
            <div 

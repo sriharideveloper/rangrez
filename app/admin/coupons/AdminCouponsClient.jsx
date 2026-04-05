@@ -21,11 +21,11 @@ export default function AdminCouponsClient({ initialCoupons }) {
       code: c.code,
       discount_type: c.discount_type,
       discount_value: c.discount_value,
-      minimum_spend: c.minimum_spend,
+      minimum_spend: c.min_order_value || 0,
       active: c.active,
       valid_from: c.valid_from ? new Date(c.valid_from).toISOString().slice(0, 16) : "",
       valid_until: c.valid_until ? new Date(c.valid_until).toISOString().slice(0, 16) : "",
-      allowed_products: c.allowed_products ? c.allowed_products.join(",") : ""
+      allowed_products: ""  
     });
     setIsFormOpen(true);
   };
@@ -51,11 +51,11 @@ export default function AdminCouponsClient({ initialCoupons }) {
     }
     
     const payload = {
-      ...formData,
       code: formData.code.toUpperCase().replace(/\s+/g, ''),
+      discount_type: formData.discount_type,
       discount_value: parseFloat(formData.discount_value),
-      minimum_spend: parseFloat(formData.minimum_spend),
-      allowed_products: parsedProducts,
+      min_order_value: parseFloat(formData.minimum_spend),
+      active: formData.active,
       valid_from: formData.valid_from ? new Date(formData.valid_from).toISOString() : null,
       valid_until: formData.valid_until ? new Date(formData.valid_until).toISOString() : null,
       id: editingId

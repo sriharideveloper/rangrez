@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useSpring } from "framer-motion";
@@ -91,35 +92,70 @@ function ProductMention({ slug }) {
 
 // Refactored Content Renderer Component
 function ContentRenderer({ content }) {
-  if (!content) return null;
+  const containerRef = useRef(null);
+  const [mentions, setMentions] = useState([]);
 
-  const parts = useMemo(() => content.split(/(@\w+[\w-]*)/g), [content]);
+  const htmlContent = content
+    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.*)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*)\*/g, '<em>$1</em>')
+    .replace(/^\- (.*$)/gm, '<li>$1</li>')
+    .replace(/\n\n/g, '<br/><br/>')
+    .replace(/\!\[(.*?)\]\((.*?)\)/g, '<div class="md-img-wrap"><img src="$2" alt="$1"/></div>')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" style="color:var(--cl-primary)">$1</a>');
 
-  return parts.map((part, index) => {
-    if (part.startsWith("@")) {
-      const slug = part.substring(1);
-      return <ProductMention key={index} slug={slug} />;
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    // Reset any existing portals if content changes, but React re-mounts DOM anyway for dangerouslySetInnerHTML
+    const walk = document.createTreeWalker(containerRef.current, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    const foundMentions = [];
+    const nodesToReplace = [];
+
+    while ((node = walk.nextNode())) {
+      if (node.nodeValue.match(/(@\w+[\w-]*)/)) {
+        nodesToReplace.push(node);
+      }
     }
 
-    const html = part
-      .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-      .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-      .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-      .replace(/\*\*(.*)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*)\*/g, '<em>$1</em>')
-      .replace(/^\- (.*$)/gm, '<li>$1</li>')
-      .replace(/\n\n/g, '<br/><br/>')
-      .replace(/\!\[(.*?)\]\((.*?)\)/g, '<div class="md-img-wrap"><img src="$2" alt="$1"/></div>')
-      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+    nodesToReplace.forEach(n => {
+      const parts = n.nodeValue.split(/(@\w+[\w-]*)/g);
+      const fragment = document.createDocumentFragment();
+      
+      parts.forEach(part => {
+        if (part.startsWith('@')) {
+          const span = document.createElement('span');
+          span.className = 'mention-portal';
+          fragment.appendChild(span);
+          foundMentions.push({ slug: part.substring(1), element: span });
+        } else if (part) {
+          fragment.appendChild(document.createTextNode(part));
+        }
+      });
+      
+      if (n.parentNode) {
+        n.parentNode.replaceChild(fragment, n);
+      }
+    });
 
-    return (
+    setMentions(foundMentions);
+  }, [htmlContent]);
+
+  if (!content) return null;
+
+  return (
+    <>
       <div 
-        key={index} 
-        dangerouslySetInnerHTML={{ __html: html }} 
-        style={{ display: "inline" }} 
+        ref={containerRef} 
+        className="markdown-content" 
+        dangerouslySetInnerHTML={{ __html: htmlContent }} 
       />
-    );
-  });
+      {mentions.map((m, i) => createPortal(<ProductMention key={`m-${i}`} slug={m.slug} />, m.element))}
+    </>
+  );
 }
 
 // Scroll Progress Component for Safe Hydration

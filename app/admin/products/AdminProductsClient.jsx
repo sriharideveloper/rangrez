@@ -15,7 +15,7 @@ export default function AdminProductsClient({ initialProducts }) {
   const [editingId, setEditingId] = useState(null);
 
   const [formData, setFormData] = useState({
-    title: "", slug: "", price: "", compare_at_price: "", style: "Floral", category: "Bridal", status: "In Stock", is_featured: false, description: "", image_url: "",
+    title: "", slug: "", price: "", compare_at_price: "", style: "Floral", category: "Bridal", status: "In Stock", is_featured: false, description: "", image_url: "", gallery_urls: [],
   });
 
   const handleTitleChange = (e) => {
@@ -31,7 +31,7 @@ export default function AdminProductsClient({ initialProducts }) {
   const handleEdit = (p) => {
     setEditingId(p.id);
     setFormData({
-      title: p.title, slug: p.slug, price: p.price, compare_at_price: p.compare_at_price || "", style: p.style, category: p.category, status: p.status, is_featured: p.is_featured, description: p.description || "", image_url: p.image_url || ""
+      title: p.title, slug: p.slug, price: p.price, compare_at_price: p.compare_at_price || "", style: p.style, category: p.category, status: p.status, is_featured: p.is_featured, description: p.description || "", image_url: p.image_url || "", gallery_urls: p.images || p.gallery_urls || []
     });
     setIsFormOpen(true);
   };
@@ -59,6 +59,28 @@ export default function AdminProductsClient({ initialProducts }) {
     setLoading(false);
   };
 
+  const handleGalleryChange = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    setLoading(true);
+    try {
+      const newUrls = await Promise.all(
+        files.map(file => uploadImageToStorage(file))
+      );
+      setFormData(prev => ({ ...prev, gallery_urls: [...(prev.gallery_urls || []), ...newUrls] }));
+    } catch (err) {
+      alert("Gallery upload failed: " + err.message);
+    }
+    setLoading(false);
+  };
+
+  const removeGalleryImage = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      gallery_urls: prev.gallery_urls.filter((_, i) => i !== index)
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -67,8 +89,10 @@ export default function AdminProductsClient({ initialProducts }) {
       ...formData,
       price: parseFloat(formData.price),
       compare_at_price: formData.compare_at_price ? parseFloat(formData.compare_at_price) : null,
-      id: editingId
+      id: editingId,
+      images: formData.gallery_urls
     };
+    delete payload.gallery_urls;
 
     const { success, error } = await upsertProduct(payload);
     
@@ -101,7 +125,8 @@ export default function AdminProductsClient({ initialProducts }) {
           status: item.status || "In Stock",
           is_featured: !!item.is_featured,
           description: item.description || "",
-          image_url: item.image_url || item.image || ""
+          image_url: item.image_url || item.image || "",
+          images: Array.isArray(item.gallery_urls) ? item.gallery_urls : (Array.isArray(item.images) ? item.images : [])
         });
       }
       window.location.reload(); 
@@ -113,7 +138,7 @@ export default function AdminProductsClient({ initialProducts }) {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ title: "", slug: "", price: "", compare_at_price: "", style: "Floral", category: "Bridal", status: "In Stock", is_featured: false, description: "", image_url: "" });
+    setFormData({ title: "", slug: "", price: "", compare_at_price: "", style: "Floral", category: "Bridal", status: "In Stock", is_featured: false, description: "", image_url: "", gallery_urls: [] });
     setIsFormOpen(false);
   };
 
@@ -214,7 +239,7 @@ export default function AdminProductsClient({ initialProducts }) {
                 </div>
 
                 <div>
-                  <label className="input-label">Product Image</label>
+                  <label className="input-label">Product Cover Image</label>
                   <div style={{ display: "flex", gap: "1rem", alignItems: "flex-end" }}>
                     {formData.image_url && (
                       <div style={{ width: "100px", height: "100px", border: "var(--border-thick)", overflow: "hidden" }}>
@@ -222,10 +247,26 @@ export default function AdminProductsClient({ initialProducts }) {
                       </div>
                     )}
                     <label className="brutalist-button brutalist-button--outline" style={{ cursor: "pointer", padding: "0.8rem 1.5rem" }}>
-                      <Upload size={16} /> {loading ? "Uploading..." : "Upload Image"}
+                      <Upload size={16} /> {loading ? "Uploading..." : "Upload Cover"}
                       <input type="file" accept="image/*" style={{ display: "none" }} onChange={handleFileChange} disabled={loading} />
                     </label>
                   </div>
+                </div>
+
+                <div>
+                  <label className="input-label">Gallery Images (Slider)</label>
+                  <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+                    {(formData.gallery_urls || []).map((url, idx) => (
+                      <div key={idx} style={{ position: "relative", width: "100px", height: "100px", border: "var(--border-thick)", overflow: "hidden" }}>
+                        <img src={url} alt={`Gallery ${idx}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <button type="button" onClick={() => removeGalleryImage(idx)} style={{ position: "absolute", top: 0, right: 0, background: "var(--cl-danger)", color: "#fff", border: "none", width: "20px", height: "20px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>&times;</button>
+                      </div>
+                    ))}
+                  </div>
+                  <label className="brutalist-button brutalist-button--outline" style={{ cursor: "pointer", padding: "0.8rem 1.5rem" }}>
+                    <Upload size={16} /> {loading ? "Uploading..." : "Add to Gallery"}
+                    <input type="file" accept="image/*" multiple style={{ display: "none" }} onChange={handleGalleryChange} disabled={loading} />
+                  </label>
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "flex-end", gap: "1rem", marginTop: "1rem", borderTop: "var(--border-thick)", paddingTop: "1.5rem" }}>
