@@ -3,8 +3,19 @@
 import { createClient as createSSRClient } from "../../lib/supabase/server";
 import { createClient as createJSClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import { z } from "zod";
+
+const getURL = () => {
+  let url =
+    process.env.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
+    process.env.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
+    "http://localhost:3000";
+  // Make sure to include `https://` when not localhost.
+  url = url.startsWith("http") ? url : `https://${url}`;
+  // Make sure to include a trailing `/`.
+  url = url.endsWith("/") ? url : `${url}/`;
+  return url;
+};
 
 const signUpSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,10 +35,6 @@ const signInSchema = z.object({
 
 export async function signUp(formData) {
   const supabase = await createSSRClient();
-  const headersList = await headers();
-  const host = headersList.get("x-forwarded-host") || headersList.get("host");
-  const protocol = headersList.get("x-forwarded-proto") || "https";
-  const origin = `${protocol}://${host}`;
 
   const rawData = {
     email: formData.get("email"),
@@ -47,7 +54,7 @@ export async function signUp(formData) {
     password,
     options: {
       data: { full_name: fullName },
-      emailRedirectTo: `${origin}/auth/callback`,
+      emailRedirectTo: `${getURL()}auth/callback`,
     },
   });
 
@@ -116,15 +123,11 @@ export async function signIn(formData) {
 
 export async function signInWithGoogle() {
   const supabase = await createSSRClient();
-  const headersList = await headers();
-  const host = headersList.get("x-forwarded-host") || headersList.get("host");
-  const protocol = headersList.get("x-forwarded-proto") || "https";
-  const origin = `${protocol}://${host}`;
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${origin}/auth/callback`,
+      redirectTo: `${getURL()}auth/callback`,
       queryParams: {
         access_type: "offline",
         prompt: "consent",

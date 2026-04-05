@@ -7,6 +7,8 @@ export const metadata = {
   title: "Admin Users & Roles | RANGREZ",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminUsersPage() {
   const supabase = await createClient();
   const currentUser = await getUser();
