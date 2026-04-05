@@ -1,4 +1,4 @@
-import { getProductBySlug } from "../../../lib/supabase/products";
+import { getProductBySlug } from "../../../../lib/supabase/products";
 
 export async function GET(request, { params }) {
   const { slug } = await params;

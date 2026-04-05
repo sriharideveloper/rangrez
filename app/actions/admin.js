@@ -11,15 +11,10 @@ export async function upsertProduct(productData) {
 
   if (id) {
     // Update existing
-    response = await supabase
-      .from("products")
-      .update(updates)
-      .eq("id", id);
+    response = await supabase.from("products").update(updates).eq("id", id);
   } else {
     // Insert new
-    response = await supabase
-      .from("products")
-      .insert([updates]);
+    response = await supabase.from("products").insert([updates]);
   }
 
   if (response.error) {
@@ -29,13 +24,13 @@ export async function upsertProduct(productData) {
   revalidatePath("/admin/products");
   revalidatePath("/shop");
   revalidatePath("/");
-  
+
   return { success: true };
 }
 
 export async function deleteProduct(productId) {
   const supabase = await createClient();
-  
+
   const { error } = await supabase
     .from("products")
     .delete()
@@ -49,20 +44,48 @@ export async function deleteProduct(productId) {
 
 export async function upsertCoupon(formData) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user?.id).single();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user?.id)
+    .single();
 
   if (profile?.role !== "admin") return { error: "Unauthorized" };
 
-  const { error } = await supabase.from("coupons").upsert(formData, { onConflict: "id" });
-  if (error) return { success: false, error: error.message };
+  // Generate a payload cleanly for inserts without passing a null string as UUID
+  const payload = { ...formData };
+  if (!payload.id) {
+    delete payload.id;
+  }
+
+  // To insert or update efficiently without UUID violating non-null
+  // we must insert() if no ID exits, else update() via upsert
+  let response;
+  if (payload.id) {
+    response = await supabase
+      .from("coupons")
+      .upsert(payload, { onConflict: "id" });
+  } else {
+    response = await supabase.from("coupons").insert(payload);
+  }
+
+  if (response.error) return { success: false, error: response.error.message };
   return { success: true };
 }
 
 export async function deleteCoupon(id) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user?.id).single();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user?.id)
+    .single();
 
   if (profile?.role !== "admin") return { error: "Unauthorized" };
 
@@ -73,32 +96,55 @@ export async function deleteCoupon(id) {
 
 export async function deleteReview(id) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user?.id).single();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user?.id)
+    .single();
 
   if (profile?.role !== "admin") return { error: "Unauthorized" };
 
-  const { error } = await supabase.from("product_reviews").delete().eq("id", id);
+  const { error } = await supabase.from("testimonials").delete().eq("id", id);
   if (error) return { success: false, error: error.message };
   return { success: true };
 }
 
 export async function upsertBulkReviews(reviewsArray) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user?.id).single();
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
-  if (profile?.role !== "admin") return { error: "Unauthorized" };
+    if (authError || !user) return { error: "Authentication failed" };
 
-  // Assume reviewsArray has product_id, user_name, rating, comment
-  const payloads = reviewsArray.map(r => ({
-    product_id: r.product_id,
-    user_name: r.user_name || "Anonymous",
-    rating: r.rating || 5,
-    comment: r.comment || "",
-  }));
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user?.id)
+      .single();
 
-  const { error } = await supabase.from("product_reviews").insert(payloads);
-  if (error) return { error: error.message };
-  return { success: true };
+    if (profile?.role !== "admin") return { error: "Unauthorized" };
+
+    const payloads = reviewsArray.map((r) => ({
+      name: r.name || "Anonymous",
+      role: r.role || "Customer",
+      rating: r.rating || 5,
+      content: r.content || r.comment || "",
+      avatar_url: r.avatar_url || null,
+      is_featured: r.is_featured || false,
+    }));
+
+    const { error } = await supabase.from("testimonials").insert(payloads);
+    if (error) return { error: error.message };
+
+    return { success: true };
+  } catch (e) {
+    console.error("Bulk Insert Error:", e);
+    return { error: e.message || "An unexpected database error occurred" };
+  }
 }

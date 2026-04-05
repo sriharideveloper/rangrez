@@ -115,7 +115,8 @@ export default function Home() {
                 <Image 
                   src="/images/hero-henna.png" 
                   alt="Henna Stencil Application" 
-                  fill 
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                   style={{ objectFit: "cover" }}
                 />
@@ -277,14 +278,18 @@ export default function Home() {
                         <div style={{ display: "flex", gap: "2px", marginBottom: "1.5rem" }}>
                            {[...Array(t.rating)].map((_, idx) => <Star key={idx} size={14} fill="var(--cl-accent)" strokeWidth={0} />)}
                         </div>
-                        <p style={{ fontSize: "1rem", lineHeight: 1.6, fontStyle: "italic", marginBottom: "2rem" }}>"{t.comment}"</p>
+                        <p style={{ fontSize: "1rem", lineHeight: 1.6, fontStyle: "italic", marginBottom: "2rem" }}>"{t.content}"</p>
                         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                           <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--cl-primary)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "0.7rem" }}>
-                              {t.user_name?.[0]}
-                           </div>
+                           {t.avatar_url ? (
+                             <img src={t.avatar_url} alt={t.name} style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }} />
+                           ) : (
+                             <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--cl-primary)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "0.7rem" }}>
+                                {t.name?.[0]}
+                             </div>
+                           )}
                            <div>
-                              <p style={{ fontWeight: 800, fontSize: "0.85rem" }}>{t.user_name}</p>
-                              <p style={{ fontSize: "0.7rem", opacity: 0.5 }}>{t.products?.title || "Artisan Client"}</p>
+                              <p style={{ fontWeight: 800, fontSize: "0.85rem" }}>{t.name}</p>
+                              <p style={{ fontSize: "0.7rem", opacity: 0.5 }}>{t.role || "Artisan Client"}</p>
                            </div>
                         </div>
                      </motion.div>

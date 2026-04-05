@@ -58,14 +58,13 @@ export default function AdminReviewsClient({ initialReviews }) {
               <form onSubmit={handleBulkSubmit} style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                 <div style={{ background: "var(--cl-secondary)", padding: "1rem" }}>
                   <p style={{ opacity: 0.8, fontSize: "0.85rem", lineHeight: 1.5 }}>
-                    Paste an array of JSON objects. <strong>Required fields:</strong> <code>product_id</code>, <code>user_name</code>, <code>rating</code> (1-5), and <code>comment</code>. 
-                    Ensure the <code>product_id</code> accurately matches an existing product UUID!
+                    Paste an array of JSON objects. <strong>Fields:</strong> <code>name</code>, <code>role</code>, <code>rating</code> (1-5), <code>content</code>, and optionally <code>avatar_url</code> and <code>is_featured</code> (true/false).
                   </p>
                 </div>
                 <textarea 
                   rows={10} 
                   className="input-field" 
-                  placeholder='[ { "product_id": "...", "user_name": "Rida F.", "rating": 5, "comment": "Amazing quality!" } ]'
+                  placeholder='[ { "name": "Rida F.", "role": "Customer", "rating": 5, "content": "Amazing quality!", "is_featured": true, "avatar_url": "https..." } ]'
                   value={bulkJson} 
                   onChange={e => setBulkJson(e.target.value)} 
                 />
@@ -88,7 +87,10 @@ export default function AdminReviewsClient({ initialReviews }) {
             style={{ border: "var(--border-thick)", padding: "1.5rem", background: "var(--cl-surface)", display: "flex", flexDirection: "column", gap: "1rem" }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-              <h3 style={{ fontSize: "1.1rem", fontWeight: 700 }}>{r.user_name}</h3>
+              <div>
+                <h3 style={{ fontSize: "1.1rem", fontWeight: 700 }}>{r.name}</h3>
+                {r.role && <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>{r.role}</p>}
+              </div>
               <div style={{ display: "flex", gap: "0.2rem" }}>
                 {[...Array(5)].map((_, idx) => (
                   <Star key={idx} size={14} fill={idx < r.rating ? "var(--cl-accent)" : "transparent"} stroke={idx < r.rating ? "none" : "var(--cl-muted)"} />
@@ -97,9 +99,9 @@ export default function AdminReviewsClient({ initialReviews }) {
             </div>
             
             <p style={{ fontSize: "0.95rem", opacity: 0.9, lineHeight: 1.5, fontStyle: "italic" }}>
-              "{r.comment}"
+              "{r.content}"
             </p>
-            <p style={{ fontSize: "0.75rem", opacity: 0.5 }}>Product ID: {r.product_id}</p>
+            {r.is_featured && <p style={{ fontSize: "0.75rem", opacity: 0.8, color: "var(--cl-accent)", fontWeight: "bold" }}>★ Featured</p>}
 
             <div style={{ borderTop: "1px dashed var(--cl-muted)", paddingTop: "1rem", display: "flex", justifyContent: "flex-end", marginTop: "auto" }}>
               <button onClick={() => handleDelete(r.id)} style={{ fontSize: "0.85rem", color: "var(--cl-danger)", display: "flex", alignItems: "center", gap: "0.25rem" }}>

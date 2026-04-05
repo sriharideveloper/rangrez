@@ -47,7 +47,7 @@ function ProductMention({ slug }) {
           }}
         >
           <div style={{ width: "100px", height: "100px", position: "relative", border: "var(--border-thin)", overflow: "hidden" }}>
-            <Image src={product.images?.[0] || "/images/hero-henna.png"} alt={product.name} fill style={{ objectFit: "cover" }} />
+            <Image src={product.images?.[0] || "/images/hero-henna.png"} alt={product.name || "Featured Product"} fill style={{ objectFit: "cover" }} />
           </div>
           <div style={{ flex: 1 }}>
             <p style={{ fontSize: "0.7rem", fontWeight: 800, textTransform: "uppercase", color: "var(--cl-primary)", marginBottom: "0.25rem" }}>Featured Product</p>
@@ -71,7 +71,7 @@ function ProductMention({ slug }) {
           }}
         >
           <div style={{ width: "100px", height: "100px", position: "relative", border: "var(--border-thin)", overflow: "hidden" }}>
-            <Image src={product.images?.[0] || "/images/hero-henna.png"} alt={product.name} fill style={{ objectFit: "cover" }} />
+            <Image src={product.images?.[0] || "/images/hero-henna.png"} alt={product.name || "Featured Product"} fill style={{ objectFit: "cover" }} />
           </div>
           <div style={{ flex: 1 }}>
             <p style={{ fontSize: "0.7rem", fontWeight: 800, textTransform: "uppercase", color: "var(--cl-primary)", marginBottom: "0.25rem" }}>Featured Product</p>
