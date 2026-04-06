@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -14,12 +15,30 @@ export default function AdminManagementClient() {
     setLoading(true);
     setMessage("");
     const supabase = createClient();
+    
+    if (role === "user") {
+      const { count, error: countErr } = await supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true })
+        .eq("role", "admin");
+        
+      if (countErr || count <= 1) {
+        setMessage("Cannot demote the last remaining admin account.");
+        setLoading(false);
+        return;
+      }
+    }
+    
     const { data, error } = await supabase.rpc("set_admin_role_by_email", { p_email: email, p_role: role });
     
     if (error) {
-      setMessage(`âŒ Error: ${error.message}`);
+      setMessage("Server error: ensure you ran the secure SQL setup");
     } else {
-      setMessage(data === 'Success' ? `âœ… Successfully updated role to ${role}` : `âš ï¸ ${data}`);
+      if (data === "Success") {
+        setMessage("Updated role successfully!");
+      } else {
+        setMessage(String(data));
+      }
     }
     setLoading(false);
   };

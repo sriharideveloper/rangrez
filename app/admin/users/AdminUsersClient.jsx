@@ -5,11 +5,9 @@ import { User, Shield, ShieldAlert, Check } from "lucide-react";
 import { createClient } from "../../../lib/supabase/client";
 
 export default function AdminUsersClient({ initialUsers, currentUser }) {
-  // Always show only that account (current admin) and normal users, not any other admins
-  const visibleUsers = initialUsers.filter(u => u.id === currentUser.id || u.role !== "admin");
   const initialAdminsCount = initialUsers.filter(u => u.role === "admin").length;
 
-  const [users, setUsers] = useState(visibleUsers);
+  const [users, setUsers] = useState(initialUsers);
   const [adminCount, setAdminCount] = useState(initialAdminsCount);
   const [loading, setLoading] = useState(false);
   const supabase = createClient();
@@ -39,12 +37,7 @@ export default function AdminUsersClient({ initialUsers, currentUser }) {
     } else {
        alert("Role updated successfully!");
        
-       if (newRole === "admin" && userId !== currentUser.id) {
-         // Dynamically hide the user if they were just promoted to Admin and aren't us
-         setUsers(users.filter(u => u.id !== userId));
-       } else {
-         setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u));
-       }
+       setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u));
        
        setAdminCount(prev => newRole === "admin" ? prev + 1 : prev - 1);
        if (userId === currentUser.id && newRole === "user") {
