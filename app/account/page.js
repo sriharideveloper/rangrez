@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -187,7 +187,7 @@ export default function Account() {
                       {profile?.full_name ||
                         user?.user_metadata?.full_name ||
                         user?.user_metadata?.name ||
-                        "â€”"}
+                        "Ã¢â‚¬â€"}
                     </p>
                   </div>
                   <div>
@@ -231,7 +231,7 @@ export default function Account() {
                           month: "long",
                           day: "numeric",
                         })
-                      : "â€”"}
+                      : "Ã¢â‚¬â€"}
                   </p>
                 </div>
                 {profile?.role === "admin" && (
@@ -292,9 +292,16 @@ export default function Account() {
                         )}
                       </p>
                     </div>
-                    <div style={{ textAlign: "right" }}>
+                    <div
+                      style={{
+                        textAlign: "right",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-end",
+                      }}
+                    >
                       <p style={{ fontSize: "1.3rem", fontWeight: 700 }}>
-                        â‚¹{order.total}
+                        ₹{order.total_amount}
                       </p>
                       <span
                         style={{
@@ -305,16 +312,40 @@ export default function Account() {
                           textTransform: "uppercase",
                           fontWeight: 700,
                           background:
-                            order.status === "delivered"
+                            order.order_status === "delivered"
                               ? "var(--cl-success)"
-                              : order.status === "shipped"
+                              : order.order_status === "shipped" ||
+                                  order.order_status === "out_for_delivery"
                                 ? "var(--cl-accent)"
                                 : "var(--cl-primary)",
                           color: "var(--cl-bg)",
                         }}
                       >
-                        {order.status}
+                        {order.order_status?.replace(/_/g, " ") || "Processing"}
                       </span>
+                      {order.tracking_number && (
+                        <div
+                          style={{
+                            marginTop: "0.5rem",
+                            fontSize: "0.8rem",
+                            color: "var(--cl-text)",
+                            fontWeight: 600,
+                          }}
+                        >
+                          DTDC:{" "}
+                          <a
+                            href={order.tracking_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              textDecoration: "underline",
+                              color: "var(--cl-primary)",
+                            }}
+                          >
+                            {order.tracking_number}
+                          </a>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -367,4 +398,3 @@ export default function Account() {
     </div>
   );
 }
-

@@ -122,6 +122,15 @@ export async function POST(req) {
       );
     }
 
+    // Explicitly update payment info immediately after RPC correctly logs it in DB
+    await supabase
+      .from("orders")
+      .update({
+        payment_id: razorpay_payment_id,
+        payment_status: "paid",
+      })
+      .eq("id", orderId);
+
     return NextResponse.json({
       success: true,
       message: "Payment verified successfully",
