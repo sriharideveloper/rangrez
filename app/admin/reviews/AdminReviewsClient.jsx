@@ -40,7 +40,7 @@ export default function AdminReviewsClient({ initialReviews }) {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+      <div className="admin-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <h1 style={{ fontSize: "2rem", fontFamily: "var(--font-heading)", textTransform: "uppercase" }}>Testimonials</h1>
         <button onClick={() => setIsBulkOpen(true)} className="brutalist-button brutalist-button--outline" style={{ padding: "0.8rem 1.5rem" }}>
           JSON Bulk Import
@@ -117,3 +117,4 @@ export default function AdminReviewsClient({ initialReviews }) {
     </div>
   );
 }
+

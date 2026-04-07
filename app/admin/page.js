@@ -1,4 +1,4 @@
-﻿import { createClient } from "../../lib/supabase/server";
+import { createClient } from "../../lib/supabase/server";
 import { DollarSign, Package, Users, ShoppingBag } from "lucide-react";
 import StatCard from "../../components/bits/StatCard";
 import AdminManagementClient from "./AdminManagementClient";
@@ -35,7 +35,7 @@ export default async function AdminDashboard() {
     {
       label: "Total Revenue",
       value: revenue,
-      prefix: "₹",
+      prefix: "?",
       icon: <DollarSign size={24} />,
     },
     {
@@ -148,7 +148,7 @@ export default async function AdminDashboard() {
                 order.shipping_address?.email ||
                 "N/A"}
             </span>
-            <span style={{ fontWeight: 600 }}>₹{order.total_amount}</span>
+            <span style={{ fontWeight: 600 }}>?{order.total_amount}</span>
             <span>
               <span
                 style={{
@@ -183,3 +183,4 @@ export default async function AdminDashboard() {
     </div>
   );
 }
+

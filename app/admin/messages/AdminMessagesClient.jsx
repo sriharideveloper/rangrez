@@ -25,7 +25,7 @@ export default function AdminMessagesClient({ initialMessages }) {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+      <div className="admin-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <h1 style={{ fontSize: "2rem", fontFamily: "var(--font-heading)", textTransform: "uppercase" }}>Inbox</h1>
       </div>
 
@@ -83,3 +83,4 @@ export default function AdminMessagesClient({ initialMessages }) {
     </div>
   );
 }
+

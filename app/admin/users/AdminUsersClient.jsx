@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import AdminExport from "../../../components/AdminExport";
 import { User, Shield, ShieldAlert } from "lucide-react";
 import { createClient } from "../../../lib/supabase/client";
 import Image from "next/image";
@@ -119,4 +120,5 @@ export default function AdminUsersClient({ initialUsers, currentUser }) {
     </div>
   );
 }
+
 

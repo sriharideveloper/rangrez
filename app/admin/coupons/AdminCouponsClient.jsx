@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import AdminExport from "../../../components/AdminExport";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, X, Trash2 } from "lucide-react";
 import { upsertCoupon, deleteCoupon } from "../../actions/admin";
@@ -79,7 +80,7 @@ export default function AdminCouponsClient({ initialCoupons }) {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+      <div className="admin-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <h1 style={{ fontSize: "2rem", fontFamily: "var(--font-heading)", textTransform: "uppercase" }}>Coupons</h1>
         <button onClick={() => setIsFormOpen(true)} className="brutalist-button" style={{ padding: "0.8rem 1.5rem" }}>
           <Plus size={16} /> Create Coupon
@@ -88,8 +89,8 @@ export default function AdminCouponsClient({ initialCoupons }) {
 
       <AnimatePresence>
         {isFormOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
+          <motion.div onClick={(e) => { if(e.target===e.currentTarget) setIsFormOpen(false); }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
+            <motion.div onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", padding: "1.5rem", borderBottom: "var(--border-thick)" }}>
                 <h2 style={{ fontSize: "1.5rem" }}>{editingId ? "Edit Coupon" : "New Coupon"}</h2>
                 <button onClick={resetForm}><X size={24} /></button>
@@ -100,7 +101,7 @@ export default function AdminCouponsClient({ initialCoupons }) {
                   <input required className="input-field" style={{ textTransform: "uppercase" }} value={formData.code} onChange={e => setFormData({...formData, code: e.target.value.toUpperCase()})} />
                 </div>
                 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+                <div className="form-grid form-grid--2col">
                   <div>
                     <label className="input-label">Type</label>
                     <select className="input-field" value={formData.discount_type} onChange={e => setFormData({...formData, discount_type: e.target.value})}>
@@ -119,7 +120,7 @@ export default function AdminCouponsClient({ initialCoupons }) {
                   <input required type="number" step="0.01" className="input-field" value={formData.minimum_spend} onChange={e => setFormData({...formData, minimum_spend: e.target.value})} />
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+                <div className="form-grid form-grid--2col">
                   <div>
                     <label className="input-label">Valid From (Optional)</label>
                     <input type="datetime-local" className="input-field" value={formData.valid_from} onChange={e => setFormData({...formData, valid_from: e.target.value})} />
@@ -194,3 +195,4 @@ export default function AdminCouponsClient({ initialCoupons }) {
     </div>
   );
 }
+

@@ -6,3 +6,4 @@ export default async function AdminProductsPage() {
 
   return <AdminProductsClient initialProducts={products} />;
 }
+

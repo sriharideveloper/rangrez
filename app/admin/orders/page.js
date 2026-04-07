@@ -8,3 +8,4 @@ export default async function AdminOrdersPage() {
     <AdminOrdersClient initialOrders={orders} />
   );
 }
+

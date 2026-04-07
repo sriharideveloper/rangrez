@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Package, ExternalLink, RefreshCw, Truck } from "lucide-react";
 import { updateOrderDetails } from "../../../lib/supabase/orders";
 import { useState } from "react";
+import AdminExport from "../../../components/AdminExport";
 
 export default function AdminOrdersClient({ initialOrders }) {
   const [orders, setOrders] = useState(initialOrders || []);

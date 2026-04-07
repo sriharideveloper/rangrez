@@ -6,3 +6,4 @@ export default async function AdminCouponsPage() {
 
   return <AdminCouponsClient initialCoupons={coupons || []} />;
 }
+

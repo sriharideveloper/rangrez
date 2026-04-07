@@ -49,29 +49,15 @@ export default async function AdminLayout({ children }) {
     <div className="admin-layout">
       <aside className="admin-sidebar">
         <div
-          style={{
-            padding: "0 2rem 2rem",
-            borderBottom: "1px solid rgba(255,255,255,0.1)",
-            marginBottom: "1rem",
-          }}
+          className="admin-sidebar-header"
         >
           <h2
-            style={{
-              fontFamily: "var(--font-heading)",
-              fontSize: "1.8rem",
-              color: "var(--cl-bg)",
-            }}
+            
           >
             RANGREZ
           </h2>
           <p
-            style={{
-              fontSize: "0.75rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              opacity: 0.5,
-              marginTop: "0.25rem",
-            }}
+            
           >
             Admin Panel
           </p>
@@ -81,19 +67,15 @@ export default async function AdminLayout({ children }) {
             key={l.href}
             href={l.href}
             className="admin-sidebar__link"
-            style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
+            
           >
             {l.icon} {l.label}
           </Link>
         ))}
         <div
-          style={{
-            marginTop: "auto",
-            padding: "1rem 2rem",
-            borderTop: "1px solid rgba(255,255,255,0.1)",
-          }}
+          className="admin-sidebar-footer"
         >
-          <Link href="/" style={{ fontSize: "0.85rem", opacity: 0.5 }}>
+          <Link href="/" >
             ← Back to Shop
           </Link>
         </div>
@@ -102,3 +84,5 @@ export default async function AdminLayout({ children }) {
     </div>
   );
 }
+
+

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import AdminExport from "../../../components/AdminExport";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, X, Upload, Trash2, ExternalLink } from "lucide-react";
 import { uploadImageToStorage } from "../../../lib/supabase/clientUpload";
@@ -144,9 +145,10 @@ export default function AdminProductsClient({ initialProducts }) {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+      <div className="admin-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <h1 style={{ fontSize: "2rem", fontFamily: "var(--font-heading)", textTransform: "uppercase" }}>Products</h1>
-        <div style={{ display: "flex", gap: "1rem" }}>
+        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
+          <AdminExport data={products} filename="rangrez-products" />
           <button onClick={() => setIsBulkOpen(true)} className="brutalist-button brutalist-button--outline" style={{ padding: "0.8rem 1.5rem" }}>
             JSON Bulk Import
           </button>
@@ -158,8 +160,8 @@ export default function AdminProductsClient({ initialProducts }) {
 
       <AnimatePresence>
         {isBulkOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
+          <motion.div onClick={(e) => { if(e.target===e.currentTarget) setIsBulkOpen(false); }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
+            <motion.div onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", padding: "1.5rem", borderBottom: "var(--border-thick)" }}>
                 <h2 style={{ fontSize: "1.5rem" }}>Bulk Import via JSON</h2>
                 <button onClick={() => setIsBulkOpen(false)}><X size={24} /></button>
@@ -185,14 +187,14 @@ export default function AdminProductsClient({ initialProducts }) {
         )}
 
         {isFormOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "800px", maxHeight: "90vh", overflowY: "auto", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
+          <motion.div onClick={(e) => { if(e.target===e.currentTarget) setIsFormOpen(false); }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
+            <motion.div onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "800px", maxHeight: "90vh", overflowY: "auto", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", padding: "1.5rem", borderBottom: "var(--border-thick)" }}>
                 <h2 style={{ fontSize: "1.5rem" }}>{editingId ? "Edit Product" : "New Product"}</h2>
                 <button onClick={resetForm}><X size={24} /></button>
               </div>
               <form onSubmit={handleSubmit} style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+                <div className="form-grid form-grid--2col">
                   <div>
                     <label className="input-label">Title</label>
                     <input required className="input-field" value={formData.title} onChange={handleTitleChange} />
@@ -328,3 +330,4 @@ export default function AdminProductsClient({ initialProducts }) {
     </div>
   );
 }
+

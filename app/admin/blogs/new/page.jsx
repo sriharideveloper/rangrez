@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -257,7 +257,7 @@ export default function BlogEditor() {
         /* Preview Mode */
         <div style={{ maxWidth: "800px", margin: "0 auto", background: "var(--cl-bg)", border: "var(--border-thick)", padding: "4rem" }}>
            <p style={{ color: "var(--cl-primary)", fontWeight: 800, textTransform: "uppercase", fontSize: "0.8rem", marginBottom: "1rem" }}>
-              {formData.tags.join(" â€¢ ") || "DRAFT"}
+              {formData.tags.join(" • ") || "DRAFT"}
            </p>
            <h1 style={{ fontSize: "4rem", fontFamily: "var(--font-heading)", lineHeight: 1, marginBottom: "2rem" }}>{formData.title || "Untitled Preview"}</h1>
            <div 
@@ -270,3 +270,4 @@ export default function BlogEditor() {
     </div>
   );
 }
+

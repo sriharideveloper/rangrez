@@ -7,3 +7,4 @@ export default async function AdminReviewsPage() {
 
   return <AdminReviewsClient initialReviews={reviews || []} />;
 }
+
