@@ -111,8 +111,8 @@ export default function AdminOrdersClient({ initialOrders }) {
         </div>
       </div>
 
-      <div style={{ border: "var(--border-thick)", overflow: "hidden" }}>       
-        <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1.5fr 1.2fr 1fr 1fr", padding: "0.75rem 1.5rem", background: "var(--cl-text)", color: "var(--cl-bg)", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+      <div className="admin-data-container">       
+        <div className="admin-data-grid-5" style={{ padding: "0.75rem 1.5rem", background: "var(--cl-text)", color: "var(--cl-bg)", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
           <span>Order Info</span><span>Customer / Address</span><span>Tracking (DTDC)</span><span>Total</span><span>Status</span>
         </div>
         {filtered.map((order, i) => (
@@ -121,8 +121,8 @@ export default function AdminOrdersClient({ initialOrders }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: i * 0.05 }}
+            className="admin-data-grid-5"
             style={{
-              display: "grid", gridTemplateColumns: "1.2fr 1.5fr 1.2fr 1fr 1fr",
               padding: "1rem 1.5rem", alignItems: "start", fontSize: "0.9rem", 
               borderTop: i > 0 ? "1px solid var(--cl-muted)" : "none",
             }}

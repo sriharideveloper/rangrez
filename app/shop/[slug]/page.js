@@ -8,14 +8,9 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 
-// Static param generation for "Buttery Smooth" pre-rendering
-export async function generateStaticParams() {
-  const products = await getAllProducts();
-  if (!products || !Array.isArray(products)) return [];
-  return products.map((product) => ({
-    slug: product.slug,
-  }));
-}
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
 // SEO Dynamic Metadata
 export async function generateMetadata({ params }) {

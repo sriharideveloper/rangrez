@@ -60,8 +60,8 @@ export default function AdminUsersClient({ initialUsers, currentUser }) {
         </div>
       </header>
 
-      <div style={{ background: "var(--cl-surface)", border: "var(--border-thin)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr 1fr", gap: "1rem", padding: "1.5rem", borderBottom: "var(--border-thin)", opacity: 0.5, fontSize: "0.8rem", textTransform: "uppercase", fontWeight: 800 }}>
+      <div className="admin-data-container">
+        <div className="admin-data-grid-3" style={{ gap: "1rem", padding: "1.5rem", borderBottom: "var(--border-thin)", opacity: 0.5, fontSize: "0.8rem", textTransform: "uppercase", fontWeight: 800 }}>
           <div>User ({users.length} total visible)</div>
           <div>Joined</div>
           <div style={{ textAlign: "right" }}>Actions</div>
@@ -71,7 +71,7 @@ export default function AdminUsersClient({ initialUsers, currentUser }) {
           <div style={{ padding: "3rem", textAlign: "center", opacity: 0.5 }}>No users found.</div>
         ) : (
           users.map((user) => (
-            <div key={user.id} style={{ display: "grid", gridTemplateColumns: "3fr 2fr 1fr", gap: "1rem", padding: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.05)", alignItems: "center" }}>
+            <div className="admin-data-grid-3" key={user.id} style={{ gap: "1rem", padding: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.05)", alignItems: "center" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "1rem", overflow: "hidden" }}>
                 {user.avatar_url ? (
                   <Image src={user.avatar_url} alt={user.full_name} style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover" }} />

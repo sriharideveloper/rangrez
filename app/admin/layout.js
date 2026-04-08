@@ -48,41 +48,41 @@ export default async function AdminLayout({ children }) {
   return (
     <div className="admin-layout">
       <aside className="admin-sidebar">
-        <div
-          className="admin-sidebar-header"
-        >
-          <h2
-            
-          >
-            RANGREZ
-          </h2>
-          <p
-            
-          >
-            Admin Panel
-          </p>
+        <div className="admin-sidebar-header">
+          <div>
+            <h2>RANGREZ</h2>
+            <p>Admin Panel</p>
+          </div>
+          <div className="mobile-only-home-link" style={{ display: "none" }}>
+            <Link
+              href="/"
+              style={{
+                color: "var(--cl-bg)",
+                textDecoration: "none",
+                border: "1px solid rgba(255,255,255,0.2)",
+                padding: "0.3rem 0.6rem",
+                fontSize: "0.75rem",
+                textTransform: "uppercase",
+              }}
+            >
+              Shop
+            </Link>
+          </div>
         </div>
-        {links.map((l) => (
-          <Link
-            key={l.href}
-            href={l.href}
-            className="admin-sidebar__link"
-            
-          >
-            {l.icon} {l.label}
-          </Link>
-        ))}
-        <div
-          className="admin-sidebar-footer"
-        >
-          <Link href="/" >
-            ← Back to Shop
-          </Link>
+
+        <nav className="admin-sidebar-nav">
+          {links.map((l) => (
+            <Link key={l.href} href={l.href} className="admin-sidebar__link">
+              {l.icon} {l.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="admin-sidebar-footer">
+          <Link href="/">← Back to Shop</Link>
         </div>
       </aside>
       <main className="admin-content">{children}</main>
     </div>
   );
 }
-
-

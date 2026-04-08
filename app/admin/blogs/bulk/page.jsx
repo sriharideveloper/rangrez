@@ -48,8 +48,8 @@ export default function BulkBlogUpload() {
         <p style={{ opacity: 0.6 }}>Paste your JSON data to rapidly populate the blog vault.</p>
       </header>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 350px", gap: "3rem" }}>
-        <div>
+      <div className="admin-grid-layout">
+        <div className="admin-grid-main">
           <label className="input-label">JSON Input</label>
           <textarea 
             value={jsonInput}

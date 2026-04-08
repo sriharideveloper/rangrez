@@ -100,11 +100,10 @@ export default async function AdminDashboard() {
       >
         Recent Orders
       </h2>
-      <div style={{ border: "var(--border-thick)", overflow: "hidden" }}>
+      <div className="admin-data-container">
         <div
+          className="admin-data-grid-5"
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 2fr 1fr 1fr 1fr",
             padding: "0.75rem 1.5rem",
             background: "var(--cl-text)",
             color: "var(--cl-bg)",
@@ -123,9 +122,8 @@ export default async function AdminDashboard() {
         {recentOrders?.map((order, i) => (
           <div
             key={order.id}
+            className="admin-data-grid-5"
             style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 2fr 1fr 1fr 1fr",
               padding: "1rem 1.5rem",
               alignItems: "center",
               borderTop: i > 0 ? "1px solid var(--cl-muted)" : "none",
@@ -183,4 +181,3 @@ export default async function AdminDashboard() {
     </div>
   );
 }
-

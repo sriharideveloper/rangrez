@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Poppins:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
-/* ═══════════════════════════════════════════════════
-   RANGREZ HENNA — Design System
-   ═══════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   RANGREZ HENNA â€” Design System
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 :root {
   --cl-bg: #fdf9f3; /* Warm Antique White */
@@ -117,7 +117,7 @@ select {
   color: var(--cl-bg);
 }
 
-/* ── Typography ─────────────────────────────────── */
+/* â”€â”€ Typography â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .title-massive {
   font-size: clamp(3rem, 12vw, 12rem);
@@ -178,7 +178,7 @@ select {
   white-space: nowrap;
 }
 
-/* ── Brutalist Utilities ────────────────────────── */
+/* â”€â”€ Brutalist Utilities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .brutalist-border {
   border: var(--border-thick);
@@ -248,7 +248,7 @@ select {
   background-color: var(--cl-danger);
 }
 
-/* ── Form Inputs ────────────────────────────────── */
+/* â”€â”€ Form Inputs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .input-field {
   width: 100%;
@@ -285,7 +285,7 @@ select {
   font-weight: 500;
 }
 
-/* ── Cards ──────────────────────────────────────── */
+/* â”€â”€ Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .product-card {
   display: flex;
@@ -365,7 +365,7 @@ select {
   opacity: 0.5;
 }
 
-/* ── Navbar ─────────────────────────────────────── */
+/* â”€â”€ Navbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .navbar-container {
   display: flex;
@@ -467,7 +467,7 @@ select {
   border: 2px solid var(--cl-bg);
 }
 
-/* ── Mobile Nav ─────────────────────────────────── */
+/* â”€â”€ Mobile Nav â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .mobile-menu-btn {
   display: none;
   background: none;
@@ -476,7 +476,7 @@ select {
   z-index: 60;
 }
 
-/* ── Theme Toggle ───────────────────────────────── */
+/* â”€â”€ Theme Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .theme-toggle {
   width: 2.2rem;
   height: 2.2rem;
@@ -497,7 +497,7 @@ select {
   transition: var(--transition-snap);
 }
 
-/* ── Announcement Bar ───────────────────────────── */
+/* â”€â”€ Announcement Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .announcement-bar {
   background: var(--cl-text);
   color: var(--cl-bg);
@@ -521,7 +521,7 @@ select {
   gap: 1rem;
 }
 
-/* ── Footer ─────────────────────────────────────── */
+/* â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .footer {
   background: var(--cl-text);
   color: var(--cl-bg);
@@ -535,7 +535,7 @@ select {
   opacity: 1;
 }
 
-/* ── Spotlight Card Effect ──────────────────────── */
+/* â”€â”€ Spotlight Card Effect â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .spotlight-card {
   position: relative;
   overflow: hidden;
@@ -562,7 +562,7 @@ select {
   opacity: 1;
 }
 
-/* ── Animations ─────────────────────────────────── */
+/* â”€â”€ Animations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @keyframes marquee {
   0% {
     transform: translateX(0);
@@ -624,7 +624,7 @@ select {
   }
 }
 
-/* ── Grain Texture Overlay ──────────────────────── */
+/* â”€â”€ Grain Texture Overlay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .grain-overlay::after {
   content: "";
   position: fixed;
@@ -647,7 +647,7 @@ select {
   }
 }
 
-/* ── Lenis ──────────────────────────────────────── */
+/* â”€â”€ Lenis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -665,16 +665,17 @@ html.lenis body {
   pointer-events: none;
 }
 
-/* ── Admin Layout ───────────────────────────────── */
+/* â”€â”€ Admin Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .admin-layout {
   display: flex;
   min-height: 100vh;
+  width: 100%;
 }
+
 .admin-sidebar {
   width: 260px;
   background: var(--cl-text);
   color: var(--cl-bg);
-  padding: 2rem 0;
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -683,6 +684,47 @@ html.lenis body {
   z-index: 100;
   border-right: var(--border-thick);
 }
+
+.admin-sidebar-header {
+  padding: 2rem 2rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1rem;
+}
+.admin-sidebar-header h2 {
+  font-family: var(--font-heading);
+  letter-spacing: 0.1em;
+  font-size: 1.5rem;
+  margin: 0;
+}
+.admin-sidebar-header p {
+  opacity: 0.6;
+  font-size: 0.8rem;
+  margin: 0.2rem 0;
+  text-transform: uppercase;
+}
+
+.admin-sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-sidebar-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
+}
+.admin-sidebar-footer a {
+  opacity: 0.6;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .admin-sidebar__link {
   padding: 1rem 2rem;
   font-size: 0.95rem;
@@ -695,19 +737,24 @@ html.lenis body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  color: var(--cl-bg);
 }
 .admin-sidebar__link:hover,
 .admin-sidebar__link--active {
   opacity: 1;
   background: rgba(255, 255, 255, 0.05);
   border-left-color: var(--cl-primary);
+  color: var(--cl-bg);
 }
+
 .admin-content {
   flex: 1;
-  padding: 2rem 3rem;
-  width: calc(100vw - 260px); /* prevent overflow */
+  padding: 2.5rem;
+  max-width: 100%;
+  min-width: 0;
   overflow-x: hidden;
 }
+
 .admin-stat-card {
   background: var(--cl-surface);
   border: var(--border-thick);
@@ -728,26 +775,25 @@ html.lenis body {
   margin-bottom: 2rem;
   border: var(--border-thick);
   background: var(--cl-surface);
-  border-radius: var(--radius-md);
 }
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px; /* guarantees it doesn't squish too much and forces scroll on mobile */
+  min-width: 800px;
   font-size: 0.9rem;
 }
 thead th {
   background: var(--cl-text);
   color: var(--cl-bg);
   text-align: left;
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.05em;
   white-space: nowrap;
 }
 tbody td {
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   border-bottom: var(--border-thin);
   vertical-align: middle;
 }
@@ -758,20 +804,20 @@ tbody tr:hover td {
   background: rgba(0, 0, 0, 0.02);
 }
 
-/* Base form resets for mobile */
+/* Base form resets for admin */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .form-grid--2col {
     grid-template-columns: 1fr 1fr;
   }
 }
 
-/* ── Responsive ─────────────────────────────────── */
+/* â”€â”€ Responsive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 1024px) {
   .title-massive {
     font-size: clamp(2.5rem, 10vw, 7rem);
@@ -800,20 +846,52 @@ tbody tr:hover td {
   }
   .admin-layout {
     flex-direction: column;
+    min-height: 100vh;
   }
   .admin-sidebar {
     width: 100%;
     height: auto;
     position: relative;
+    border-right: none;
+    border-bottom: var(--border-thick);
+  }
+  .admin-sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+  }
+  .admin-sidebar-nav {
     flex-direction: row;
     overflow-x: auto;
-    padding: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide scrollbar for a cleaner look */
+  }
+  .admin-sidebar-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .mobile-only-home-link {
+    display: block !important;
+  }
+  .admin-sidebar-footer {
+    display: none; /* Hide footer on mobile out of view */
   }
   .admin-sidebar__link {
-    border-left: none;
-    border-bottom: 3px solid transparent;
     padding: 1rem 1.5rem;
     white-space: nowrap;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+  .admin-sidebar__link:hover,
+  .admin-sidebar__link--active {
+    border-left-color: transparent;
+    border-bottom-color: var(--cl-primary);
+  }
+  .admin-content {
+    max-width: 100%;
+    padding: 1.5rem 1rem;
   }
 }
 
@@ -830,7 +908,7 @@ tbody tr:hover td {
   }
 }
 
-/* ═══ MARKDOWN CONTENT STYLING ═══ */
+/* â•â•â• MARKDOWN CONTENT STYLING â•â•â• */
 .markdown-content {
   h1,
   h2,
@@ -904,9 +982,9 @@ tbody tr:hover td {
   }
 }
 
-/* ═══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PRODUCT & BLOG DETAIL SYSTEM (SSR SAFE)
-   ═══════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 .detail-layout {
   display: grid;
@@ -999,27 +1077,82 @@ tbody tr:hover td {
 }
 
 /* --- Admin Menu Patches --- */
-.admin-sidebar-header { padding: 0 2rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 1rem; flex-shrink: 0; }
-.admin-sidebar-header h2 { font-family: var(--font-heading); font-size: 1.8rem; color: var(--cl-bg); }
-.admin-sidebar-header p { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-top: 0.25rem; }
-.admin-sidebar-footer { margin-top: auto; padding: 1rem 2rem; border-top: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
-.admin-sidebar-footer a { font-size: 0.85rem; opacity: 0.5; text-decoration: none; color: currentColor; }
-.admin-sidebar-footer a:hover { opacity: 1; }
+.admin-sidebar-header {
+  padding: 0 2rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+.admin-sidebar-header h2 {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: var(--cl-bg);
+}
+.admin-sidebar-header p {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+  margin-top: 0.25rem;
+}
+.admin-sidebar-footer {
+  margin-top: auto;
+  padding: 1rem 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+.admin-sidebar-footer a {
+  font-size: 0.85rem;
+  opacity: 0.5;
+  text-decoration: none;
+  color: currentColor;
+}
+.admin-sidebar-footer a:hover {
+  opacity: 1;
+}
 
 @media (max-width: 768px) {
-  .admin-sidebar-header { padding: 1rem; border-bottom: none; margin-bottom: 0; display: none; }
-  .admin-sidebar-footer { display: none; }
-  .admin-sidebar__link span { display: none; } /* Show only icons on very small screens or make it a sticky bottom bar! actually let's keep text but make it scroll horizontally. */
-  .admin-sidebar__link { padding: 1rem; flex-direction: column; gap: 0.25rem; font-size: 0.75rem; text-align: center; }
-  .admin-sidebar__link span { display: block; font-size: 0.65rem; }
+  .admin-sidebar-header {
+    padding: 1rem;
+    border-bottom: none;
+    margin-bottom: 0;
+    display: none;
+  }
+  .admin-sidebar-footer {
+    display: none;
+  }
+  .admin-sidebar__link span {
+    display: none;
+  } /* Show only icons on very small screens or make it a sticky bottom bar! actually let's keep text but make it scroll horizontally. */
+  .admin-sidebar__link {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+  .admin-sidebar__link span {
+    display: block;
+    font-size: 0.65rem;
+  }
 }
 
 /* Global Form Resets & Better Mobile Table Padding */
 @media (max-width: 768px) {
-  table th, table td { padding: 0.5rem; font-size: 0.8rem; }
-  .table-responsive { width: 100%; margin-left: -1.5rem; padding: 0 1.5rem; border-left: none; border-right: none; border-radius: 0; }
+  table th,
+  table td {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+  .table-responsive {
+    width: 100%;
+    margin-left: -1.5rem;
+    padding: 0 1.5rem;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+  }
 }
-
 
 /* Extra Admin Layout mobile fixes */
 @media (max-width: 768px) {
@@ -1036,7 +1169,6 @@ tbody tr:hover td {
     flex-wrap: wrap;
   }
 }
-
 
 /* --- Extreme Mobile Fallbacks --- */
 @media (max-width: 480px) {
@@ -1057,23 +1189,90 @@ tbody tr:hover td {
   body {
     font-size: 14px;
   }
-  h1, h2 {
+  h1,
+  h2 {
     word-break: break-word;
   }
 }
-
-
-
-
 
 @media (max-width: 768px) {
   [style*="padding"] {
     /* If it has inline padding with rem that is large, let's just make it a var or cap it */
   }
-  .admin-content > div[style*="padding"] { padding: 1.5rem !important; }
-  .detail-info { padding: 2rem 1.5rem !important; }
-  body > section { padding: 3rem 1.5rem !important; }
-  section[style*="padding"] { padding: 3rem 1.5rem !important; }
-  form[style*="padding"] { padding: 1.5rem !important; }
+  .admin-content > div[style*="padding"] {
+    padding: 1.5rem !important;
+  }
+  .detail-info {
+    padding: 2rem 1.5rem !important;
+  }
+  body > section {
+    padding: 3rem 1.5rem !important;
+  }
+  section[style*="padding"] {
+    padding: 3rem 1.5rem !important;
+  }
+  form[style*="padding"] {
+    padding: 1.5rem !important;
+  }
 }
 
+.admin-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .admin-grid-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.admin-page-header,
+.admin-header-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 2rem !important;
+}
+.admin-header-actions {
+  display: flex;
+  gap: 1rem;
+}
+@media (max-width: 768px) {
+  .admin-page-header,
+  .admin-header-row {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+}
+
+/* Data Grids */
+.admin-data-container {
+  border: var(--border-thick);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 2rem;
+  background: var(--cl-surface);
+}
+
+.admin-data-grid-5 {
+  display: grid;
+  grid-template-columns: 1.2fr 1.5fr 1.2fr 1fr 1fr;
+  min-width: 900px;
+}
+
+.admin-data-grid-4 {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr;
+  min-width: 700px;
+}
+
+.admin-data-grid-3 {
+  display: grid;
+  grid-template-columns: 3fr 2fr 1fr;
+  min-width: 600px;
+}

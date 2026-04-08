@@ -65,8 +65,8 @@ export default function AdminBlogsPage() {
         />
       </div>
 
-      <div style={{ border: "var(--border-thick)", overflow: "hidden" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1fr 1fr", padding: "1rem 1.5rem", background: "var(--cl-text)", color: "var(--cl-bg)", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+      <div className="admin-data-container">
+        <div className="admin-data-grid-4" style={{ padding: "1rem 1.5rem", background: "var(--cl-text)", color: "var(--cl-bg)", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
           <span>Post Title</span><span>Slug</span><span>Published</span><span>Actions</span>
         </div>
         
@@ -81,7 +81,7 @@ export default function AdminBlogsPage() {
           </div>
         ) : (
           filteredBlogs.map((blog, i) => (
-            <div key={blog.id} style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1fr 1fr", padding: "1.25rem 1.5rem", borderTop: i > 0 ? "1px solid var(--cl-muted)" : "none", alignItems: "center" }}>
+            <div className="admin-data-grid-4" key={blog.id} style={{ padding: "1.25rem 1.5rem", borderTop: i > 0 ? "1px solid var(--cl-muted)" : "none", alignItems: "center" }}>
               <div>
                 <p style={{ fontWeight: 700, fontSize: "1.1rem" }}>{blog.title}</p>
                 <p style={{ fontSize: "0.7rem", opacity: 0.5, textTransform: "uppercase" }}>{blog.author || "Rangrez Team"}</p>

@@ -5,19 +5,9 @@ import { ArrowLeft, Calendar, User, Share2, Tag, Bookmark } from "lucide-react";
 import { getBlogBySlug, getAllBlogs } from "../../../lib/supabase/blogs";
 import BlogDetailClient from "./BlogDetailClient";
 
-// Static param generation for "Buttery Smooth" pre-rendering
-export async function generateStaticParams() {
-  try {
-    const blogs = await getAllBlogs();
-    if (!blogs || !Array.isArray(blogs)) return [];
-    return blogs.map((blog) => ({
-      slug: blog.slug,
-    }));
-  } catch (err) {
-    console.error("Error in generateStaticParams for blogs:", err);
-    return [];
-  }
-}
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
 
 // SEO Dynamic Metadata
 export async function generateMetadata({ params }) {

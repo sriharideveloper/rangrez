@@ -1,12 +1,27 @@
 import { getAllBlogs } from "../lib/supabase/blogs";
 import { getAllProducts } from "../lib/supabase/products";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
 export default async function sitemap() {
   const baseUrl = "https://rangrez-henna.com";
 
   // Dynamic content fetching
-  const blogs = await getAllBlogs();
-  const products = await getAllProducts();
+  let blogs = [];
+  let products = [];
+
+  try {
+    blogs = await getAllBlogs();
+  } catch (e) {
+    console.error("sitemap blog fetch error", e);
+  }
+
+  try {
+    products = await getAllProducts();
+  } catch (e) {
+    console.error("sitemap product fetch error", e);
+  }
 
   const blogUrls = blogs.map((blog) => ({
     url: `${baseUrl}/blog/${blog.slug}`,
@@ -23,10 +38,30 @@ export default async function sitemap() {
   }));
 
   const staticUrls = [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
-    { url: `${baseUrl}/shop`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
-    { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
-    { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
+    {
+      url: baseUrl,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 1,
+    },
+    {
+      url: `${baseUrl}/shop`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
   ];
 
   return [...staticUrls, ...blogUrls, ...productUrls];
