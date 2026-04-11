@@ -331,7 +331,7 @@ export default function ProductClient({ product, related, initialReviews }) {
               </div>
             </div>
 
-            <div style={{ maxHeight: "600px", overflowY: "auto", paddingRight: "1rem", display: "flex", flexDirection: "column", gap: "2rem" }}>
+            <div data-lenis-prevent="true"  style={{}}>
               {reviews.map((r, i) => (
                 mounted ? (
                   <motion.div key={r.id} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} style={{ padding: "2rem", background: "var(--cl-bg)", borderRadius: "var(--radius-lg)" }}>

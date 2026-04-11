@@ -57,7 +57,7 @@ export default function CartDrawer() {
             </div>
 
             {/* Items */}
-            <div style={{ flex: 1, overflowY: "auto", padding: "1.25rem" }}>
+            <div data-lenis-prevent="true"  style={{}}>
               {cartItems.length === 0 ? (
                 <div style={{ textAlign: "center", marginTop: "4rem" }}>
                   <ShoppingBag size={48} strokeWidth={1} style={{ opacity: 0.2, marginBottom: "1rem" }} />

@@ -14,6 +14,7 @@ export default function Shop() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
+  const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -74,7 +75,7 @@ export default function Shop() {
 
         {/* Mobile Filter Overlay */}
         {showFilters && (
-          <div style={{ position: "fixed", inset: 0, background: "var(--cl-bg)", zIndex: 100, padding: "2rem", overflowY: "auto" }}>
+          <div data-lenis-prevent="true"  style={{}}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "2rem" }}>
               <h3 style={{ fontSize: "1.5rem", textTransform: "uppercase" }}>Filters</h3>
               <button onClick={() => setShowFilters(false)}><X size={24} /></button>
@@ -98,6 +99,17 @@ export default function Shop() {
             <button className="brutalist-button brutalist-button--outline md:hidden" onClick={() => setShowFilters(true)}>
               <SlidersHorizontal size={16} /> Filters
             </button>
+            <input 
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                padding: "0.5rem 1rem", border: "var(--border-thick)", background: "transparent", 
+                color: "var(--cl-text)", outline: "none", width: "100%", maxWidth: "300px",
+                fontSize: "0.85rem", textTransform: "uppercase"
+              }}
+            />
             <span style={{ fontSize: "0.85rem", fontWeight: 600, textTransform: "uppercase" }}>{filteredProducts.length} Products</span>
             <select
               value={sortBy}
@@ -126,17 +138,16 @@ export default function Shop() {
                       <div className="product-card">
                         <div className="product-card__image">
                           <img src={p.image_url} alt={p.title} loading="lazy" />
-                          {p.status !== "In Stock" && (
+                          {p.stock <= 0 && (
                             <span style={{ position: "absolute", top: "1rem", right: "1rem", background: "var(--cl-primary)", color: "var(--cl-bg)", padding: "0.3rem 0.8rem", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", zIndex: 2 }}>
-                              {p.status}
+                              Out of Stock
                             </span>
                           )}
                         </div>
                         <div className="product-card__body">
                           <div>
                             <span style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", opacity: 0.6, letterSpacing: "0.05em", display: "block" }}>
-                              {p.category}
-                            </span>
+                              {p.size}</span>
                             <h3 className="product-card__title">{p.title}</h3>
                           </div>
                           <div className="product-card__price">
@@ -153,7 +164,7 @@ export default function Shop() {
                 <div style={{ gridColumn: "1/-1", textAlign: "center", padding: "4rem 0", borderTop: "var(--border-thin)", marginTop: "2rem" }}>
                   <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>No products found</h3>
                   <p style={{ opacity: 0.6 }}>Try adjusting your filters.</p>
-                  <button onClick={() => { setFilter("all"); setSortBy("featured"); }} className="brutalist-button" style={{ marginTop: "1.5rem" }}>
+                  <button onClick={() => { setFilter("all"); setSortBy("featured"); setSearchQuery(""); }} className="brutalist-button" style={{ marginTop: "1.5rem" }}>
                     Clear Filters
                   </button>
                 </div>

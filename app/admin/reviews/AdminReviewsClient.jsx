@@ -50,7 +50,7 @@ export default function AdminReviewsClient({ initialReviews }) {
       <AnimatePresence>
         {isBulkOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} data-lenis-prevent="true" style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", padding: "1.5rem", borderBottom: "var(--border-thick)" }}>
                 <h2 style={{ fontSize: "1.5rem" }}>Bulk Import Testimonials</h2>
                 <button onClick={() => setIsBulkOpen(false)}><X size={24} /></button>

@@ -103,7 +103,7 @@ export default function Contact() {
             </div>
 
             {/* Chat Body */}
-            <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div data-lenis-prevent="true"  style={{}}>
               {messages.length === 0 ? (
                 <div style={{ textAlign: "center", opacity: 0.5, marginTop: "2rem" }}>
                   <MessageCircle size={40} style={{ margin: "0 auto 1rem" }} />

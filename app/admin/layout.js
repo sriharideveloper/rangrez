@@ -70,7 +70,7 @@ export default async function AdminLayout({ children }) {
           </div>
         </div>
 
-        <nav className="admin-sidebar-nav">
+        <nav className="admin-sidebar-nav" data-lenis-prevent="true">
           {links.map((l) => (
             <Link key={l.href} href={l.href} className="admin-sidebar__link">
               {l.icon} {l.label}
