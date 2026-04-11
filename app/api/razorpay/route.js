@@ -1,7 +1,7 @@
 import Razorpay from "razorpay";
 import { NextResponse } from "next/server";
 import { rateLimit } from "../middleware/rateLimit";
-import { createClient } from "../../../../lib/supabase/server";
+import { createClient } from "../../../lib/supabase/server";
 
 export async function POST(req) {
   // Apply rate limiting: max 10 requests per minute
