@@ -9,7 +9,7 @@ import {
   Star,
   FileText,
   Users,
-  Truck
+  Truck,
 } from "lucide-react";
 import { getUser } from "../actions/auth";
 
@@ -43,7 +43,10 @@ export default async function AdminLayout({ children }) {
     { href: "/admin/coupons", label: "Coupons", icon: <Ticket size={18} /> },
     { href: "/admin/messages", label: "Inbox", icon: <Inbox size={18} /> },
     { href: "/admin/reviews", label: "Testimonials", icon: <Star size={18} /> },
-      { href: "/admin/shipping", label: "Shipping", icon: <Truck size={18} /> },
+    { href: "/admin/shipping", label: "Shipping", icon: <Truck size={18} /> },
+  ];
+
+  return (
     <div className="admin-layout">
       <aside className="admin-sidebar">
         <div className="admin-sidebar-header">
@@ -68,7 +71,10 @@ export default async function AdminLayout({ children }) {
           </div>
         </div>
 
-        <nav className="admin-sidebar-nav hide-scrollbar" data-lenis-prevent="true">
+        <nav
+          className="admin-sidebar-nav hide-scrollbar"
+          data-lenis-prevent="true"
+        >
           {links.map((l) => (
             <Link key={l.href} href={l.href} className="admin-sidebar__link">
               {l.icon} {l.label}
