@@ -14,11 +14,8 @@ import SpotlightCard from "../../../components/SpotlightCard";
 import { submitProductReview } from "../../../lib/supabase/engagement";
 import { createClient } from "../../../lib/supabase/client";
 
-const SIZES = ["Standard", "Large", "Full Arm"];
-
 export default function ProductClient({ product, related, initialReviews }) {
   const { addItem } = useCartStore();
-  const [selectedSize, setSelectedSize] = useState("Standard");
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
@@ -60,7 +57,7 @@ export default function ProductClient({ product, related, initialReviews }) {
   }, [product?.id]);
 
   const handleAdd = () => {
-    addItem({ ...product, image: product.images?.[0] || product.image_url, size: selectedSize, quantity: qty });
+    addItem({ ...product, image: product.images?.[0] || product.image_url, quantity: qty });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -223,30 +220,8 @@ export default function ProductClient({ product, related, initialReviews }) {
             {product.description || "Indulge in our artisan-grade stencils, designed for the modern henna enthusiast."}
           </p>
 
-          {/* SIZES */}
-          <div style={{ borderTop: "var(--border-thin)", paddingTop: "2rem" }}>
-            <p className="input-label" style={{ marginBottom: "1rem" }}>Select Size Style</p>
-            <div style={{ display: "flex", gap: "0.75rem" }}>
-              {SIZES.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setSelectedSize(s)}
-                  style={{
-                    padding: "1rem 1.5rem", borderRadius: "var(--radius-md)", fontSize: "0.9rem", fontWeight: 600,
-                    border: selectedSize === s ? "2px solid var(--cl-text)" : "1px solid var(--cl-muted)",
-                    background: selectedSize === s ? "var(--cl-text)" : "transparent",
-                    color: selectedSize === s ? "var(--cl-bg)" : "inherit",
-                    transition: "all 0.2s"
-                  }}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* QUANTITY & ACTIONS */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginTop: "1rem" }}>
             <div style={{ 
               display: "inline-flex", alignItems: "center", border: "var(--border-thick)", 
               borderRadius: "100px", padding: "0.25rem" 
@@ -271,7 +246,7 @@ export default function ProductClient({ product, related, initialReviews }) {
                 className="brutalist-button"
                 onClick={handleAdd}
                 whileTap={{ scale: 0.95 }}
-                style={{ flex: 1, height: "60px", fontSize: "1.1rem" }}
+                style={{ flex: 1, minHeight: "60px", fontSize: "1rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "normal" }}
               >
                 {added ? <><Check /> Added!</> : <><ShoppingBag /> Add to Cart — ₹{product.price * qty}</>}
               </motion.button>
@@ -279,7 +254,7 @@ export default function ProductClient({ product, related, initialReviews }) {
               <button
                 className="brutalist-button"
                 onClick={handleAdd}
-                style={{ flex: 1, height: "60px", fontSize: "1.1rem" }}
+                style={{ flex: 1, minHeight: "60px", fontSize: "1rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "normal" }}
               >
                 {added ? <><Check /> Added!</> : <><ShoppingBag /> Add to Cart — ₹{product.price * qty}</>}
               </button>

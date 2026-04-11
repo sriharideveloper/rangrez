@@ -151,15 +151,26 @@ export default function AdminOrdersClient({ initialOrders }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
                 <Truck size={14} /> DTDC Tracking
               </div>
-              <input 
-                type="text" 
-                placeholder="Enter AWB no."
-                value={trackingNumberInput[order.id] !== undefined ? trackingNumberInput[order.id] : (order.tracking_number || "") }
-                onChange={(e) => handleTrackingChange(order.id, e.target.value)}
-                style={{
-                  padding: "0.2rem 0.4rem", fontSize: "0.8rem", border: "1px solid var(--cl-muted)", outline: "none", width: "90%"
-                }}
-              />
+              <div style={{ display: 'flex', gap: '0.3rem' }}>
+                <input 
+                  type="text" 
+                  placeholder="Enter AWB no."
+                  value={trackingNumberInput[order.id] !== undefined ? trackingNumberInput[order.id] : (order.tracking_number || "") }
+                  onChange={(e) => handleTrackingChange(order.id, e.target.value)}
+                  style={{
+                    padding: "0.2rem 0.4rem", fontSize: "0.8rem", border: "1px solid var(--cl-muted)", outline: "none", flex: 1
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => handleUpdate(order.id, order.order_status || "processing", order.tracking_number)}
+                  style={{
+                    padding: "0.2rem 0.6rem", fontSize: "0.7rem", fontWeight: "bold", background: "var(--cl-text)", color: "var(--cl-bg)", border: "none", cursor: "pointer"
+                  }}
+                >
+                  SAVE
+                </button>
+              </div>
               {order.tracking_url && (
                 <a href={order.tracking_url} target="_blank" rel="noreferrer" style={{fontSize: "0.7rem", color: "var(--cl-accent)", textDecoration: "underline"}}>
                   Verify Link <ExternalLink size={10} style={{display:'inline'}}/>

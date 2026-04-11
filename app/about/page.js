@@ -30,7 +30,7 @@ export default function About() {
         <ScrollFloat delay={0.2}>
           <h2 className="title-section" style={{ marginBottom: "1.5rem", textAlign: "right", marginTop: "4rem" }}>Modern Solution</h2>
           <p style={{ fontSize: "1.2rem", lineHeight: 1.8, fontWeight: 300, textAlign: "right" }}>
-            By utilizing high-grade, reusable adhesives and precision-cut silicone materials, we have created
+            By utilizing high-grade, adhesives and precision-cut silicone materials, we have created
             stencils that honor the freehand mastery of generational artists. It is an unhinged dedication to
             extreme cleanliness and geometric purity, ensuring every stain left behind is perfectly balanced,
             crisp, and inherently premium.
@@ -52,7 +52,7 @@ export default function About() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2rem", maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
           {[
             { num: "50+", label: "Unique Designs" },
-            { num: "8x", label: "Reusable" },
+            { num: "1-Time", label: "Perfect Use" },
             { num: "10K+", label: "Happy Customers" },
             { num: "100%", label: "Skin Safe" },
           ].map((stat, i) => (
@@ -77,7 +77,7 @@ export default function About() {
           {[
             { title: "Precision", text: "Every stencil is cut with absolute mathematical accuracy to ensure the final stain is flawless." },
             { title: "Heritage", text: "Roots in centuries-old traditions, adapted for effortless modern aesthetics." },
-            { title: "Sustainability", text: "Built to last. Washable and reusable for up to eight full sessions without losing tackiness." },
+            { title: "Sustainability", text: "Designed for perfection. Single-use and hygienic to ensure the cleanest, sharpest stain for your special occasion." },
           ].map((val, i) => (
             <ScrollFloat key={i} delay={i * 0.15}>
               <div style={{ borderTop: "var(--border-thick)", paddingTop: "1.5rem" }}>

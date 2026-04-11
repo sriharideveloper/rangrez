@@ -94,7 +94,15 @@ export default function Checkout() {
             id: i.id,
             title: i.title,
             qty: i.quantity,
+            price: i.price,
+            product_id: i.id,
+            quantity: i.quantity
           })),
+          subtotal: getSubtotal(),
+          discount_amount: getSubtotal() - eligibleSubtotal,
+          coupon_code: appliedCoupon ? appliedCoupon.code : null,
+          total: total,
+          address: address
         }),
       });
       const order = await res.json();
@@ -128,7 +136,7 @@ export default function Checkout() {
           });
           const result = await verifyRes.json();
           if (result.success) {
-            setOrderComplete(true);
+            setOrderComplete(result.order_id || true);
             clearCart();
           } else {
             alert("Payment verification failed. Please contact support.");
@@ -334,7 +342,7 @@ export default function Checkout() {
                   id: "email",
                   label: "Email",
                   type: "email",
-                  placeholder: "hello@example.com",
+                  placeholder: "rangrezstencils@gmail.com",
                 },
                 {
                   id: "phone",

@@ -90,7 +90,7 @@ export default function AdminCouponsClient({ initialCoupons }) {
       <AnimatePresence>
         {isFormOpen && (
           <motion.div onClick={(e) => { if(e.target===e.currentTarget) setIsFormOpen(false); }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-            <motion.div onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
+            <motion.div onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", overscrollBehavior: "contain", overscrollBehavior: "contain", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", padding: "1.5rem", borderBottom: "var(--border-thick)" }}>
                 <h2 style={{ fontSize: "1.5rem" }}>{editingId ? "Edit Coupon" : "New Coupon"}</h2>
                 <button onClick={resetForm}><X size={24} /></button>
@@ -195,4 +195,5 @@ export default function AdminCouponsClient({ initialCoupons }) {
     </div>
   );
 }
+
 

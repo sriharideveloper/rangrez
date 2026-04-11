@@ -1,6 +1,7 @@
 import Razorpay from "razorpay";
 import { NextResponse } from "next/server";
 import { rateLimit } from "../middleware/rateLimit";
+import { createClient } from "../../../../lib/supabase/server";
 
 export async function POST(req) {
   // Apply rate limiting: max 10 requests per minute
@@ -9,7 +10,7 @@ export async function POST(req) {
 
   try {
     const body = await req.json();
-    const { amount, items } = body;
+    const { amount, items, subtotal, discount_amount, coupon_code, total, address } = body;
 
     if (!amount || amount <= 0) {
       return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
@@ -43,9 +44,21 @@ export async function POST(req) {
     };
 
     const order = await razorpay.orders.create(options);
+
+    // Save session to prevent drops
+    const supabase = await createClient();
+    const { data: userData } = await supabase.auth.getUser();
+    
+    await supabase.from("payment_sessions").insert({
+      razorpay_order_id: order.id,
+      user_id: userData?.user?.id || null,
+      order_data: { items, subtotal, discount_amount, coupon_code, total, address }
+    });
+
     return NextResponse.json(order);
   } catch (error) {
     console.error("Error creating Razorpay order:", error);
     return NextResponse.json({ error: "Failed to create order" }, { status: 500 });
   }
 }
+

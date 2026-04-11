@@ -25,13 +25,12 @@ export default function Shop() {
     loadProducts();
   }, []);
 
-  const categories = useMemo(() => {
-    const cats = new Set(products.map(p => p.category));
-    return ["all", ...Array.from(cats).filter(Boolean)];
-  }, [products]);
+  const sizes = useMemo(() => {
+    return ["all", "Bridal", "Semi Bridal", "Extra Large", "Large", "Medium", "Small"];
+  }, []);
 
   const filteredProducts = useMemo(() => {
-    let result = filter === "all" ? products : products.filter(p => p.category === filter);
+    let result = filter === "all" ? products : products.filter(p => p.size === filter);
     
     switch (sortBy) {
       case "price-asc": result.sort((a, b) => a.price - b.price); break;
@@ -54,9 +53,9 @@ export default function Shop() {
       <div style={{ display: "flex", flex: 1, position: "relative" }}>
         {/* Desktop Sidebar */}
         <aside style={{ width: "260px", padding: "2rem", borderRight: "var(--border-thick)", display: "none" }} className="md:block">
-          <h3 style={{ fontSize: "1rem", fontWeight: 700, textTransform: "uppercase", marginBottom: "1.5rem" }}>Filter by Category</h3>
+          <h3 style={{ fontSize: "1rem", fontWeight: 700, textTransform: "uppercase", marginBottom: "1.5rem" }}>Filter by Size</h3>
           <ul style={{ display: "flex", flexDirection: "column", gap: "0.75rem", listStyle: "none", padding: 0 }}>
-            {categories.map((cat) => (
+            {sizes.map((cat) => (
               <li key={cat}>
                 <button
                   onClick={() => setFilter(cat)}
@@ -81,7 +80,7 @@ export default function Shop() {
               <button onClick={() => setShowFilters(false)}><X size={24} /></button>
             </div>
             <ul style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              {categories.map((cat) => (
+              {sizes.map((cat) => (
                 <li key={cat}>
                   <button onClick={() => { setFilter(cat); setShowFilters(false); }} className="brutalist-button brutalist-button--outline" style={{ width: "100%", textAlign: "left", background: filter === cat ? "var(--cl-text)" : "transparent", color: filter === cat ? "var(--cl-bg)" : "var(--cl-text)" }}>
                     {cat}

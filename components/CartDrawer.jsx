@@ -85,9 +85,8 @@ export default function CartDrawer() {
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                           <div>
                             <h4 style={{ fontSize: "0.95rem", fontWeight: 600, fontFamily: "var(--font-body)" }}>{item.title || "Stencil"}</h4>
-                            <p style={{ fontSize: "0.75rem", opacity: 0.6 }}>{item.size || "Standard"}</p>
                           </div>
-                          <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>₹{item.price * item.quantity}</span>
+                          <span style={{ fontWeight: 700, fontSize: "0.95rem", whiteSpace: "nowrap", marginLeft: "1rem" }}>₹{item.price * item.quantity}</span>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.5rem" }}>
                           <div style={{ display: "inline-flex", alignItems: "center", border: "2px solid var(--cl-text)" }}>

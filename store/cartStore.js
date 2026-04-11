@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { 
-  fetchUserCart, 
-  addToCloudCart, 
-  updateCloudQuantity, 
-  removeFromCloudCart, 
+import {
+  fetchUserCart,
+  addToCloudCart,
+  updateCloudQuantity,
+  removeFromCloudCart,
   clearCloudCart,
-  syncLocalToCloud 
+  syncLocalToCloud,
 } from "../lib/supabase/cart";
 
 export const useCartStore = create(
@@ -30,16 +30,12 @@ export const useCartStore = create(
 
       addItem: async (product) => {
         const state = get();
-        const existing = state.items.find(
-          (i) => i.id === product.id && i.size === product.size
-        );
+        const existing = state.items.find((i) => i.id === product.id);
 
         let newItems;
         if (existing) {
           newItems = state.items.map((i) =>
-            i.id === product.id && i.size === product.size
-              ? { ...i, quantity: i.quantity + 1 }
-              : i
+            i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i,
           );
         } else {
           newItems = [...state.items, { ...product, quantity: 1 }];
@@ -48,16 +44,16 @@ export const useCartStore = create(
         set({ items: newItems, isOpen: true });
 
         if (state.userId) {
-          await addToCloudCart(state.userId, { 
-            ...product, 
-            quantity: existing ? existing.quantity + 1 : 1 
+          await addToCloudCart(state.userId, {
+            ...product,
+            quantity: existing ? existing.quantity + 1 : 1,
           });
         }
       },
 
       removeItem: async (id) => {
         const state = get();
-        const itemToRemove = state.items.find(i => i.id === id);
+        const itemToRemove = state.items.find((i) => i.id === id);
         set((state) => ({
           items: state.items.filter((i) => i.id !== id),
         }));
@@ -69,8 +65,8 @@ export const useCartStore = create(
 
       updateQuantity: async (id, qty) => {
         const state = get();
-        const item = state.items.find(i => i.id === id);
-        
+        const item = state.items.find((i) => i.id === id);
+
         if (qty <= 0) {
           state.removeItem(id);
           return;
@@ -78,7 +74,7 @@ export const useCartStore = create(
 
         set((state) => ({
           items: state.items.map((i) =>
-            i.id === id ? { ...i, quantity: qty } : i
+            i.id === id ? { ...i, quantity: qty } : i,
           ),
         }));
 
@@ -98,9 +94,8 @@ export const useCartStore = create(
       getSubtotal: () =>
         get().items.reduce((t, i) => t + i.price * i.quantity, 0),
 
-      getItemCount: () =>
-        get().items.reduce((t, i) => t + i.quantity, 0),
+      getItemCount: () => get().items.reduce((t, i) => t + i.quantity, 0),
     }),
-    { name: "rangrez-cart" }
-  )
+    { name: "rangrez-cart" },
+  ),
 );

@@ -17,9 +17,8 @@ CREATE TABLE IF NOT EXISTS public.products (
     updated_at TIMESTAMPTZ DEFAULT now()
 );
 
-ALTER TABLE public.products ADD COLUMN IF NOT EXISTS stock_standard INTEGER DEFAULT 0;
-ALTER TABLE public.products ADD COLUMN IF NOT EXISTS stock_large INTEGER DEFAULT 0;
-ALTER TABLE public.products ADD COLUMN IF NOT EXISTS stock_full_arm INTEGER DEFAULT 0;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS size TEXT;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS stock INTEGER DEFAULT 0;
 ALTER TABLE public.products ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
 
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
@@ -109,7 +108,6 @@ CREATE TABLE IF NOT EXISTS public.order_items (
     order_id UUID NOT NULL REFERENCES public.orders(id) ON DELETE CASCADE,
     product_id UUID NOT NULL REFERENCES public.products(id) ON DELETE RESTRICT,
     title TEXT NOT NULL,
-    size TEXT NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity > 0),
     price_at_time DECIMAL(10,2) NOT NULL,
     created_at TIMESTAMPTZ DEFAULT now()
@@ -156,18 +154,12 @@ BEGIN
     ) RETURNING id INTO new_order_id;
 
     FOR item IN SELECT * FROM jsonb_array_elements(p_items) LOOP
-        IF item->>'size' = 'Standard' THEN
-            UPDATE public.products SET stock_standard = stock_standard - (item->>'quantity')::INTEGER WHERE id = (item->>'product_id')::UUID AND stock_standard >= (item->>'quantity')::INTEGER RETURNING stock_standard INTO current_stock;
-        ELSIF item->>'size' = 'Large' THEN
-            UPDATE public.products SET stock_large = stock_large - (item->>'quantity')::INTEGER WHERE id = (item->>'product_id')::UUID AND stock_large >= (item->>'quantity')::INTEGER RETURNING stock_large INTO current_stock;
-        ELSIF item->>'size' = 'Full Arm' THEN
-            UPDATE public.products SET stock_full_arm = stock_full_arm - (item->>'quantity')::INTEGER WHERE id = (item->>'product_id')::UUID AND stock_full_arm >= (item->>'quantity')::INTEGER RETURNING stock_full_arm INTO current_stock;
-        END IF;
+        UPDATE public.products SET stock = stock - (item->>'quantity')::INTEGER WHERE id = (item->>'product_id')::UUID AND stock >= (item->>'quantity')::INTEGER RETURNING stock INTO current_stock;
 
-        IF current_stock IS NULL THEN RAISE EXCEPTION 'Insufficient stock for %', (item->>'size'); END IF;
+        IF current_stock IS NULL THEN RAISE EXCEPTION 'Insufficient stock for %', (item->>'title'); END IF;
 
-        INSERT INTO public.order_items (order_id, product_id, title, size, quantity, price_at_time) VALUES (
-            new_order_id, (item->>'product_id')::UUID, item->>'title', item->>'size', (item->>'quantity')::INTEGER, (item->>'price')::DECIMAL
+        INSERT INTO public.order_items (order_id, product_id, title, quantity, price_at_time) VALUES (
+            new_order_id, (item->>'product_id')::UUID, item->>'title', (item->>'quantity')::INTEGER, (item->>'price')::DECIMAL
         );
     END LOOP;
 

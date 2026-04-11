@@ -128,7 +128,7 @@ function LoginForm() {
 
             <div>
               <label className="input-label" htmlFor="email">Email</label>
-              <input id="email" name="email" type="email" required className="input-field" placeholder="hello@example.com" />
+              <input id="email" name="email" type="email" required className="input-field" placeholder="rangrezstencils@gmail.com" />
             </div>
 
             <div>

@@ -30,9 +30,8 @@ CREATE TABLE IF NOT EXISTS public.cart_items (
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     product_id UUID NOT NULL REFERENCES public.products(id) ON DELETE CASCADE,
     quantity INTEGER DEFAULT 1,
-    size TEXT, -- 'Standard', 'Large', 'Full Arm'
     created_at TIMESTAMPTZ DEFAULT now(),
-    UNIQUE(user_id, product_id, size)
+    UNIQUE(user_id, product_id)
 );
 
 ALTER TABLE public.cart_items ENABLE ROW LEVEL SECURITY;

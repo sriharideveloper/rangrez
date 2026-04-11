@@ -71,9 +71,9 @@ export default function Contact() {
             <h2 className="title-section" style={{ marginBottom: "2.5rem" }}>Get In Touch</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
               {[
-                { icon: <Mail size={20} />, label: "Email", value: "hello@rangrezhenna.com" },
+                { icon: <Mail size={20} />, label: "Email", value: "rangrezstencils@gmail.com" },
                 { icon: <Camera size={20} />, label: "Instagram", value: "@rangrez_henna_stencils" },
-                { icon: <MapPin size={20} />, label: "Location", value: "Malappuram, Kerala, India" },
+                { icon: <MapPin size={20} />, label: "Location", value: "Kochi, Kerala, India" },
               ].map((item, i) => (
                 <div key={i} style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
                   <div style={{ width: "40px", height: "40px", border: "var(--border-thick)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>

@@ -16,7 +16,7 @@ export default function AdminProductsClient({ initialProducts }) {
   const [editingId, setEditingId] = useState(null);
 
   const [formData, setFormData] = useState({
-    title: "", slug: "", price: "", compare_at_price: "", style: "Floral", category: "Bridal", status: "In Stock", is_featured: false, description: "", image_url: "", gallery_urls: [],
+    title: "", slug: "", price: "", compare_at_price: "", style: "Floral", category: "Bridal", size: "Bridal", stock: 0, status: "In Stock", is_featured: false, description: "", image_url: "", gallery_urls: [],
   });
 
   const handleTitleChange = (e) => {
@@ -32,7 +32,10 @@ export default function AdminProductsClient({ initialProducts }) {
   const handleEdit = (p) => {
     setEditingId(p.id);
     setFormData({
-      title: p.title, slug: p.slug, price: p.price, compare_at_price: p.compare_at_price || "", style: p.style, category: p.category, status: p.status, is_featured: p.is_featured, description: p.description || "", image_url: p.image_url || "", gallery_urls: p.images || p.gallery_urls || []
+      title: p.title, slug: p.slug, price: p.price, compare_at_price: p.compare_at_price || "", 
+      style: p.style, category: p.category, size: p.size || "Bridal", stock: p.stock || 0,
+      status: p.status, is_featured: p.is_featured, description: p.description || "", 
+      image_url: p.image_url || "", gallery_urls: p.images || p.gallery_urls || []
     });
     setIsFormOpen(true);
   };
@@ -90,6 +93,7 @@ export default function AdminProductsClient({ initialProducts }) {
       ...formData,
       price: parseFloat(formData.price),
       compare_at_price: formData.compare_at_price ? parseFloat(formData.compare_at_price) : null,
+      stock: parseInt(formData.stock, 10),
       id: editingId,
       images: formData.gallery_urls
     };
@@ -139,7 +143,7 @@ export default function AdminProductsClient({ initialProducts }) {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ title: "", slug: "", price: "", compare_at_price: "", style: "Floral", category: "Bridal", status: "In Stock", is_featured: false, description: "", image_url: "", gallery_urls: [] });
+    setFormData({ title: "", slug: "", price: "", compare_at_price: "", style: "Floral", category: "Bridal", size: "Bridal", stock: 0, status: "In Stock", is_featured: false, description: "", image_url: "", gallery_urls: [] });
     setIsFormOpen(false);
   };
 
@@ -161,7 +165,7 @@ export default function AdminProductsClient({ initialProducts }) {
       <AnimatePresence>
         {isBulkOpen && (
           <motion.div onClick={(e) => { if(e.target===e.currentTarget) setIsBulkOpen(false); }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-            <motion.div onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
+            <motion.div onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", overscrollBehavior: "contain", overscrollBehavior: "contain", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", padding: "1.5rem", borderBottom: "var(--border-thick)" }}>
                 <h2 style={{ fontSize: "1.5rem" }}>Bulk Import via JSON</h2>
                 <button onClick={() => setIsBulkOpen(false)}><X size={24} /></button>
@@ -188,7 +192,7 @@ export default function AdminProductsClient({ initialProducts }) {
 
         {isFormOpen && (
           <motion.div onClick={(e) => { if(e.target===e.currentTarget) setIsFormOpen(false); }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-            <motion.div onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "800px", maxHeight: "90vh", overflowY: "auto", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
+            <motion.div onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "800px", maxHeight: "90vh", overflowY: "auto", overscrollBehavior: "contain", overscrollBehavior: "contain", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", padding: "1.5rem", borderBottom: "var(--border-thick)" }}>
                 <h2 style={{ fontSize: "1.5rem" }}>{editingId ? "Edit Product" : "New Product"}</h2>
                 <button onClick={resetForm}><X size={24} /></button>
@@ -223,8 +227,21 @@ export default function AdminProductsClient({ initialProducts }) {
                       <option>Floral</option><option>Geometric</option><option>Paisley</option><option>Arabic</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="input-label">Status</label>
+                  <div>                      <label className="input-label">Size Classification</label>
+                      <select className="input-field" value={formData.size} onChange={e => setFormData({...formData, size: e.target.value})}>
+                        <option>Bridal</option>
+                        <option>Semi Bridal</option>
+                        <option>Extra Large</option>
+                        <option>Large</option>
+                        <option>Medium</option>
+                        <option>Small</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="input-label">Stock Quantity</label>
+                      <input type="number" step="1" min="0" required className="input-field" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} />
+                    </div>
+                    <div>                    <label className="input-label">Status</label>
                     <select className="input-field" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}>
                       <option>In Stock</option><option>Out of Stock</option><option>Low Stock</option><option>Best Seller</option><option>New</option>
                     </select>
@@ -330,4 +347,5 @@ export default function AdminProductsClient({ initialProducts }) {
     </div>
   );
 }
+
 
