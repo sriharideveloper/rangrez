@@ -7,7 +7,7 @@ CREATE OR REPLACE FUNCTION place_order(
     p_shipping JSONB, p_subtotal DECIMAL, p_discount DECIMAL,
     p_coupon TEXT, p_total DECIMAL, p_items JSONB
 )
-RETURNS UUID LANGUAGE plpgsql SECURITY DEFINER AS \$\$
+RETURNS UUID LANGUAGE plpgsql SECURITY DEFINER AS $$
 DECLARE
     new_order_id UUID;
     item JSONB;
@@ -42,4 +42,4 @@ BEGIN
 
     RETURN new_order_id;
 END;
-\$\$;
+$$;
