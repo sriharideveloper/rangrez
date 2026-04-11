@@ -52,9 +52,9 @@ function LoginForm() {
   };
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
+    <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", minHeight: "100vh" }}>
       {/* Left: Form */}
-      <section className="border-r" style={{ flex: "1 1 500px", padding: "3rem 2rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+      <section className="border-r" style={{ flex: "1 1 100%", minWidth: "300px", maxWidth: "1000px", padding: "3rem 1.5rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", margin: "0 auto" }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -185,7 +185,7 @@ function LoginForm() {
       </section>
 
       {/* Right: Visual */}
-      <section style={{ flex: "1 1 500px", background: "var(--cl-primary)", position: "relative", overflow: "hidden", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", padding: "3rem" }}>
+      <section style={{ flex: "1 1 100%", minWidth: "300px", minHeight: "300px", background: "var(--cl-primary)", position: "relative", overflow: "hidden", display: "flex", alignItems: "flex-end", justifyContent: "flex-end", padding: "3rem" }}>
         {/* Animated orbs (Aurora-inspired) */}
         <motion.div
           animate={{ scale: [1, 1.3, 1], x: [0, 50, 0], y: [0, -30, 0] }}

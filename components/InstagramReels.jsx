@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Camera, ArrowUpRight, Play } from "lucide-react";
 import { INSTAGRAM_REELS } from "../lib/mockData";
@@ -114,6 +114,12 @@ function ReelCard({ url, index }) {
 export default function InstagramReels() {
   const [displayCount, setDisplayCount] = useState(8);
   const reels = INSTAGRAM_REELS;
+
+  useEffect(() => {
+    if (window.innerWidth <= 768) {
+      setDisplayCount(3);
+    }
+  }, []);
 
   return (
     <section style={{ padding: "var(--section-padding) 2rem", background: "var(--cl-bg)", position: "relative", overflow: "hidden" }}>
