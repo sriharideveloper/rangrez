@@ -42,7 +42,7 @@ export default function AdminReviewsClient({ initialReviews }) {
     <div>
       <div className="admin-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <h1 style={{ fontSize: "2rem", fontFamily: "var(--font-heading)", textTransform: "uppercase" }}>Testimonials</h1>
-        <button onClick={() => setIsBulkOpen(true)} className="brutalist-button brutalist-button--outline" style={{ padding: "0.8rem 1.5rem" }}>
+        <button onClick={() => setIsBulkOpen(true)} className="brutalist-button brutalist-button--outline brutalist-button--sm" style={{ padding: "0.8rem 1.2rem" }}>
           JSON Bulk Import
         </button>
       </div>
@@ -50,7 +50,7 @@ export default function AdminReviewsClient({ initialReviews }) {
       <AnimatePresence>
         {isBulkOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} data-lenis-prevent="true" style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} data-lenis-prevent="true" style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", padding: "1.5rem", borderBottom: "var(--border-thick)" }}>
                 <h2 style={{ fontSize: "1.5rem" }}>Bulk Import Testimonials</h2>
                 <button onClick={() => setIsBulkOpen(false)}><X size={24} /></button>
@@ -68,7 +68,7 @@ export default function AdminReviewsClient({ initialReviews }) {
                   value={bulkJson} 
                   onChange={e => setBulkJson(e.target.value)} 
                 />
-                <button type="submit" disabled={loading} className="brutalist-button" style={{ marginTop: "1rem" }}>
+                <button type="submit" disabled={loading} className="brutalist-button brutalist-button--sm" style={{ marginTop: "1rem" }}>
                   {loading ? "Importing..." : "Run Import"}
                 </button>
               </form>

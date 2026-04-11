@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, CreditCard, Shield, Check, Tag } from "lucide-react";
+import { ArrowLeft, CreditCard, Shield, Check, Tag, AlertTriangle } from "lucide-react";
 import { useCartStore } from "../../store/cartStore";
 import { loadRazorpay } from "../../utils/razorpay";
 import { validateCoupon } from "../../lib/supabase/coupons";
@@ -213,7 +213,7 @@ export default function Checkout() {
           Thank you for your order. You will receive a confirmation email
           shortly.
         </p>
-        <Link href="/shop" className="brutalist-button">
+        <Link href="/shop" className="brutalist-button brutalist-button--sm">
           Continue Shopping
         </Link>
       </div>
@@ -236,7 +236,7 @@ export default function Checkout() {
         <h2 className="title-section" style={{ marginBottom: "1rem" }}>
           Your cart is empty
         </h2>
-        <Link href="/shop" className="brutalist-button">
+        <Link href="/shop" className="brutalist-button brutalist-button--sm">
           <ArrowLeft size={18} /> Shop Now
         </Link>
       </div>
@@ -394,7 +394,7 @@ export default function Checkout() {
               ))}
               <button
                 type="submit"
-                className="brutalist-button brutalist-button--full"
+                className="brutalist-button brutalist-button--sm brutalist-button--full"
                 style={{ marginTop: "1rem", padding: "1rem" }}
               >
                 Continue to Payment
@@ -449,7 +449,7 @@ export default function Checkout() {
                 <button
                   onClick={handlePayment}
                   disabled={loading}
-                  className="brutalist-button"
+                  className="brutalist-button brutalist-button--sm"
                   style={{
                     flex: 2,
                     padding: "1rem",
@@ -609,7 +609,7 @@ export default function Checkout() {
                       <button
                         onClick={handleApplyCoupon}
                         disabled={couponLoading || !couponInput.trim()}
-                        className="brutalist-button"
+                        className="brutalist-button brutalist-button--sm"
                         style={{
                           padding: "0.75rem 1.5rem",
                           minWidth: "100px",

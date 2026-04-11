@@ -57,7 +57,7 @@ export default function CartDrawer() {
             </div>
 
             {/* Items */}
-            <div data-lenis-prevent="true"  style={{}}>
+            <div className="hide-scrollbar" data-lenis-prevent="true"  style={{}}>
               {cartItems.length === 0 ? (
                 <div style={{ textAlign: "center", marginTop: "4rem" }}>
                   <ShoppingBag size={48} strokeWidth={1} style={{ opacity: 0.2, marginBottom: "1rem" }} />
@@ -127,7 +127,7 @@ export default function CartDrawer() {
                 <Link
                   href="/checkout"
                   onClick={toggleCart}
-                  className="brutalist-button brutalist-button--full"
+                  className="brutalist-button brutalist-button--sm brutalist-button--full"
                   style={{ padding: "1rem" }}
                 >
                   Checkout <ArrowRight size={16} />

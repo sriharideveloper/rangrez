@@ -181,12 +181,9 @@ export default function ProductClient({ product, related, initialReviews }) {
         <div style={{ flex: "1 1 40%", minWidth: "350px", padding: "4rem 3rem", display: "flex", flexDirection: "column", gap: "2.5rem" }}>
           <header>
             <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1.5rem" }}>
-              {product.status && (
-                <span style={{ 
-                  background: "var(--cl-text)", color: "var(--cl-bg)", padding: "0.4rem 1rem", 
-                  fontSize: "0.7rem", fontWeight: 700, borderRadius: "100px", textTransform: "uppercase" 
-                }}>
-                  {product.status}
+              {product.stock <= 0 && (
+                <span style={{ padding: "0.2rem 0.6rem", background: "var(--cl-primary)", color: "var(--cl-bg)", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase" }}>
+                  Out of Stock
                 </span>
               )}
               {mounted && (
@@ -243,7 +240,7 @@ export default function ProductClient({ product, related, initialReviews }) {
 
             {mounted ? (
               <motion.button
-                className="brutalist-button"
+                className="brutalist-button brutalist-button--sm"
                 onClick={handleAdd}
                 whileTap={{ scale: 0.95 }}
                 style={{ flex: 1, minHeight: "60px", fontSize: "1rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "normal" }}
@@ -252,7 +249,7 @@ export default function ProductClient({ product, related, initialReviews }) {
               </motion.button>
             ) : (
               <button
-                className="brutalist-button"
+                className="brutalist-button brutalist-button--sm"
                 onClick={handleAdd}
                 style={{ flex: 1, minHeight: "60px", fontSize: "1rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "normal" }}
               >
@@ -275,10 +272,10 @@ export default function ProductClient({ product, related, initialReviews }) {
               </div>
             </div>
             <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-              <ShieldCheck size={20} style={{ color: "var(--cl-primary)" }} />
+              <AlertCircle size={20} style={{ color: "var(--cl-primary)" }} />
               <div style={{ fontSize: "0.85rem" }}>
-                <p style={{ fontWeight: 700 }}>Quality Guarantee</p>
-                <p style={{ opacity: 0.6 }}>Laser-cut precision</p>
+                <p style={{ fontWeight: 700 }}>No Refund Policy</p>
+                <p style={{ opacity: 0.6 }}>All sales are final</p>
               </div>
             </div>
           </div>
@@ -313,7 +310,7 @@ export default function ProductClient({ product, related, initialReviews }) {
                 rows={5} className="input-field" 
                 value={reviewInput.comment} onChange={e => setReviewInput({...reviewInput, comment: e.target.value})}
               />
-              <button type="submit" disabled={submittingReview} className="brutalist-button" style={{ width: "fit-content" }}>
+              <button type="submit" disabled={submittingReview} className="brutalist-button brutalist-button--sm" style={{ width: "fit-content" }}>
                 {submittingReview ? "Submitting..." : "Post Review"}
               </button>
             </form>
@@ -331,7 +328,7 @@ export default function ProductClient({ product, related, initialReviews }) {
               </div>
             </div>
 
-            <div data-lenis-prevent="true"  style={{}}>
+            <div className="hide-scrollbar" data-lenis-prevent="true"  style={{}}>
               {reviews.map((r, i) => (
                 mounted ? (
                   <motion.div key={r.id} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} style={{ padding: "2rem", background: "var(--cl-bg)", borderRadius: "var(--radius-lg)" }}>

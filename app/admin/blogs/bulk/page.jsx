@@ -62,7 +62,7 @@ export default function BulkBlogUpload() {
           <button 
             onClick={handleBulkUpload}
             disabled={loading || !jsonInput}
-            className="brutalist-button" 
+            className="brutalist-button brutalist-button--sm" 
             style={{ marginTop: "2rem", width: "100%", padding: "1.2rem", fontSize: "1rem" }}
           >
             {loading ? "Processing..." : "Execute Bulk Upload"}

@@ -121,7 +121,7 @@ export default function BlogEditor() {
         <div style={{ display: "flex", gap: "1rem" }}>
           <button 
             onClick={() => setPreview(!preview)} 
-            className="brutalist-button" 
+            className="brutalist-button brutalist-button--sm" 
             style={{ background: "var(--cl-surface)", color: "var(--cl-text)", padding: "1rem 2rem" }}
           >
             {preview ? <Layout size={18} /> : <Eye size={18} />} {preview ? "Edit Mode" : "Preview"}
@@ -129,7 +129,7 @@ export default function BlogEditor() {
           <button 
             onClick={handleSave} 
             disabled={loading}
-            className="brutalist-button" 
+            className="brutalist-button brutalist-button--sm" 
             style={{ padding: "1rem 3rem" }}
           >
             <Save size={18} style={{ marginRight: "8px" }} /> {loading ? "Saving..." : "Publish"}

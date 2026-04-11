@@ -82,7 +82,7 @@ export default function AdminCouponsClient({ initialCoupons }) {
     <div>
       <div className="admin-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <h1 style={{ fontSize: "2rem", fontFamily: "var(--font-heading)", textTransform: "uppercase" }}>Coupons</h1>
-        <button onClick={() => setIsFormOpen(true)} className="brutalist-button" style={{ padding: "0.8rem 1.5rem" }}>
+        <button onClick={() => setIsFormOpen(true)} className="brutalist-button brutalist-button--sm" style={{ padding: "0.8rem 1.2rem", width: "100%", justifyContent: "center" }}>
           <Plus size={16} /> Create Coupon
         </button>
       </div>
@@ -90,7 +90,7 @@ export default function AdminCouponsClient({ initialCoupons }) {
       <AnimatePresence>
         {isFormOpen && (
           <motion.div onClick={(e) => { if(e.target===e.currentTarget) setIsFormOpen(false); }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-            <motion.div data-lenis-prevent="true" onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", overscrollBehavior: "contain", overscrollBehavior: "contain", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
+            <motion.div className="hide-scrollbar" data-lenis-prevent="true" onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none", overscrollBehavior: "contain", overscrollBehavior: "contain", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", padding: "1.5rem", borderBottom: "var(--border-thick)" }}>
                 <h2 style={{ fontSize: "1.5rem" }}>{editingId ? "Edit Coupon" : "New Coupon"}</h2>
                 <button onClick={resetForm}><X size={24} /></button>
@@ -142,8 +142,8 @@ export default function AdminCouponsClient({ initialCoupons }) {
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "flex-end", gap: "1rem", marginTop: "1rem", borderTop: "var(--border-thick)", paddingTop: "1.5rem" }}>
-                  <button type="button" onClick={resetForm} className="brutalist-button brutalist-button--outline">Cancel</button>
-                  <button type="submit" disabled={loading} className="brutalist-button">
+                  <button type="button" onClick={resetForm} className="brutalist-button brutalist-button--outline brutalist-button--sm">Cancel</button>
+                  <button type="submit" disabled={loading} className="brutalist-button brutalist-button--sm">
                     {loading ? "Saving..." : "Save Coupon"}
                   </button>
                 </div>

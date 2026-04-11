@@ -16,7 +16,7 @@ export default function AdminProductsClient({ initialProducts }) {
   const [editingId, setEditingId] = useState(null);
 
   const [formData, setFormData] = useState({
-    title: "", slug: "", price: "", compare_at_price: "", style: "Floral", category: "Bridal", size: "Bridal", stock: 0, status: "In Stock", is_featured: false, description: "", image_url: "", gallery_urls: [],
+    title: "", slug: "", price: "", compare_at_price: "", size: "Bridal", stock: 0, is_featured: false, description: "", image_url: "", gallery_urls: [],
   });
 
   const handleTitleChange = (e) => {
@@ -33,8 +33,8 @@ export default function AdminProductsClient({ initialProducts }) {
     setEditingId(p.id);
     setFormData({
       title: p.title, slug: p.slug, price: p.price, compare_at_price: p.compare_at_price || "", 
-      style: p.style, category: p.category, size: p.size || "Bridal", stock: p.stock || 0,
-      status: p.status, is_featured: p.is_featured, description: p.description || "", 
+      size: p.size || "Bridal", stock: p.stock || 0,
+      is_featured: p.is_featured, description: p.description || "", 
       image_url: p.image_url || "", gallery_urls: p.images || p.gallery_urls || []
     });
     setIsFormOpen(true);
@@ -125,9 +125,6 @@ export default function AdminProductsClient({ initialProducts }) {
           slug: item.slug || item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
           price: parseFloat(item.price),
           compare_at_price: item.compare_at_price ? parseFloat(item.compare_at_price) : null,
-          category: item.category || "Everyday",
-          style: item.style || "Floral",
-          status: item.status || "In Stock",
           is_featured: !!item.is_featured,
           description: item.description || "",
           image_url: item.image_url || item.image || "",
@@ -143,7 +140,7 @@ export default function AdminProductsClient({ initialProducts }) {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ title: "", slug: "", price: "", compare_at_price: "", style: "Floral", category: "Bridal", size: "Bridal", stock: 0, status: "In Stock", is_featured: false, description: "", image_url: "", gallery_urls: [] });
+    setFormData({ title: "", slug: "", price: "", compare_at_price: "", size: "Bridal", stock: 0, is_featured: false, description: "", image_url: "", gallery_urls: [] });
     setIsFormOpen(false);
   };
 
@@ -153,10 +150,10 @@ export default function AdminProductsClient({ initialProducts }) {
         <h1 style={{ fontSize: "2rem", fontFamily: "var(--font-heading)", textTransform: "uppercase" }}>Products</h1>
         <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
           <AdminExport data={products} filename="rangrez-products" />
-          <button onClick={() => setIsBulkOpen(true)} className="brutalist-button brutalist-button--outline" style={{ padding: "0.8rem 1.5rem" }}>
+          <button onClick={() => setIsBulkOpen(true)} className="brutalist-button brutalist-button--outline brutalist-button--sm" style={{ padding: "0.8rem 1rem", fontSize: "0.85rem" }}>
             JSON Bulk Import
           </button>
-          <button onClick={() => setIsFormOpen(true)} className="brutalist-button" style={{ padding: "0.8rem 1.5rem" }}>
+          <button onClick={() => setIsFormOpen(true)} className="brutalist-button brutalist-button--sm" style={{ padding: "0.8rem 1rem", fontSize: "0.85rem" }}>
             <Plus size={16} /> Add Product
           </button>
         </div>
@@ -165,7 +162,7 @@ export default function AdminProductsClient({ initialProducts }) {
       <AnimatePresence>
         {isBulkOpen && (
           <motion.div onClick={(e) => { if(e.target===e.currentTarget) setIsBulkOpen(false); }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-            <motion.div data-lenis-prevent="true" onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", overscrollBehavior: "contain", overscrollBehavior: "contain", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
+            <motion.div className="hide-scrollbar" data-lenis-prevent="true" onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none", overscrollBehavior: "contain", overscrollBehavior: "contain", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", padding: "1.5rem", borderBottom: "var(--border-thick)" }}>
                 <h2 style={{ fontSize: "1.5rem" }}>Bulk Import via JSON</h2>
                 <button onClick={() => setIsBulkOpen(false)}><X size={24} /></button>
@@ -173,16 +170,16 @@ export default function AdminProductsClient({ initialProducts }) {
               <form onSubmit={handleBulkSubmit} style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                 <p style={{ opacity: 0.8, fontSize: "0.9rem", lineHeight: 1.5 }}>
                   Paste an array of JSON objects. Required fields: <code>title</code>, <code>price</code>. 
-                  Optional: <code>category</code>, <code>style</code>, <code>status</code>, <code>image_url</code>, <code>description</code>, <code>is_featured</code>.
+                  Optional: <code>status</code>, <code>image_url</code>, <code>description</code>, <code>is_featured</code>.
                 </p>
                 <textarea 
                   rows={10} 
                   className="input-field" 
-                  placeholder='[ { "title": "Floral Stencil", "price": 499, "category": "Bridal" } ]'
+                  placeholder='[ { "title": "Floral Stencil", "price": 499, "size": "Bridal" } ]'
                   value={bulkJson} 
                   onChange={e => setBulkJson(e.target.value)} 
                 />
-                <button type="submit" disabled={loading} className="brutalist-button" style={{ marginTop: "1rem" }}>
+                <button type="submit" disabled={loading} className="brutalist-button brutalist-button--sm" style={{ marginTop: "1rem", width: "100%", justifyContent: "center" }}>
                   {loading ? "Importing..." : "Run Import"}
                 </button>
               </form>
@@ -192,7 +189,7 @@ export default function AdminProductsClient({ initialProducts }) {
 
         {isFormOpen && (
           <motion.div onClick={(e) => { if(e.target===e.currentTarget) setIsFormOpen(false); }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-            <motion.div data-lenis-prevent="true" onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "800px", maxHeight: "90vh", overflowY: "auto", overscrollBehavior: "contain", overscrollBehavior: "contain", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
+            <motion.div className="hide-scrollbar" data-lenis-prevent="true" onClick={e => e.stopPropagation()} initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: "var(--cl-bg)", color: "var(--cl-text)", width: "100%", maxWidth: "800px", maxHeight: "90vh", overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none", overscrollBehavior: "contain", overscrollBehavior: "contain", overflowX: "hidden", display: "flex", flexDirection: "column", border: "var(--border-thick)", boxShadow: "var(--shadow-brutal)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", padding: "1.5rem", borderBottom: "var(--border-thick)" }}>
                 <h2 style={{ fontSize: "1.5rem" }}>{editingId ? "Edit Product" : "New Product"}</h2>
                 <button onClick={resetForm}><X size={24} /></button>
@@ -215,18 +212,8 @@ export default function AdminProductsClient({ initialProducts }) {
                     <label className="input-label">Compare at Price (₹)</label>
                     <input type="number" step="0.01" className="input-field" value={formData.compare_at_price} onChange={e => setFormData({...formData, compare_at_price: e.target.value})} />
                   </div>
-                  <div>
-                    <label className="input-label">Category</label>
-                    <select className="input-field" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
-                      <option>Bridal</option><option>Festival</option><option>Everyday</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="input-label">Style</label>
-                    <select className="input-field" value={formData.style} onChange={e => setFormData({...formData, style: e.target.value})}>
-                      <option>Floral</option><option>Geometric</option><option>Paisley</option><option>Arabic</option>
-                    </select>
-                  </div>
+                  
+                  
                   <div>                      <label className="input-label">Size Classification</label>
                       <select className="input-field" value={formData.size} onChange={e => setFormData({...formData, size: e.target.value})}>
                         <option>Bridal</option>
@@ -241,11 +228,7 @@ export default function AdminProductsClient({ initialProducts }) {
                       <label className="input-label">Stock Quantity</label>
                       <input type="number" step="1" min="0" required className="input-field" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} />
                     </div>
-                    <div>                    <label className="input-label">Status</label>
-                    <select className="input-field" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}>
-                      <option>In Stock</option><option>Out of Stock</option><option>Low Stock</option><option>Best Seller</option><option>New</option>
-                    </select>
-                  </div>
+                    
                   <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "1.5rem" }}>
                     <input type="checkbox" style={{ width: "1.2rem", height: "1.2rem", accentColor: "var(--cl-primary)" }} checked={formData.is_featured} onChange={e => setFormData({...formData, is_featured: e.target.checked})} />
                     <label className="input-label" style={{ marginBottom: 0 }}>Feature on Homepage</label>
@@ -265,7 +248,7 @@ export default function AdminProductsClient({ initialProducts }) {
                         <img src={formData.image_url} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       </div>
                     )}
-                    <label className="brutalist-button brutalist-button--outline" style={{ cursor: "pointer", padding: "0.8rem 1.5rem" }}>
+                    <label className="brutalist-button brutalist-button--outline brutalist-button--sm" style={{ cursor: "pointer", width: "100%", justifyContent: "center", fontSize: "0.85rem", padding: "0.8rem" }}>
                       <Upload size={16} /> {loading ? "Uploading..." : "Upload Cover"}
                       <input type="file" accept="image/*" style={{ display: "none" }} onChange={handleFileChange} disabled={loading} />
                     </label>
@@ -282,15 +265,15 @@ export default function AdminProductsClient({ initialProducts }) {
                       </div>
                     ))}
                   </div>
-                  <label className="brutalist-button brutalist-button--outline" style={{ cursor: "pointer", padding: "0.8rem 1.5rem" }}>
+                  <label className="brutalist-button brutalist-button--outline brutalist-button--sm" style={{ cursor: "pointer", width: "100%", justifyContent: "center", fontSize: "0.85rem", padding: "0.8rem" }}>
                     <Upload size={16} /> {loading ? "Uploading..." : "Add to Gallery"}
                     <input type="file" accept="image/*" multiple style={{ display: "none" }} onChange={handleGalleryChange} disabled={loading} />
                   </label>
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "flex-end", gap: "1rem", marginTop: "1rem", borderTop: "var(--border-thick)", paddingTop: "1.5rem" }}>
-                  <button type="button" onClick={resetForm} className="brutalist-button brutalist-button--outline">Cancel</button>
-                  <button type="submit" disabled={loading} className="brutalist-button">
+                  <button type="button" onClick={resetForm} className="brutalist-button brutalist-button--outline brutalist-button--sm">Cancel</button>
+                  <button type="submit" disabled={loading} className="brutalist-button brutalist-button--sm">
                     {loading ? "Saving..." : "Save Product"}
                   </button>
                 </div>
@@ -322,12 +305,8 @@ export default function AdminProductsClient({ initialProducts }) {
                 <span style={{ fontWeight: 700 }}>₹{product.price}</span>
               </div>
               <div style={{ display: "flex", gap: "0.5rem", fontSize: "0.75rem", flexWrap: "wrap", marginBottom: "1.5rem" }}>
-                <span style={{ padding: "0.15rem 0.5rem", border: "1.5px solid var(--cl-muted)", textTransform: "uppercase", fontWeight: 600 }}>{product.category}</span>
-                <span style={{
-                  padding: "0.15rem 0.5rem", textTransform: "uppercase", fontWeight: 600,
-                  background: product.status === "In Stock" ? "var(--cl-success)" : product.status === "Old Stock" ? "var(--cl-accent)" : "var(--cl-primary)",
-                  color: "var(--cl-bg)",
-                }}>{product.status}</span>
+                <span style={{ padding: "0.15rem 0.5rem", border: "1.5px solid var(--cl-muted)", textTransform: "uppercase", fontWeight: 600 }}>{product.size || "Bridal"}</span>
+                <span style={{ padding: "0.15rem 0.5rem", border: "1.5px solid var(--cl-muted)", textTransform: "uppercase", fontWeight: 600 }}>{product.stock > 0 ? "IN STOCK" : "OUT OF STOCK"}</span>
                 {product.is_featured && <span style={{ padding: "0.15rem 0.5rem", background: "var(--cl-text)", color: "var(--cl-bg)" }}>★ Featured</span>}
               </div>
 

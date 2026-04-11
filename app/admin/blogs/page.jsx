@@ -44,10 +44,10 @@ export default function AdminBlogsPage() {
           <p style={{ opacity: 0.6, marginTop: "0.5rem" }}>Curate the Malabar Magic stories.</p>
         </div>
         <div style={{ display: "flex", gap: "1rem" }}>
-          <Link href="/admin/blogs/bulk" className="brutalist-button" style={{ background: "var(--cl-surface)", color: "var(--cl-text)", padding: "1rem 2rem", fontSize: "0.9rem" }}>
+          <Link href="/admin/blogs/bulk" className="brutalist-button brutalist-button--sm" style={{ background: "var(--cl-surface)", color: "var(--cl-text)", padding: "1rem 2rem", fontSize: "0.9rem" }}>
             <Database size={18} style={{ marginRight: "8px" }} /> Bulk Upload
           </Link>
-          <Link href="/admin/blogs/new" className="brutalist-button" style={{ padding: "1rem 2.5rem", fontSize: "0.9rem" }}>
+          <Link href="/admin/blogs/new" className="brutalist-button brutalist-button--sm" style={{ padding: "1rem 2.5rem", fontSize: "0.9rem" }}>
             <Plus size={18} style={{ marginRight: "8px" }} /> Create New Post
           </Link>
         </div>

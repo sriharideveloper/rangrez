@@ -99,7 +99,7 @@ export default function AdminUsersClient({ initialUsers, currentUser }) {
               <div style={{ textAlign: "right" }}>
                 <button 
                   onClick={() => handleRoleChange(user.id, user.role)}
-                  className="brutalist-button"
+                  className="brutalist-button brutalist-button--sm"
                   disabled={loading}
                   style={{ 
                      padding: "0.5rem 1rem", fontSize: "0.75rem", 

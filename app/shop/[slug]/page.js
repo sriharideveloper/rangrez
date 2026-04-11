@@ -59,7 +59,7 @@ export default async function ProductPage({ params }) {
 
   const allProducts = await getAllProducts();
   const related = allProducts
-    .filter((x) => x.category === product.category && x.id !== product.id)
+    .filter((x) => x.size === product.size && x.id !== product.id)
     .slice(0, 3);
   const reviews = await getProductReviews(product.id);
 
