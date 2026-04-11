@@ -77,7 +77,7 @@ export default async function Image({ params }) {
              borderRadius: 20
             }}>
              <img
-               src={product.images?.[0] || product.image_url || "https://rangrez-henna.com/images/hero-henna.png"}
+               src={product.images?.[0] || product.image_url || "https://www.rangrezstencils.in/images/hero-henna.png"}
                style={{ width: "100%", height: "100%", objectFit: "cover" }}    
              />
            </div>

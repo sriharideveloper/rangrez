@@ -22,6 +22,11 @@ const poppins = Poppins({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://www.rangrezstencils.in"),
+  icons: {
+    icon: "/logo.jpg",
+    apple: "/logo.jpg"
+  },
   title: "Rangrez Henna | DIY Henna Stencils | Stop Paying the 'Bride Tax'",
   description:
     "Zero tears, maximum aesthetic. Stop paying ₹5000 for a blurry circle! Get Malabar Magic on your hands in 5 minutes with our laser-cut DIY stencils.",
@@ -30,7 +35,7 @@ export const metadata = {
   openGraph: {
     title: "Rangrez Henna | Peel. Paste. Slay.",
     description: "Wedding-ready henna without the salon trauma or tears. Grab your Kochi stencil today.",
-    url: "https://rangrez-henna.com",
+    url: "https://www.rangrezstencils.in",
     siteName: "Rangrez Henna",
     locale: "en_IN",
     type: "website",

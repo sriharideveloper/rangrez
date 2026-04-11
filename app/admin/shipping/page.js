@@ -43,30 +43,31 @@ export default function ShippingAdmin() {
       const payload = [
         {
           destination: "kerala",
-          name: "Kerala Minimum",
+
           fee: config.kerala,
           is_active: true,
         },
         {
           destination: "rest_of_india",
-          name: "Rest of India Default",
+
           fee: config.rest_of_india,
           is_active: true,
         },
         {
           destination: "international",
-          name: "International Subbase",
+
           fee: config.international,
           is_active: true,
         },
         {
           destination: "free_shipping_threshold",
-          name: "Free Shipping Order Min",
+
           fee: config.free_shipping_threshold,
           is_active: true,
         },
       ];
-      await updateShippingConfig(payload);
+      const res = await updateShippingConfig(payload);
+      if (!res.success) throw new Error(res.error);
       setMessage("Configuration saved successfully.");
     } catch (err) {
       setMessage("Error saving: " + err.message);

@@ -4,4 +4,4 @@ Disallow: /admin/
 Disallow: /account/
 Disallow: /api/auth/callback
 
-Sitemap: https://rangrez-henna.com/sitemap.xml
+Sitemap: https://www.rangrezstencils.in/sitemap.xml

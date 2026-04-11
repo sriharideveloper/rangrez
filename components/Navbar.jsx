@@ -62,7 +62,7 @@ export default function Navbar() {
       <nav className="navbar-container border-b">
         <div className="navbar-brand">
           <div className="brand-logo-circle" />
-          <Link href="/"><span className="brand-text">RANGREZ</span></Link>
+          <Link href="/"><img src="/logo.jpg" alt="Rangrez Logo" style={{ height: "40px" }} /></Link>
         </div>
 
         <div className="navbar-links">
@@ -102,7 +102,7 @@ export default function Navbar() {
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "3rem" }}>
-              <span className="brand-text">RANGREZ</span>
+              <img src="/logo.jpg" alt="Rangrez Logo" style={{ height: "40px" }} />
               <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
                 <X size={28} />
               </button>

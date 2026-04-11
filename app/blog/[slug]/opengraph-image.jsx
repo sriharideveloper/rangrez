@@ -38,7 +38,7 @@ export default async function Image({ params }) {
           alignItems: "flex-start",
           justifyContent: "flex-end",
           backgroundColor: "#111",
-          backgroundImage: `linear-gradient(to bottom, transparent, rgba(17,17,17,0.8), #111), url(${blog.featured_image || "https://rangrez-henna.com/images/hero-henna.png"})`,
+          backgroundImage: `linear-gradient(to bottom, transparent, rgba(17,17,17,0.8), #111), url(${blog.featured_image || "https://www.rangrezstencils.in/images/hero-henna.png"})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           padding: "60px",

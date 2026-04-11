@@ -271,7 +271,7 @@ export default function ProductClient({ product, related, initialReviews }) {
                 className="brutalist-button brutalist-button--sm"
                 onClick={handleAdd}
                 whileTap={{ scale: 0.95 }}
-                style={{ flex: 1, minHeight: "50px", fontSize: "0.85rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "nowrap" }}
+                style={{ flex: 1, minHeight: "50px", fontSize: "0.75rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "nowrap" }}
               >
                 {added ? <><Check size={18} /> Added!</> : <><ShoppingBag size={18} /> Add to Cart - ₹{product.price * qty}</>}
               </motion.button>
@@ -279,7 +279,7 @@ export default function ProductClient({ product, related, initialReviews }) {
               <button
                 className="brutalist-button brutalist-button--sm"
                 onClick={handleAdd}
-                style={{ flex: 1, minHeight: "50px", fontSize: "0.85rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "nowrap" }}
+                style={{ flex: 1, minHeight: "50px", fontSize: "0.75rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "nowrap" }}
               >
                 {added ? <><Check size={18} /> Added!</> : <><ShoppingBag size={18} /> Add to Cart - ₹{product.price * qty}</>}
               </button>
