@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ArrowLeft, Minus, Plus, ShoppingBag, Check, 
-  Star, Eye, TrendingUp, Share2, ShieldCheck, 
+  Star, Eye, TrendingUp, Share2, ShieldCheck, AlertCircle, 
   Truck, RotateCcw 
 } from "lucide-react";
 import { useCartStore } from "../../../store/cartStore";
