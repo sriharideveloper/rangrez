@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { motion } from "framer-motion";
 import ScrollFloat from "../../components/ScrollFloat";
 
@@ -40,11 +40,7 @@ export default function About() {
 
       {/* Image Break */}
       <section style={{ height: "50vh", background: "var(--cl-secondary)", borderTop: "var(--border-thick)", borderBottom: "var(--border-thick)", overflow: "hidden", position: "relative" }}>
-        <img
-          src="https://images.unsplash.com/photo-1555169062-013468b47731?auto=format&fit=crop&q=80&w=1600"
-          alt="Henna Process"
-          style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.5, mixBlendMode: "multiply" }}
-        />
+        <Image src="https://images.unsplash.com/photo-1555169062-013468b47731?auto=format&fit=crop&q=80&w=1600" alt="Henna Process" fill style={{ objectFit: "cover", opacity: 0.5, mixBlendMode: "multiply" }} unoptimized />
       </section>
 
       {/* Stats */}

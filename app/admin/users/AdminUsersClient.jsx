@@ -74,7 +74,7 @@ export default function AdminUsersClient({ initialUsers, currentUser }) {
             <div className="admin-data-grid-3" key={user.id} style={{ gap: "1rem", padding: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.05)", alignItems: "center" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "1rem", overflow: "hidden" }}>
                 {user.avatar_url ? (
-                  <Image src={user.avatar_url} alt={user.full_name} style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover" }} />
+                  <img src={user.avatar_url} alt={user.full_name} style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover" }} />
                 ) : (
                   <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "var(--cl-bg)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.1)" }}>
                      <User size={18} opacity={0.5} />

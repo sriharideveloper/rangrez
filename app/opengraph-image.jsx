@@ -28,12 +28,14 @@ export default async function Image() {
            <div style={{ fontSize: 36, fontWeight: 800, letterSpacing: 8 }}>RANGREZ</div>
         </div>
 
-        <div style={{ fontSize: 130, fontWeight: 900, lineHeight: 1.05, textTransform: 'uppercase', marginBottom: 30, padding: '0 60px', color: '#fff' }}>
-          DIY HENNA.<br/>ZERO REGRETS.
+        <div style={{ display: 'flex', flexDirection: 'column', fontSize: 130, fontWeight: 900, lineHeight: 1.05, textTransform: 'uppercase', marginBottom: 30, padding: '0 60px', color: '#fff', alignItems: 'center' }}>
+          <div>DIY HENNA.</div>
+          <div>ZERO REGRETS.</div>
         </div>
         
-        <div style={{ fontSize: 44, fontWeight: 600, opacity: 0.9, marginBottom: 50, color: '#ffb347', lineHeight: 1.3 }}>
-          Stop paying the "bride tax".<br/>Get breathtaking Malabar Magic in 5 mins.
+        <div style={{ display: 'flex', flexDirection: 'column', fontSize: 44, fontWeight: 600, opacity: 0.9, marginBottom: 50, color: '#ffb347', lineHeight: 1.3, alignItems: 'center' }}>
+          <div>Stop paying the "bride tax".</div>
+          <div>Get breathtaking Malabar Magic in 5 mins.</div>
         </div>
 
         <div style={{ display: 'flex', background: '#A44A3F', padding: '24px 60px', borderRadius: 100, fontSize: 36, fontWeight: 800, boxShadow: '0 20px 40px rgba(164,74,63,0.4)' }}>

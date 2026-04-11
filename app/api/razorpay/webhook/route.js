@@ -103,7 +103,19 @@ export async function POST(req) {
       } else {
         console.error("Webhook Order DB insertion failed:", dbError);
         // Rollback lock so next retry works
-        await supabase.rpc("rollback_payment_session", { p_rzp_order_id: razorpay_order_id });
+        await supabase.rpc("rollback_payment_session", {
+          p_rzp_order_id: razorpay_order_id,
+        });
+
+        // CRITICAL: Return 500 here so Razorpay retries the webhook later.
+        // If we returned 200, Razorpay would assume it worked and drop the webhook event permanently!
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Database error dropping order, triggering retry.",
+          },
+          { status: 500 },
+        );
       }
     }
 

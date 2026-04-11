@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -79,7 +79,16 @@ export default function CartDrawer() {
                       style={{ display: "flex", gap: "1rem", padding: "1rem", border: "var(--border-thick)", background: "var(--cl-surface)" }}
                     >
                       <div style={{ width: "72px", height: "72px", background: "var(--cl-secondary)", border: "2px solid var(--cl-text)", overflow: "hidden", flexShrink: 0 }}>
-                        {item.image && <img src={item.image} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
+                        {(item.image || item.image_url || item.images?.[0]) && (
+                          <Image 
+                            src={item.image || item.image_url || item.images?.[0]} 
+                            alt={item.title || "Cart item"} 
+                            width={72} 
+                            height={72} 
+                            style={{ objectFit: "cover", width: "100%", height: "100%" }} 
+                            unoptimized 
+                          />
+                        )}
                       </div>
                       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>

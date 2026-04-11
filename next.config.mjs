@@ -6,6 +6,7 @@ const nextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "*.instagram.com" },
       { protocol: "https", hostname: "*.supabase.co" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
     ],
   },
   async headers() {

@@ -112,7 +112,7 @@ export default function AdminOrdersClient({ initialOrders }) {
       </div>
 
       <div className="admin-data-container">       
-        <div className="admin-data-grid-5" style={{ padding: "0.75rem 1.5rem", background: "var(--cl-text)", color: "var(--cl-bg)", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+        <div className="admin-data-grid-5 admin-header-row" style={{ padding: "0.75rem 1.5rem", background: "var(--cl-text)", color: "var(--cl-bg)", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", borderRadius: "var(--radius-md)" }}>
           <span>Order Info</span><span>Customer / Address</span><span>Tracking (DTDC)</span><span>Total</span><span>Status</span>
         </div>
         {filtered.map((order, i) => (
@@ -201,7 +201,7 @@ export default function AdminOrdersClient({ initialOrders }) {
                 <option value="shipped" style={{ color: "#000", background: "#fff" }}>Shipped</option>
                 <option value="out_for_delivery" style={{ color: "#000", background: "#fff" }}>Out For Delivery</option>
                 <option value="delivered" style={{ color: "#000", background: "#fff" }}>Delivered</option>
-                <option value="cancelled" style={{ color: "#000", background: "#fff" }}>Cancelled</option>
+          <option value="cancelled" style={{ color: "#000", background: "#fff" }}>Cancelled</option>
               </select>
               {loadingId === order.id && <RefreshCw size={14} className="spin" />}
             </div>
@@ -214,6 +214,39 @@ export default function AdminOrdersClient({ initialOrders }) {
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .spin { animation: spin 1s linear infinite; }
+        
+        .admin-data-grid-5 {
+          display: grid;
+          grid-template-columns: 1.2fr 1.5fr 1.2fr 1fr 1fr;
+          min-width: 900px;
+        }
+
+        .admin-header-row {
+          display: grid;
+        }
+
+        @media (max-width: 768px) {
+          .admin-data-container {
+            overflow-x: hidden !important;
+          }
+          .admin-header-row {
+            display: none !important;
+          }
+          .admin-data-grid-5 {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1rem !important;
+            min-width: 100% !important;
+            background: var(--cl-surface) !important;
+            border: var(--border-thick) !important;
+            border-radius: var(--radius-md) !important;
+            padding: 1.5rem !important;
+            margin-bottom: 1rem !important;
+          }
+          .admin-data-grid-5 > div {
+            width: 100% !important;
+          }
+        }
       `}} />
     </div>
   );

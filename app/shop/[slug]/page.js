@@ -20,19 +20,19 @@ export async function generateMetadata({ params }) {
   if (!product) return { title: "Product Not Found | Rangrez" };
 
   return {
-    title: `${product.name} | Peel, Paste, Slay | Rangrez Henna`,
-    description: `Don't pay the salon ₹5K for this! Get the ${product.name} stencil today and slay your Kerala wedding look in 5 flat minutes.`,
+    title: `${product.title} | Peel, Paste, Slay | Rangrez Henna`,
+    description: `Don't pay the salon ₹5K for this! Get the ${product.title} stencil today and slay your Kerala wedding look in 5 flat minutes.`,
     openGraph: {
-      title: `${product.name} | Zero Tears, Maximum Slay`,
+      title: `${product.title} | Zero Tears, Maximum Slay`,
       description:
         product.description ||
-        `Don't pay the salon ₹5K for this! Get the ${product.name} stencil today and slay your Kerala wedding look in 5 flat minutes.`,
+        `Don't pay the salon ₹5K for this! Get the ${product.title} stencil today and slay your Kerala wedding look in 5 flat minutes.`,
       images: [`/shop/${slug}/opengraph-image`],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${product.name} | Zero Tears, Maximum Slay`,
-      description: `Don't pay the salon ₹5K for this! Get the ${product.name} stencil today and slay your look in 5 minutes.`,
+      title: `${product.title} | Zero Tears, Maximum Slay`,
+      description: `Don't pay the salon ₹5K for this! Get the ${product.title} stencil today and slay your look in 5 minutes.`,
     },
   };
 }

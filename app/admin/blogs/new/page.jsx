@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -230,7 +230,7 @@ export default function BlogEditor() {
                 />
                 {formData.featured_image && (
                   <div style={{ marginTop: "0.5rem", borderRadius: "8px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)", height: "120px", position: "relative" }}>
-                    <img src={formData.featured_image} alt="Featured Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    {formData.featured_image && <Image src={formData.featured_image} fill unoptimized /> }
                   </div>
                 )}              </div>
             <div>

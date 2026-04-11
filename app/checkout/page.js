@@ -3,15 +3,33 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, CreditCard, Shield, Check, Tag, AlertTriangle } from "lucide-react";
+import {
+  ArrowLeft,
+  CreditCard,
+  Shield,
+  Check,
+  Tag,
+  AlertTriangle,
+} from "lucide-react";
 import { useCartStore } from "../../store/cartStore";
 import { loadRazorpay } from "../../utils/razorpay";
 import { validateCoupon } from "../../lib/supabase/coupons";
+import { getShippingConfig } from "../../lib/supabase/shipping";
+import { useEffect, useMemo } from "react";
 
 export default function Checkout() {
   const { items, getSubtotal, clearCart } = useCartStore();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [shippingConfig, setShippingConfig] = useState([]);
+
+  useEffect(() => {
+    async function loadShipping() {
+      const config = await getShippingConfig();
+      setShippingConfig(config || []);
+    }
+    loadShipping();
+  }, []);
   const [orderComplete, setOrderComplete] = useState(false);
   const [address, setAddress] = useState({
     name: "",
@@ -43,7 +61,36 @@ export default function Checkout() {
   discountAmount = Math.min(discountAmount, subtotal);
 
   const afterDiscount = subtotal - discountAmount;
-  const shipping = afterDiscount >= 999 ? 0 : 79;
+
+  // Shipping Fee Logic
+  const shipping = useMemo(() => {
+    // Safety fallback
+    if (!shippingConfig || shippingConfig.length === 0) return 79;
+
+    const thresholdConfig = shippingConfig.find(
+      (c) => c.destination === "free_shipping_threshold",
+    );
+    const threshold =
+      thresholdConfig?.is_active && thresholdConfig.fee > 0
+        ? Number(thresholdConfig.fee)
+        : 999;
+
+    if (afterDiscount >= threshold) return 0;
+
+    const isKerala =
+      address.state?.toLowerCase() === "kerala" ||
+      address.state?.toLowerCase() === "kl";
+
+    let config = null;
+    if (isKerala) {
+      config = shippingConfig.find((c) => c.destination === "kerala");
+    } else {
+      config = shippingConfig.find((c) => c.destination === "rest_of_india");
+    }
+
+    return config?.is_active ? Number(config.fee) : 79;
+  }, [shippingConfig, address.state, afterDiscount]);
+
   const total = Math.max(0, afterDiscount + shipping);
 
   const handleApplyCoupon = async () => {
@@ -96,13 +143,14 @@ export default function Checkout() {
             qty: i.quantity,
             price: i.price,
             product_id: i.id,
-            quantity: i.quantity
+            quantity: i.quantity,
           })),
           subtotal: getSubtotal(),
           discount_amount: getSubtotal() - eligibleSubtotal,
           coupon_code: appliedCoupon ? appliedCoupon.code : null,
           total: total,
-          address: address
+          shipping_fee: shipping,
+          address: address,
         }),
       });
       const order = await res.json();
@@ -121,6 +169,8 @@ export default function Checkout() {
         description: `Order of ${items.length} item(s)`,
         order_id: order.id,
         handler: async (response) => {
+          // Keep loading true while verifying
+          setLoading(true);
           // Verify payment
           const verifyRes = await fetch("/api/razorpay/verify", {
             method: "POST",
@@ -131,6 +181,7 @@ export default function Checkout() {
               razorpay_signature: response.razorpay_signature,
               items,
               total,
+              shipping_fee: shipping,
               address,
             }),
           });
@@ -139,7 +190,10 @@ export default function Checkout() {
             setOrderComplete(result.order_id || true);
             clearCart();
           } else {
-            alert("Payment verification failed. Please contact support.");
+            alert(
+              `Order creation delayed. Your payment (ID: ${response.razorpay_payment_id}) was successful, but there was an issue finalizing your order. Please screenshot this and contact support.`,
+            );
+            setLoading(false);
           }
         },
         prefill: {
@@ -148,15 +202,28 @@ export default function Checkout() {
           contact: address.phone,
         },
         theme: { color: "#A44A3F" },
+        modal: {
+          ondismiss: function () {
+            // User closed the popup, unlock the pay button
+            setLoading(false);
+            console.log("Checkout aborted by user");
+          },
+        },
       };
 
       const razorpay = new window.Razorpay(options);
+
+      razorpay.on("payment.failed", function (response) {
+        alert(`Payment Failed: ${response.error.description}`);
+        setLoading(false);
+      });
+
       razorpay.open();
     } catch (err) {
       console.error(err);
       alert("Something went wrong. Please try again.");
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   if (orderComplete) {
@@ -379,17 +446,89 @@ export default function Checkout() {
                   <label className="input-label" htmlFor={f.id}>
                     {f.label}
                   </label>
-                  <input
-                    id={f.id}
-                    type={f.type}
-                    required
-                    placeholder={f.placeholder}
-                    className="input-field"
-                    value={address[f.id]}
-                    onChange={(e) =>
-                      setAddress({ ...address, [f.id]: e.target.value })
-                    }
-                  />
+                  {f.id === "state" ? (
+                    <select
+                      id={f.id}
+                      required
+                      className="input-field"
+                      value={address[f.id]}
+                      onChange={(e) =>
+                        setAddress({ ...address, [f.id]: e.target.value })
+                      }
+                      style={{
+                        WebkitAppearance: "none",
+                        MozAppearance: "none",
+                        appearance: "none",
+                        backgroundColor: "var(--bg)",
+                        backgroundImage:
+                          "url(\"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e\")",
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "right 1rem center",
+                        backgroundSize: "1em",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <option value="" disabled>
+                        Select State (Shipping within India only)
+                      </option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">
+                        Arunachal Pradesh
+                      </option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu">Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                      <option value="Andaman and Nicobar Islands">
+                        Andaman and Nicobar Islands
+                      </option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Dadra and Nagar Haveli and Daman and Diu">
+                        Dadra and Nagar Haveli and Daman and Diu
+                      </option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Jammu and Kashmir">
+                        Jammu and Kashmir
+                      </option>
+                      <option value="Ladakh">Ladakh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                      <option value="Puducherry">Puducherry</option>
+                    </select>
+                  ) : (
+                    <input
+                      id={f.id}
+                      type={f.type}
+                      required
+                      placeholder={f.placeholder}
+                      className="input-field"
+                      value={address[f.id]}
+                      onChange={(e) =>
+                        setAddress({ ...address, [f.id]: e.target.value })
+                      }
+                    />
+                  )}
                 </div>
               ))}
               <button

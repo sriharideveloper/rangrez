@@ -9,6 +9,7 @@ import {
   Star,
   FileText,
   Users,
+  Truck
 } from "lucide-react";
 import { getUser } from "../actions/auth";
 
@@ -42,10 +43,7 @@ export default async function AdminLayout({ children }) {
     { href: "/admin/coupons", label: "Coupons", icon: <Ticket size={18} /> },
     { href: "/admin/messages", label: "Inbox", icon: <Inbox size={18} /> },
     { href: "/admin/reviews", label: "Testimonials", icon: <Star size={18} /> },
-    { href: "/admin/users", label: "Users & Roles", icon: <Users size={18} /> },
-  ];
-
-  return (
+      { href: "/admin/shipping", label: "Shipping", icon: <Truck size={18} /> },
     <div className="admin-layout">
       <aside className="admin-sidebar">
         <div className="admin-sidebar-header">

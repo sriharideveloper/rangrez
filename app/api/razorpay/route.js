@@ -10,7 +10,16 @@ export async function POST(req) {
 
   try {
     const body = await req.json();
-    const { amount, items, subtotal, discount_amount, coupon_code, total, address } = body;
+    const {
+      amount,
+      items,
+      subtotal,
+      discount_amount,
+      coupon_code,
+      total,
+      address,
+      shipping_fee,
+    } = body;
 
     if (!amount || amount <= 0) {
       return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
@@ -45,20 +54,41 @@ export async function POST(req) {
 
     const order = await razorpay.orders.create(options);
 
-    // Save session to prevent drops
+    // Save session to prevent drops securely bypassing RLS
     const supabase = await createClient();
     const { data: userData } = await supabase.auth.getUser();
-    
-    await supabase.from("payment_sessions").insert({
-      razorpay_order_id: order.id,
-      user_id: userData?.user?.id || null,
-      order_data: { items, subtotal, discount_amount, coupon_code, total, address }
-    });
+
+    const { error: sessionError } = await supabase.rpc(
+      "create_payment_session",
+      {
+        p_rzp_order_id: order.id,
+        p_user_id: userData?.user?.id || null,
+        p_order_data: {
+          items,
+          subtotal,
+          discount_amount,
+          coupon_code,
+          total,
+          address,
+          shipping_fee,
+        },
+      },
+    );
+
+    if (sessionError) {
+      console.error("Failed to create payment session:", sessionError);
+      return NextResponse.json(
+        { error: "Checkout session failed to start" },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json(order);
   } catch (error) {
     console.error("Error creating Razorpay order:", error);
-    return NextResponse.json({ error: "Failed to create order" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to create order" },
+      { status: 500 },
+    );
   }
 }
-

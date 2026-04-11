@@ -52,14 +52,17 @@ export default async function Image({ params }) {
             <div style={{ fontSize: 76, fontWeight: 900, lineHeight: 1.05, textTransform: "uppercase", marginBottom: 20, color: "#fff" }}>{product.name}</div>
             
             <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-              <div style={{ fontSize: 56, fontWeight: 900, color: "#ffb347" }}>₹{product.price}</div>
+              <div style={{ fontSize: 56, fontWeight: 900, color: "#ffb347" }}>Rs. {product.price}</div>
               {product.compare_at_price && (
-                 <div style={{ fontSize: 32, fontWeight: 700, textDecoration: "line-through", color: "#666" }}>₹{product.compare_at_price}</div>
+                 <div style={{ fontSize: 32, fontWeight: 700, textDecoration: "line-through", color: "#666" }}>Rs. {product.compare_at_price}</div>
               )}
             </div>
           </div>
 
-          <div style={{ fontSize: 28, opacity: 0.8, color: "#aaa", lineHeight: 1.4 }}>Stop paying ₹5000.<br/>Do it yourself in 5 mins.</div>
+          <div style={{ display: "flex", flexDirection: "column", fontSize: 28, opacity: 0.8, color: "#aaa", lineHeight: 1.4 }}>
+            <div>Stop paying Rs. 5000.</div>
+            <div>Do it yourself in 5 mins.</div>
+          </div>
         </div>
 
         {/* Right Side: Product Image with brutalist border */}
@@ -79,9 +82,8 @@ export default async function Image({ params }) {
              />
            </div>
            
-           <div style={{ position: "absolute", bottom: 60, right: 20, background: "#fff", color: "#111", padding: "10px 20px", borderRadius: 100, fontSize: 32, fontWeight: 900, transform: "rotate(-10deg)", boxShadow: "0 10px 20px rgba(0,0,0,0.5)"}}>
+           <div style={{ position: "absolute", bottom: 60, right: 20, display: "flex", background: "#fff", color: "#111", padding: "10px 20px", borderRadius: 100, fontSize: 32, fontWeight: 900, transform: "rotate(-10deg)", boxShadow: "0 10px 20px rgba(0,0,0,0.5)"}}>
              BRIDE APPROVED 💅
-
            </div>
         </div>
       </div>

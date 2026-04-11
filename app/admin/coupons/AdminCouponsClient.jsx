@@ -82,7 +82,7 @@ export default function AdminCouponsClient({ initialCoupons }) {
     <div>
       <div className="admin-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <h1 style={{ fontSize: "2rem", fontFamily: "var(--font-heading)", textTransform: "uppercase" }}>Coupons</h1>
-        <button onClick={() => setIsFormOpen(true)} className="brutalist-button brutalist-button--sm" style={{ padding: "0.8rem 1.2rem", width: "100%", justifyContent: "center" }}>
+        <button onClick={() => setIsFormOpen(true)} className="brutalist-button brutalist-button--sm" style={{ padding: "0.8rem 1.2rem", justifyContent: "center" }}>
           <Plus size={16} /> Create Coupon
         </button>
       </div>
@@ -95,45 +95,45 @@ export default function AdminCouponsClient({ initialCoupons }) {
                 <h2 style={{ fontSize: "1.5rem" }}>{editingId ? "Edit Coupon" : "New Coupon"}</h2>
                 <button onClick={resetForm}><X size={24} /></button>
               </div>
-              <form onSubmit={handleSubmit} style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+              <form onSubmit={handleSubmit} style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
                 <div>
                   <label className="input-label">Coupon Code (e.g. EID50)</label>
-                  <input required className="input-field" style={{ textTransform: "uppercase" }} value={formData.code} onChange={e => setFormData({...formData, code: e.target.value.toUpperCase()})} />
+                  <input required className="input-field" style={{ textTransform: "uppercase", padding: "0.8rem", fontSize: "0.9rem" }} value={formData.code} onChange={e => setFormData({...formData, code: e.target.value.toUpperCase()})} />
                 </div>
                 
-                <div className="form-grid form-grid--2col">
-                  <div>
+                <div className="form-grid form-grid--2col" style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div style={{ flex: '1 1 150px' }}>
                     <label className="input-label">Type</label>
-                    <select className="input-field" value={formData.discount_type} onChange={e => setFormData({...formData, discount_type: e.target.value})}>
+                    <select className="input-field" style={{ padding: "0.8rem", fontSize: "0.9rem" }} value={formData.discount_type} onChange={e => setFormData({...formData, discount_type: e.target.value})}>
                       <option value="percentage">Percentage (%)</option>
                       <option value="fixed">Fixed Amount (₹)</option>
                     </select>
                   </div>
-                  <div>
+                  <div style={{ flex: '1 1 150px' }}>
                     <label className="input-label">Discount Value</label>
-                    <input required type="number" step="0.01" className="input-field" value={formData.discount_value} onChange={e => setFormData({...formData, discount_value: e.target.value})} />
+                    <input required type="number" step="0.01" className="input-field" style={{ padding: "0.8rem", fontSize: "0.9rem" }} value={formData.discount_value} onChange={e => setFormData({...formData, discount_value: e.target.value})} />
                   </div>
                 </div>
 
                 <div>
                   <label className="input-label">Minimum Spend (₹)</label>
-                  <input required type="number" step="0.01" className="input-field" value={formData.minimum_spend} onChange={e => setFormData({...formData, minimum_spend: e.target.value})} />
+                  <input required type="number" step="0.01" className="input-field" style={{ padding: "0.8rem", fontSize: "0.9rem" }} value={formData.minimum_spend} onChange={e => setFormData({...formData, minimum_spend: e.target.value})} />
                 </div>
 
-                <div className="form-grid form-grid--2col">
-                  <div>
+                <div className="form-grid form-grid--2col" style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div style={{ flex: '1 1 200px' }}>
                     <label className="input-label">Valid From (Optional)</label>
-                    <input type="datetime-local" className="input-field" value={formData.valid_from} onChange={e => setFormData({...formData, valid_from: e.target.value})} />
+                    <input type="datetime-local" className="input-field" style={{ padding: "0.8rem", fontSize: "0.9rem" }} value={formData.valid_from} onChange={e => setFormData({...formData, valid_from: e.target.value})} />
                   </div>
-                  <div>
+                  <div style={{ flex: '1 1 200px' }}>
                     <label className="input-label">Valid Until (Optional)</label>
-                    <input type="datetime-local" className="input-field" value={formData.valid_until} onChange={e => setFormData({...formData, valid_until: e.target.value})} />
+                    <input type="datetime-local" className="input-field" style={{ padding: "0.8rem", fontSize: "0.9rem" }} value={formData.valid_until} onChange={e => setFormData({...formData, valid_until: e.target.value})} />
                   </div>
                 </div>
 
                 <div>
                   <label className="input-label">Allowed Products (Comma separated UUIDs, empty for all products)</label>
-                  <textarea className="input-field" rows={2} placeholder="e.g. 5e3d..., 8f9a..." value={formData.allowed_products} onChange={e => setFormData({...formData, allowed_products: e.target.value})} />
+                  <textarea className="input-field" rows={2} style={{ padding: "0.8rem", fontSize: "0.9rem" }} placeholder="e.g. 5e3d..., 8f9a..." value={formData.allowed_products} onChange={e => setFormData({...formData, allowed_products: e.target.value})} />
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem" }}>

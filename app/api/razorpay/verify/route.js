@@ -75,8 +75,15 @@ export async function POST(req) {
 
     // 2. Destructure Data
     const { user_id, order_data } = sessionData;
-    const { items, subtotal, discount_amount, coupon_code, total, address } =
-      order_data;
+    const {
+      items,
+      subtotal,
+      discount_amount,
+      coupon_code,
+      total,
+      shipping_fee,
+      address,
+    } = order_data;
 
     // 3. Place Order (Deducts stock securely only after pay)
     const { data: orderId, error: dbError } = await supabase.rpc(
@@ -90,6 +97,7 @@ export async function POST(req) {
         p_subtotal: subtotal || total,
         p_discount: discount_amount || 0,
         p_coupon: coupon_code || null,
+        p_shipping_fee: shipping_fee || 0,
         p_total: total,
         p_items: items,
       },
@@ -97,10 +105,12 @@ export async function POST(req) {
 
     if (dbError) {
       console.error("Order DB insertion failed:", dbError);
-      
+
       // Rollback session lock so they can retry or webhook can catch it
-      await supabase.rpc("rollback_payment_session", { p_rzp_order_id: razorpay_order_id });
-      
+      await supabase.rpc("rollback_payment_session", {
+        p_rzp_order_id: razorpay_order_id,
+      });
+
       return NextResponse.json(
         {
           success: false,

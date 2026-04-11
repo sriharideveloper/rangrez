@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { useState } from "react";
 import AdminExport from "../../../components/AdminExport";
 import { motion, AnimatePresence } from "framer-motion";
@@ -245,7 +245,7 @@ export default function AdminProductsClient({ initialProducts }) {
                   <div style={{ display: "flex", gap: "1rem", alignItems: "flex-end" }}>
                     {formData.image_url && (
                       <div style={{ width: "100px", height: "100px", border: "var(--border-thick)", overflow: "hidden" }}>
-                        <img src={formData.image_url} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <Image src={formData.image_url} alt="Preview" fill style={{ objectFit: "cover" }} unoptimized />
                       </div>
                     )}
                     <label className="brutalist-button brutalist-button--outline brutalist-button--sm" style={{ cursor: "pointer", width: "100%", justifyContent: "center", fontSize: "0.85rem", padding: "0.8rem" }}>
@@ -260,7 +260,7 @@ export default function AdminProductsClient({ initialProducts }) {
                   <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
                     {(formData.gallery_urls || []).map((url, idx) => (
                       <div key={idx} style={{ position: "relative", width: "100px", height: "100px", border: "var(--border-thick)", overflow: "hidden" }}>
-                        <img src={url} alt={`Gallery ${idx}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <Image src={url} alt={Gallery } fill style={{ objectFit: "cover" }} unoptimized />
                         <button type="button" onClick={() => removeGalleryImage(idx)} style={{ position: "absolute", top: 0, right: 0, background: "var(--cl-danger)", color: "#fff", border: "none", width: "20px", height: "20px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>&times;</button>
                       </div>
                     ))}
@@ -294,7 +294,7 @@ export default function AdminProductsClient({ initialProducts }) {
           >
             <div style={{ height: "180px", background: "var(--cl-secondary)", overflow: "hidden", position: "relative" }}>
               {product.image_url ? (
-                <img src={product.image_url} alt={product.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <Image src={product.image_url} alt={product.title || "Product"} fill style={{ objectFit: "cover" }} unoptimized />
               ) : (
                 <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.2 }}>No Image</div>
               )}

@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -84,6 +84,25 @@ export default function ProductClient({ product, related, initialReviews }) {
     setSubmittingReview(false);
   };
 
+  const handleShare = async () => {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    const shareText = `✨ *${product.title}* ✨\n\nStop paying salons ₹5k! Slay your Henna look in 5 minutes with our premium peeling stencils.\n\n`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${product.title} | Rangrez`,
+          text: shareText,
+          url: url,
+        });
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(shareText + url)}`);
+    }
+  };
+
   const galleryRaw = Array.isArray(product.gallery_urls) ? product.gallery_urls : (Array.isArray(product.images) ? product.images : []);
   const gallery = [product.image_url, ...galleryRaw].filter((v, i, a) => v && a.indexOf(v) === i);
 
@@ -129,11 +148,7 @@ export default function ProductClient({ product, related, initialReviews }) {
               
               {!mounted && (
                 <div style={{ width: "100%", height: "100%" }}>
-                  <img
-                    src={gallery[activeImage]}
-                    alt={product.title}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
+                  <Image src={gallery[activeImage]} alt={product.title} fill style={{ objectFit: "cover" }} priority unoptimized />
                 </div>
               )}
 
@@ -169,7 +184,7 @@ export default function ProductClient({ product, related, initialReviews }) {
                       opacity: activeImage === i ? 1 : 0.5, transition: "all 0.3s", cursor: "pointer", padding: 0
                     }}
                   >
-                    <img src={img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <Image src={img} alt="Thumbnail view" fill style={{ objectFit: "cover" }} unoptimized />
                   </button>
                 ))}
               </div>
@@ -205,11 +220,24 @@ export default function ProductClient({ product, related, initialReviews }) {
               {product.title}
             </h1>
             
-            <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-              <span style={{ fontSize: "2.5rem", fontWeight: 500 }}>₹{product.price}</span>
-              {product.compare_at_price && (
-                <span style={{ fontSize: "1.5rem", textDecoration: "line-through", opacity: 0.3 }}>₹{product.compare_at_price}</span>
-              )}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1.5rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+                <span style={{ fontSize: "2.5rem", fontWeight: 500 }}>₹{product.price}</span>
+                {product.compare_at_price && (
+                  <span style={{ fontSize: "1.5rem", textDecoration: "line-through", opacity: 0.3 }}>₹{product.compare_at_price}</span>
+                )}
+              </div>
+              <button 
+                onClick={handleShare}
+                style={{ 
+                  display: "flex", alignItems: "center", gap: "0.5rem", 
+                  padding: "0.5rem 1rem", background: "transparent", 
+                  border: "1px solid var(--cl-border)", borderRadius: "var(--radius-sm)",
+                  cursor: "pointer", fontSize: "0.9rem", color: "var(--cl-foreground)"
+                }}
+              >
+                <Share2 size={16} /> Share
+              </button>
             </div>
           </header>
 
@@ -243,17 +271,17 @@ export default function ProductClient({ product, related, initialReviews }) {
                 className="brutalist-button brutalist-button--sm"
                 onClick={handleAdd}
                 whileTap={{ scale: 0.95 }}
-                style={{ flex: 1, minHeight: "60px", fontSize: "1rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "normal" }}
+                style={{ flex: 1, minHeight: "50px", fontSize: "0.85rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "nowrap" }}
               >
-                {added ? <><Check /> Added!</> : <><ShoppingBag /> Add to Cart — ₹{product.price * qty}</>}
+                {added ? <><Check size={18} /> Added!</> : <><ShoppingBag size={18} /> Add to Cart - ₹{product.price * qty}</>}
               </motion.button>
             ) : (
               <button
                 className="brutalist-button brutalist-button--sm"
                 onClick={handleAdd}
-                style={{ flex: 1, minHeight: "60px", fontSize: "1rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "normal" }}
+                style={{ flex: 1, minHeight: "50px", fontSize: "0.85rem", padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", whiteSpace: "nowrap" }}
               >
-                {added ? <><Check /> Added!</> : <><ShoppingBag /> Add to Cart — ₹{product.price * qty}</>}
+                {added ? <><Check size={18} /> Added!</> : <><ShoppingBag size={18} /> Add to Cart - ₹{product.price * qty}</>}
               </button>
             )}
           </div>
@@ -375,7 +403,7 @@ export default function ProductClient({ product, related, initialReviews }) {
                   <Link href={`/shop/${p.slug}`}>
                     <div className="product-card">
                       <div className="product-card__image">
-                        <img src={p.image_url} alt={p.title} loading="lazy" />
+                        {p.image_url && <Image src={p.image_url} alt={p.title} fill style={{ objectFit: "cover" }} unoptimized />}
                       </div>
                       <div className="product-card__body">
                         <h3 className="product-card__title">{p.title}</h3>

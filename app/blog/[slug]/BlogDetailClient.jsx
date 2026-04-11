@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
@@ -192,15 +191,16 @@ function ScrollProgress() {
 export default function BlogDetailClient({ blog }) {
   const handleShare = () => {
     const url = typeof window !== "undefined" ? window.location.href : "";
+    const shareText = `✨ *${blog.title}* ✨\n\n${blog.excerpt || "Grab your tea and get ready for some Malabar truth bombs, henna hacks, and unapologetic real talk."}\n\n`;
+    
     if (navigator.share) {
       navigator.share({
         title: blog.title,
-        text: blog.excerpt,
+        text: shareText,
         url: url,
-      });
+      }).catch(err => console.log('Share error:', err));
     } else {
-      navigator.clipboard.writeText(url);
-      alert("Link copied to clipboard!");
+      window.open(`https://wa.me/?text=${encodeURIComponent(shareText + url)}`);
     }
   };
 

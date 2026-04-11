@@ -1,6 +1,5 @@
-﻿"use client";
-
-import Image from "next/image";
+"use client";
+﻿import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -296,7 +295,7 @@ export default function Home() {
                           <p style={{ fontSize: "1rem", lineHeight: 1.6, fontStyle: "italic", marginBottom: "2rem", flex: 1 }}>"{t.content}"</p>
                           <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginTop: "auto" }}>
                              {t.avatar_url ? (
-                               <img src={t.avatar_url} alt={t.name} style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }} />
+                               <Image src={t.avatar_url} alt={t.name || "Avatar"} width={32} height={32} style={{ borderRadius: "50%", objectFit: "cover" }} unoptimized />
                              ) : (
                                <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--cl-primary)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "0.7rem" }}>
                                   {t.name?.[0]}

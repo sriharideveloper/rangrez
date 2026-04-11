@@ -56,7 +56,7 @@ export default async function Image({ params }) {
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 20 }}>
            {blog.tags?.length > 0 ? blog.tags.map(t => (
-             <div key={t} style={{ fontSize: 24, background: "rgba(164,74,63,0.9)", padding: "10px 24px", borderRadius: 100, fontWeight: 800, textTransform: "uppercase" }}>#{t}</div>       
+             <div key={t} style={{ fontSize: 24, background: "rgba(164,74,63,0.9)", padding: "10px 24px", borderRadius: 100, fontWeight: 800, textTransform: "uppercase" }}>{`#${t}`}</div>       
            )) : (
              <div style={{ fontSize: 24, background: "rgba(164,74,63,0.9)", padding: "10px 24px", borderRadius: 100, fontWeight: 800, textTransform: "uppercase" }}>#MALABARMAGIC</div>
            )}
@@ -67,10 +67,10 @@ export default async function Image({ params }) {
         </div>
 
         <div style={{ fontSize: 32, opacity: 0.9, display: "flex", alignItems: "center", gap: 16 }}>
-           <span style={{ color: "#ffb347", fontWeight: "bold" }}>Words by:</span>
-           <span style={{ fontWeight: 800 }}>{blog.author || "A Desi Auntie with Tea"}</span>
+           <div style={{ color: "#ffb347", fontWeight: "bold" }}>Words by:</div>
+           <div style={{ fontWeight: 800 }}>{blog.author || "A Desi Auntie with Tea"}</div>
            <div style={{ width: 12, height: 12, background: "#ffb347", borderRadius: "50%" }} />
-           <span style={{ letterSpacing: 2 }}>5 MINUTE READ OR LESS</span>
+           <div style={{ letterSpacing: 2 }}>5 MINUTE READ OR LESS</div>
         </div>
       </div>
     ),

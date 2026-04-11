@@ -35,7 +35,7 @@ export default async function AdminDashboard() {
     {
       label: "Total Revenue",
       value: revenue,
-      prefix: "?",
+      prefix: "₹",
       icon: <DollarSign size={24} />,
     },
     {

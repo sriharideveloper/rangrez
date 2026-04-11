@@ -6,7 +6,7 @@ import { Camera, ArrowUpRight, Play } from "lucide-react";
 import { INSTAGRAM_REELS } from "../lib/mockData";
 
 function ReelCard({ url, index }) {
-  const [loadIframe, setLoadIframe] = useState(false);
+  const [loadIframe, setLoadIframe] = useState(index < 8);
   
   // Extract reel ID
   const reelId = url.split("/reel/")[1]?.replace("/", "") || url.split("/p/")[1]?.replace("/", "") || "";
@@ -42,16 +42,9 @@ function ReelCard({ url, index }) {
     >
       {!loadIframe ? (
         <div style={{ width: "100%", height: "100%", position: "relative" }}>
-          {/* Instant High-Res Cover */}
-          <img 
-            src={thumbnailUrl} 
-            alt="Reel Cover"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-          
           <div style={{ 
             position: "absolute", inset: 0, 
-            background: "linear-gradient(to top, rgba(42,31,26,0.8), transparent)",
+            background: "linear-gradient(to top, rgba(42,31,26,0.8), rgba(0,0,0,0.1))",
             zIndex: 3, display: "flex", alignItems: "center", justifyContent: "center"
           }}>
              <motion.div 
@@ -112,13 +105,23 @@ function ReelCard({ url, index }) {
 }
 
 export default function InstagramReels() {
-  const [displayCount, setDisplayCount] = useState(8);
+  const [displayCount, setDisplayCount] = useState(12);
   const reels = INSTAGRAM_REELS;
 
   useEffect(() => {
-    if (window.innerWidth <= 768) {
-      setDisplayCount(3);
-    }
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setDisplayCount(3);
+      } else {
+        setDisplayCount(12);
+      }
+    };
+    
+    // Initial check
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
