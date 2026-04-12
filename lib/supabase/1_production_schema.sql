@@ -106,7 +106,7 @@ CREATE POLICY "Users view own orders" ON public.orders FOR SELECT USING (auth.ui
 CREATE TABLE IF NOT EXISTS public.order_items (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_id UUID NOT NULL REFERENCES public.orders(id) ON DELETE CASCADE,
-    product_id UUID NOT NULL REFERENCES public.products(id) ON DELETE RESTRICT,
+    product_id UUID REFERENCES public.products(id) ON DELETE SET NULL,
     title TEXT NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity > 0),
     price_at_time DECIMAL(10,2) NOT NULL,

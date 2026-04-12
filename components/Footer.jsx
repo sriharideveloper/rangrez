@@ -64,18 +64,33 @@ export default function Footer() {
         <span>© {year} Rangrez Henna. All rights reserved.</span>
         <span>Made with ❤️ in Kochi. Malayali soul, global finesse.</span>
       </div>
-      <div style={{ padding: "0 2rem 1.5rem", display: "flex", justifyContent: "center", fontSize: "0.75rem", opacity: 0.7, textAlign: "center" }}>
-        <span>
-          Designed and developed by{" "}
-          <a
-            href="https://www.linkedin.com/in/sriharithebest/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ fontWeight: 600, textDecoration: "underline", textUnderlineOffset: "2px", color: "var(--cl-bg)" }}
-          >
-            Imperium & Co.
-          </a>
-        </span>
+      <div style={{ padding: "0 2rem 1.5rem", display: "flex", justifyContent: "center", width: "100%", overflow: "hidden" }}>
+        <a
+          href="https://www.linkedin.com/in/sriharithebest/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            position: "relative",
+            display: "inline-flex",
+            alignItems: "center",
+            padding: "0.6rem 1.5rem",
+            border: "1px dashed rgba(255, 255, 255, 0.4)",
+            fontSize: "0.7rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.15em",
+            fontFamily: "monospace",
+            color: "rgba(255, 255, 255, 0.6)",
+            textDecoration: "none",
+            background: "rgba(255, 255, 255, 0.03)",
+            whiteSpace: "nowrap",
+            boxShadow: "0 0 10px rgba(0,0,0,0.5)"
+          }}
+        >
+          {/* Ticket cutouts */}
+          <span style={{ position: "absolute", top: "50%", left: "-10px", width: "20px", height: "20px", background: "var(--cl-black, #0a0a0a)", borderRadius: "50%", transform: "translateY(-50%)", borderRight: "1px dashed rgba(255, 255, 255, 0.4)" }} />
+          <span style={{ position: "absolute", top: "50%", right: "-10px", width: "20px", height: "20px", background: "var(--cl-black, #0a0a0a)", borderRadius: "50%", transform: "translateY(-50%)", borderLeft: "1px dashed rgba(255, 255, 255, 0.4)" }} />
+          <span>Designed & Developed by <strong style={{ color: "var(--cl-bg, #fff)", fontWeight: 700, marginLeft: "0.25rem" }}>Imperium & Co.</strong></span>
+        </a>
       </div>
     </footer>
   );
