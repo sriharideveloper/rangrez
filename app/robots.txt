@@ -4,4 +4,20 @@ Disallow: /admin/
 Disallow: /account/
 Disallow: /api/auth/callback
 
+# Explicitly allow AI and SEO crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
 Sitemap: https://www.rangrezstencils.in/sitemap.xml

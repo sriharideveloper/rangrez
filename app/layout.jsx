@@ -23,27 +23,65 @@ const poppins = Poppins({
 
 export const metadata = {
   metadataBase: new URL("https://www.rangrezstencils.in"),
+  title: {
+    default: "Rangrez Henna | Premium DIY Henna Stencils",
+    template: "%s | Rangrez Henna",
+  },
+  description:
+    "Premium DIY bridal henna stencils. Stop paying premium prices for temporary art. Get perfect Malabar aesthetic henna on your hands in 5 minutes with our reusable laser-cut stencils.",
+  keywords: ["henna", "stencils", "Kochi Mehndi", "Kerala Wedding", "DIY Mehndi", "Reusable Stencils", "Rangrez", "Bridal Henna", "Quick Mehndi", "Organic Henna Art"],
+  authors: [{ name: "Rangrez Team", url: "https://www.rangrezstencils.in/about" }],
+  creator: "Rangrez",
+  publisher: "Rangrez Henna",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: "/logo.jpg",
-    apple: "/logo.jpg"
+    shortcut: "/logo.jpg",
+    apple: "/logo.jpg",
   },
-  title: "Rangrez Henna | DIY Henna Stencils | Stop Paying the 'Bride Tax'",
-  description:
-    "Zero tears, maximum aesthetic. Stop paying ₹5000 for a blurry circle! Get Malabar Magic on your hands in 5 minutes with our laser-cut DIY stencils.",
-  keywords: "henna, stencils, Kochi Mehndi, Kerala Wedding, Malayali Bride, Malabar Henna, DIY Mehndi, Reusable Stencils, Rangrez",
-  authors: [{ name: "Rangrez Team" }],
   openGraph: {
     title: "Rangrez Henna | Peel. Paste. Slay.",
     description: "Wedding-ready henna without the salon trauma or tears. Grab your Kochi stencil today.",
     url: "https://www.rangrezstencils.in",
     siteName: "Rangrez Henna",
+    images: [
+      {
+        url: "/logo.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Rangrez Henna Premium Stencils",
+      },
+    ],
     locale: "en_IN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rangrez | DIY Kerala Bridal Art",
-    description: "Stop paying ₹5000 for a blurry circle! DIY Malabar magic in 5 minutes.",
+    title: "Rangrez | Premium DIY Bridal Henna",
+    description: "Stop paying premium prices for temporary art. Perfect DIY Malabar magic in 5 minutes.",
+    images: ["/logo.jpg"],
+    creator: "@rangrezhenna",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    google: "YOUR_GOOGLE_SEARCH_CONSOLE_VERIFICATION_CODE", // Replace when available
   },
 };
 

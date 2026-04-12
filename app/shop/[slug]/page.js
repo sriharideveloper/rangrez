@@ -7,6 +7,7 @@ import ProductClient from "./ProductClient";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -24,15 +25,28 @@ export async function generateMetadata({ params }) {
     description: `Don't pay the salon ₹5K for this! Get the ${product.title} stencil today and slay your Kerala wedding look in 5 flat minutes.`,
     openGraph: {
       title: `${product.title} | Zero Tears, Maximum Slay`,
+      type: "website",
+      url: `https://www.rangrezstencils.in/shop/${product.slug}`,
       description:
         product.description ||
         `Don't pay the salon ₹5K for this! Get the ${product.title} stencil today and slay your Kerala wedding look in 5 flat minutes.`,
-      images: [`/shop/${slug}/opengraph-image`],
+      images: [
+        {
+          url: `/shop/${slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: product.title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `${product.title} | Zero Tears, Maximum Slay`,
       description: `Don't pay the salon ₹5K for this! Get the ${product.title} stencil today and slay your look in 5 minutes.`,
+      images: [`/shop/${slug}/opengraph-image`],
+    },
+    alternates: {
+      canonical: `https://www.rangrezstencils.in/shop/${product.slug}`,
     },
   };
 }
@@ -63,11 +77,52 @@ export default async function ProductPage({ params }) {
     .slice(0, 3);
   const reviews = await getProductReviews(product.id);
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    image: `https://www.rangrezstencils.in/shop/${product.slug}/opengraph-image`,
+    description: product.description || "Premium DIY bridal henna stencils.",
+    brand: {
+      "@type": "Brand",
+      name: "Rangrez Henna",
+    },
+    offers: {
+      "@type": "Offer",
+      url: `https://www.rangrezstencils.in/shop/${product.slug}`,
+      priceCurrency: "INR",
+      price: product.price,
+      availability:
+        product.stock_status === "in_stock"
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+    },
+    // Adding aggregate rating if reviews exists
+    ...(reviews &&
+      reviews.length > 0 && {
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: (
+            reviews.reduce((acc, r) => acc + (r.rating || 5), 0) /
+            reviews.length
+          ).toFixed(1),
+          reviewCount: reviews.length,
+        },
+      }),
+  };
+
   return (
-    <ProductClient
-      product={product}
-      related={related}
-      initialReviews={reviews}
-    />
+    <>
+      <Script
+        id="product-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <ProductClient
+        product={product}
+        related={related}
+        initialReviews={reviews}
+      />
+    </>
   );
 }

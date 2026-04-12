@@ -64,6 +64,19 @@ export default function Footer() {
         <span>© {year} Rangrez Henna. All rights reserved.</span>
         <span>Made with ❤️ in Kochi. Malayali soul, global finesse.</span>
       </div>
+      <div style={{ padding: "0 2rem 1.5rem", display: "flex", justifyContent: "center", fontSize: "0.75rem", opacity: 0.7, textAlign: "center" }}>
+        <span>
+          Designed and developed by{" "}
+          <a
+            href="https://www.linkedin.com/in/sriharithebest/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontWeight: 600, textDecoration: "underline", textUnderlineOffset: "2px", color: "var(--cl-bg)" }}
+          >
+            Imperium & Co.
+          </a>
+        </span>
+      </div>
     </footer>
   );
 }

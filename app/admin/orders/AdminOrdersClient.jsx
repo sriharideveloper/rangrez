@@ -82,169 +82,418 @@ export default function AdminOrdersClient({ initialOrders }) {
   };
 
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
-        <h1 style={{ fontSize: "2rem", fontFamily: "var(--font-heading)", textTransform: "uppercase" }}>Orders</h1>
-        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-          {["all", "processing", "shipped", "delivered"].map(s => (
-            <button
-              key={s}
-              onClick={() => setFilter(s)}
-              style={{
-                padding: "0.5rem 1rem", fontSize: "0.8rem", fontWeight: 600, textTransform: "uppercase",
-                border: "var(--border-thick)",
-                background: filter === s ? "var(--cl-text)" : "var(--cl-bg)",   
-                color: filter === s ? "var(--cl-bg)" : "var(--cl-text)",        
-                transition: "var(--transition-snap)",
-              }}
-            >{s}</button>
-          ))}
-          <button 
-            onClick={exportToCSV}
-            style={{
-              padding: "0.5rem 1rem", fontSize: "0.8rem", fontWeight: 600, textTransform: "uppercase",
-              border: "var(--border-thick)", background: "var(--cl-accent)", color: "var(--cl-bg)", cursor: "pointer"
-            }}
-          >
+    <div className="admin-orders-page">
+      <div className="admin-orders-header">
+        <h1>Orders</h1>
+        <div className="admin-orders-actions">
+          <div className="admin-filters">
+            {["all", "processing", "shipped", "delivered"].map(s => (
+              <button
+                key={s}
+                onClick={() => setFilter(s)}
+                className={`filter-btn ${filter === s ? 'active' : ''}`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+          <button onClick={exportToCSV} className="export-btn">
             Export CSV
           </button>
         </div>
       </div>
 
       <div className="admin-data-container">       
-        <div className="admin-data-grid-5 admin-header-row" style={{ padding: "0.75rem 1.5rem", background: "var(--cl-text)", color: "var(--cl-bg)", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", borderRadius: "var(--radius-md)" }}>
-          <span>Order Info</span><span>Customer / Address</span><span>Tracking (DTDC)</span><span>Total</span><span>Status</span>
+        <div className="admin-header-row">
+          <span>Order Info</span>
+          <span>Customer & Address</span>
+          <span>Tracking (DTDC)</span>
+          <span>Total</span>
+          <span>Status</span>
         </div>
-        {filtered.map((order, i) => (
-          <motion.div
-            key={order.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: i * 0.05 }}
-            className="admin-data-grid-5"
-            style={{
-              padding: "1rem 1.5rem", alignItems: "start", fontSize: "0.9rem", 
-              borderTop: i > 0 ? "1px solid var(--cl-muted)" : "none",
-            }}
-          >
-            {/* Column 1: Order Info */}
-            <div style={{display: 'flex', flexDirection: 'column'}}>
-              <span style={{ fontSize: "0.8rem", opacity: 0.8 }}>ID: {order.id?.slice(0, 8)}</span>
-              <span style={{ fontSize: "0.8rem" }}>{new Date(order.created_at).toLocaleDateString()}</span>
-              {order.payment_status === "paid" ? 
-                 <span style={{ fontSize: "0.7rem", color: "var(--cl-success)", fontWeight: "bold" }}>PAID</span> : 
-                 <span style={{ fontSize: "0.7rem", opacity: 0.6, fontWeight: "bold" }}>{order.payment_status?.toUpperCase()}</span>
-              }
-            </div>
-
-            {/* Column 2: Customer / Address */}
-            <div style={{display: 'flex', flexDirection: 'column', gap: '0.2rem'}}>
-              <span style={{ fontWeight: 600 }}>{order.customer_name || order.users?.email || order.shipping_address?.email || "N/A"}</span>
-              <span style={{ fontSize: "0.8rem" }}>{order.customer_phone || order.shipping_address?.phone}</span>
-              <span style={{ opacity: 0.6, fontSize: "0.8rem", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden", paddingRight: "1rem" }}>       
-                {order.shipping_address?.city}, {order.shipping_address?.state}   
-              </span>
-            </div>
-
-            {/* Column 3: Tracking Setup */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
-                <Truck size={14} /> DTDC Tracking
+        
+        <div className="admin-orders-list">
+          {filtered.map((order, i) => (
+            <motion.div
+              key={order.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05 }}
+              className="admin-order-card"
+            >
+              {/* Column 1: Order Info */}
+              <div className="order-col">
+                <div className="mobile-label">Order Info</div>
+                <div className="order-id">ID: {order.id?.slice(0, 8)}</div>
+                <div className="order-date">{new Date(order.created_at).toLocaleDateString()}</div>
+                {order.payment_status === "paid" ? 
+                  <div className="order-payment paid">PAID</div> : 
+                  <div className="order-payment unpaid">{order.payment_status?.toUpperCase()}</div>
+                }
               </div>
-              <div style={{ display: 'flex', gap: '0.3rem' }}>
-                <input 
-                  type="text" 
-                  placeholder="Enter AWB no."
-                  value={trackingNumberInput[order.id] !== undefined ? trackingNumberInput[order.id] : (order.tracking_number || "") }
-                  onChange={(e) => handleTrackingChange(order.id, e.target.value)}
-                  style={{
-                    padding: "0.2rem 0.4rem", fontSize: "0.8rem", border: "1px solid var(--cl-muted)", outline: "none", flex: 1
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => handleUpdate(order.id, order.order_status || "processing", order.tracking_number)}
-                  style={{
-                    padding: "0.2rem 0.6rem", fontSize: "0.7rem", fontWeight: "bold", background: "var(--cl-text)", color: "var(--cl-bg)", border: "none", cursor: "pointer"
-                  }}
-                >
-                  SAVE
-                </button>
+
+              {/* Column 2: Customer / Address */}
+              <div className="order-col">
+                <div className="mobile-label">Customer & Address</div>
+                <div className="customer-name">{order.customer_name || order.users?.email || order.shipping_address?.email || "N/A"}</div>
+                <div className="customer-phone">{order.customer_phone || order.shipping_address?.phone}</div>
+                <div className="customer-address">       
+                  {order.shipping_address?.city}, {order.shipping_address?.state}   
+                </div>
               </div>
-              {order.tracking_url && (
-                <a href={order.tracking_url} target="_blank" rel="noreferrer" style={{fontSize: "0.7rem", color: "var(--cl-accent)", textDecoration: "underline"}}>
-                  Verify Link <ExternalLink size={10} style={{display:'inline'}}/>
-                </a>
-              )}
-            </div>
 
-            {/* Column 4: Totals */}
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-               <span style={{ fontWeight: 700 }}>₹{order.total_amount}</span>
-               {Array.isArray(order.items) && <span style={{fontSize: "0.7rem", opacity: 0.6}}>{order.items.length} items</span>}
-            </div>
+              {/* Column 3: Tracking Setup */}
+              <div className="order-col">
+                <div className="mobile-label">Tracking Info</div>
+                <div className="tracking-header">
+                  <Truck size={14} /> DTDC Tracking
+                </div>
+                <div className="tracking-input-group">
+                  <input 
+                    type="text" 
+                    placeholder="Enter AWB no."
+                    value={trackingNumberInput[order.id] !== undefined ? trackingNumberInput[order.id] : (order.tracking_number || "") }
+                    onChange={(e) => handleTrackingChange(order.id, e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleUpdate(order.id, order.order_status || "processing", order.tracking_number)}
+                  >
+                    SAVE
+                  </button>
+                </div>
+                {order.tracking_url && (
+                  <a href={order.tracking_url} target="_blank" rel="noreferrer" className="tracking-link">
+                    Verify Link <ExternalLink size={10} style={{display:'inline'}}/>
+                  </a>
+                )}
+              </div>
 
-            {/* Column 5: Status */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <select
-                value={order.order_status || "processing"}
-                onChange={(e) => handleUpdate(order.id, e.target.value, order.tracking_number)}  
-                disabled={loadingId === order.id}
-                style={{
-                  padding: "0.3rem", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase",
-                  background: order.order_status === "delivered" ? "var(--cl-success)" : order.order_status === "shipped" || order.order_status === "out_for_delivery" ? "var(--cl-accent)" : "var(--cl-primary)",       
-                  color: "var(--cl-bg)", border: "none", cursor: "pointer", outline: "none"
-                }}
-              >
-                <option value="processing" style={{ color: "#000", background: "#fff" }}>Processing</option>
-                <option value="confirmed" style={{ color: "#000", background: "#fff" }}>Confirmed</option>
-                <option value="shipped" style={{ color: "#000", background: "#fff" }}>Shipped</option>
-                <option value="out_for_delivery" style={{ color: "#000", background: "#fff" }}>Out For Delivery</option>
-                <option value="delivered" style={{ color: "#000", background: "#fff" }}>Delivered</option>
-          <option value="cancelled" style={{ color: "#000", background: "#fff" }}>Cancelled</option>
-              </select>
-              {loadingId === order.id && <RefreshCw size={14} className="spin" />}
-            </div>
-          </motion.div>
-        ))}
-        {filtered.length === 0 && (
-           <div style={{ padding: "3rem", textAlign: "center", opacity: 0.5 }}>No orders found.</div>
-        )}
+              {/* Column 4: Totals */}
+              <div className="order-col">
+                <div className="mobile-label">Total Amount</div>
+                <div className="order-total">₹{order.total_amount}</div>
+                {Array.isArray(order.items) && <div className="order-items">{order.items.length} items</div>}
+              </div>
+
+              {/* Column 5: Status */}
+              <div className="order-col status-col">
+                <div className="mobile-label">Order Status</div>
+                <div className="status-action-group">
+                  <select
+                    value={order.order_status || "processing"}
+                    onChange={(e) => handleUpdate(order.id, e.target.value, order.tracking_number)}  
+                    disabled={loadingId === order.id}
+                    className={`status-select status-${(order.order_status || "processing").replace(/_/g, '-')}`}
+                  >
+                    <option value="processing">Processing</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="out_for_delivery">Out For Delivery</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                  {loadingId === order.id && <RefreshCw size={14} className="spin" />}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+          {filtered.length === 0 && (
+            <div className="empty-state">No orders found.</div>
+          )}
+        </div>
       </div>
+
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .spin { animation: spin 1s linear infinite; }
         
-        .admin-data-grid-5 {
-          display: grid;
-          grid-template-columns: 1.2fr 1.5fr 1.2fr 1fr 1fr;
-          min-width: 900px;
+        .admin-orders-page {
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+        }
+
+        .admin-orders-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 1.5rem;
+        }
+
+        .admin-orders-header h1 {
+          font-size: 2rem;
+          font-family: var(--font-heading);
+          text-transform: uppercase;
+          margin: 0;
+        }
+
+        .admin-orders-actions {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+          align-items: center;
+        }
+
+        .admin-filters {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .filter-btn, .export-btn {
+          padding: 0.5rem 1rem;
+          font-size: 0.8rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          border: var(--border-thick, 2px solid var(--cl-text));
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border-radius: 4px;
+        }
+
+        .filter-btn {
+          background: transparent;
+          color: var(--cl-text);
+        }
+
+        .filter-btn.active {
+          background: var(--cl-text);
+          color: var(--cl-bg);
+        }
+
+        .filter-btn:hover:not(.active) {
+          background: rgba(0,0,0,0.05);
+        }
+
+        .export-btn {
+          background: var(--cl-accent, #c9a050);
+          color: #fff;
+          border-color: var(--cl-accent, #c9a050);
+        }
+        .export-btn:hover {
+          opacity: 0.9;
+        }
+
+        /* Desktop Table Layout */
+        .admin-data-container {
+          background: var(--cl-surface, #fff);
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         .admin-header-row {
           display: grid;
+          grid-template-columns: 1.2fr 1.5fr 1.2fr 1fr 1fr;
+          padding: 1rem 1.5rem;
+          background: var(--cl-text);
+          color: var(--cl-bg);
+          font-size: 0.8rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          gap: 1rem;
         }
 
-        @media (max-width: 768px) {
+        .admin-orders-list {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .admin-order-card {
+          display: grid;
+          grid-template-columns: 1.2fr 1.5fr 1.2fr 1fr 1fr;
+          padding: 1.5rem;
+          align-items: start;
+          gap: 1rem;
+          border-bottom: 1px solid var(--cl-muted, #eee);
+          transition: background 0.2s ease;
+        }
+
+        .admin-order-card:hover {
+          background: rgba(0,0,0,0.01);
+        }
+        
+        .admin-order-card:last-child {
+          border-bottom: none;
+        }
+
+        .order-col {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .mobile-label {
+          display: none;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: var(--cl-text);
+          opacity: 0.6;
+          margin-bottom: 0.25rem;
+        }
+
+        .order-id { font-size: 0.85rem; opacity: 0.8; font-family: monospace; }
+        .order-date { font-size: 0.85rem; }
+        .order-payment { font-size: 0.7rem; font-weight: 700; margin-top: 0.2rem; }
+        .order-payment.paid { color: var(--cl-success, #2e7d32); }
+        .order-payment.unpaid { opacity: 0.6; }
+
+        .customer-name { font-weight: 600; font-size: 0.95rem; }
+        .customer-phone { font-size: 0.85rem; opacity: 0.8; }
+        .customer-address {
+          font-size: 0.85rem;
+          opacity: 0.6;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .tracking-header {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          font-size: 0.8rem;
+          font-weight: 600;
+          margin-bottom: 0.2rem;
+        }
+
+        .tracking-input-group {
+          display: flex;
+          gap: 0;
+          border: 1px solid var(--cl-muted, #ccc);
+          border-radius: 4px;
+          overflow: hidden;
+        }
+
+        .tracking-input-group input {
+          flex: 1;
+          padding: 0.4rem 0.5rem;
+          font-size: 0.8rem;
+          border: none;
+          outline: none;
+          min-width: 0;
+        }
+
+        .tracking-input-group button {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.75rem;
+          font-weight: 700;
+          background: var(--cl-text);
+          color: var(--cl-bg);
+          border: none;
+          cursor: pointer;
+        }
+
+        .tracking-link {
+          font-size: 0.75rem;
+          color: var(--cl-accent, #c9a050);
+          text-decoration: underline;
+          margin-top: 0.2rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.2rem;
+        }
+
+        .order-total { font-weight: 700; font-size: 1rem; }
+        .order-items { font-size: 0.8rem; opacity: 0.6; }
+
+        .status-action-group {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .status-select {
+          padding: 0.4rem 0.5rem;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          outline: none;
+          color: #fff;
+          appearance: none;
+        }
+
+        .status-select option {
+          background: #fff;
+          color: #000;
+        }
+
+        .status-processing { background: var(--cl-primary, #666); }
+        .status-confirmed { background: #1976d2; }
+        .status-shipped, .status-out-for-delivery { background: var(--cl-accent, #f57c00); }
+        .status-delivered { background: var(--cl-success, #2e7d32); }
+        .status-cancelled { background: #d32f2f; }
+
+        .empty-state {
+          padding: 3rem;
+          text-align: center;
+          opacity: 0.5;
+          font-size: 1.1rem;
+        }
+
+        /* Mobile Layout */
+        @media (max-width: 900px) {
+          .admin-orders-actions {
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+          }
+          .admin-filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+          }
+          .filter-btn {
+            width: 100%;
+            text-align: center;
+          }
+          .export-btn {
+            width: 100%;
+          }
+          
           .admin-data-container {
-            overflow-x: hidden !important;
+            background: transparent;
+            box-shadow: none;
           }
+
           .admin-header-row {
-            display: none !important;
+            display: none;
           }
-          .admin-data-grid-5 {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 1rem !important;
-            min-width: 100% !important;
-            background: var(--cl-surface) !important;
-            border: var(--border-thick) !important;
-            border-radius: var(--radius-md) !important;
-            padding: 1.5rem !important;
-            margin-bottom: 1rem !important;
+
+          .admin-order-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--cl-surface, #fff);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--cl-muted, #eee);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            gap: 1.25rem;
           }
-          .admin-data-grid-5 > div {
-            width: 100% !important;
+
+          .order-col {
+            width: 100%;
+          }
+
+          .mobile-label {
+            display: block;
+          }
+
+          .customer-address {
+            white-space: normal;
+          }
+
+          .status-col {
+            padding-top: 1rem;
+            border-top: 1px dashed var(--cl-muted, #eee);
           }
         }
       `}} />

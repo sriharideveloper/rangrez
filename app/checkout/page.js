@@ -434,17 +434,9 @@ export default function Checkout() {
         ))}
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          maxWidth: "1100px",
-          margin: "0 auto",
-          padding: "0 2rem 4rem",
-        }}
-      >
+      <div className="checkout-layout">
         {/* Form / Payment */}
-        <div style={{ flex: "1 1 500px", paddingRight: "2rem" }}>
+        <div className="checkout-main">
           {step === 1 && (
             <motion.form
               initial={{ opacity: 0 }}
@@ -822,7 +814,7 @@ export default function Checkout() {
         </div>
 
         {/* Order Summary */}
-        <div style={{ flex: "0 0 340px", minWidth: "280px" }}>
+        <div className="checkout-sidebar">
           <div
             style={{
               border: "var(--border-thick)",
@@ -1063,6 +1055,48 @@ export default function Checkout() {
           </div>
         </div>
       </div>
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        .checkout-layout {
+          display: flex;
+          flex-wrap: wrap;
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 0 2rem 4rem;
+          gap: 2rem;
+        }
+
+        .checkout-main {
+          flex: 1 1 500px;
+        }
+
+        .checkout-sidebar {
+          flex: 0 0 340px;
+          min-width: 280px;
+        }
+
+        @media (max-width: 900px) {
+          .checkout-layout {
+            flex-direction: column-reverse;
+            padding: 0 1rem 3rem;
+            gap: 2.5rem;
+          }
+
+          .checkout-sidebar {
+            flex: 1 1 auto;
+            width: 100%;
+          }
+
+          .checkout-main {
+            flex: 1 1 auto;
+            width: 100%;
+          }
+        }
+      `,
+        }}
+      />
     </div>
   );
 }

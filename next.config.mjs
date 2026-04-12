@@ -1,3 +1,5 @@
+import withPWAInit from "@ducanh2912/next-pwa";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ["lucide-react", "framer-motion"],
@@ -27,4 +29,13 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+const withPWA = withPWAInit({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  // Configure the fallbacks to point to our newly created offline page
+  fallbacks: {
+    document: "/offline",
+  },
+});
+
+export default withPWA(nextConfig);
