@@ -65,6 +65,12 @@ export async function POST(req) {
         p_user_id: userData?.user?.id || null,
         p_order_data: {
           user_id: userData?.user?.id || null,
+          items,
+          subtotal,
+          discount_amount,
+          coupon_code,
+          total,
+          address,
           shipping_fee,
         },
       },

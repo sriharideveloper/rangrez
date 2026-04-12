@@ -61,7 +61,7 @@ export async function POST(req) {
         .eq("razorpay_order_id", razorpay_order_id)
         .single();
 
-      if (existingSession && existingSession.status === "paid") {
+      if (existingSession && (existingSession.status === "paid" || existingSession.status === "processing")) {
         return NextResponse.json({
           success: true,
           message: "Payment already verified",
