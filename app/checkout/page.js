@@ -259,31 +259,7 @@ export default function Checkout() {
             <Check size={40} color="var(--cl-bg)" />
           </div>
         </motion.div>
-        <h1
-          style={{
-            fontSize: "3rem",
-            fontFamily: "var(--font-heading)",
-            textTransform: "uppercase",
-            marginBottom: "1rem",
-          }}
-        >
-          Order Confirmed!
-        </h1>
-        <p
-          style={{
-            fontSize: "1.1rem",
-            opacity: 0.7,
-            maxWidth: "500px",
-            marginBottom: "2rem",
-          }}
-        >
-          Thank you for your order. You will receive a confirmation email
-          shortly.
-        </p>
-        <Link href="/shop" className="brutalist-button brutalist-button--sm">
-          Continue Shopping
-        </Link>
-      </div>
+        <h1 style={{ fontSize: "3rem", fontFamily: "var(--font-heading)", textTransform: "uppercase", marginBottom: "1rem" }}>Order Confirmed!</h1><p style={{ fontSize: "1.1rem", opacity: 0.8, maxWidth: "600px", marginBottom: "1.5rem", lineHeight: 1.6 }}>Thank you for shopping with Rangrez, <b>{address.name.split(" ")[0]}</b>! Your order has been successfully placed.</p><div style={{ background: "var(--cl-section)", padding: "1.5rem", borderRadius: "8px", border: "1px solid var(--cl-border)", marginBottom: "2rem", width: "100%", maxWidth: "500px", fontFamily: "monospace", textAlign: "left" }}><div style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}><strong>Order ID:</strong> {typeof orderComplete === "string" ? orderComplete.split("-")[0].toUpperCase() : "CONFIRMED"}</div><div style={{ marginBottom: "0.5rem" }}><strong>Email:</strong> {address.email}</div><div style={{ padding: "1rem 0", borderTop: "1px dashed var(--cl-border)", borderBottom: "1px dashed var(--cl-border)", margin: "1rem 0" }}>You will receive a confirmation email shortly containing your full receipt.</div><div style={{ color: "var(--cl-muted)", fontSize: "0.9rem", lineHeight: 1.5 }}>Want to check on your delivery? You can track your order status directly from your <b><Link href="/account" style={{ textDecoration: "underline", color: "var(--cl-text)" }}>Account page</Link></b>.</div></div><Link href="/shop" className="brutalist-button brutalist-button--sm" style={{textDecoration:"none"}}>Continue Shopping</Link></div>
     );
   }
 
