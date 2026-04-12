@@ -244,7 +244,7 @@ export default function AdminProductsClient({ initialProducts }) {
                   <label className="input-label">Product Cover Image</label>
                   <div style={{ display: "flex", gap: "1rem", alignItems: "flex-end" }}>
                     {formData.image_url && (
-                      <div style={{ width: "100px", height: "100px", border: "var(--border-thick)", overflow: "hidden" }}>
+                      <div style={{ position: "relative", width: "100px", height: "100px", border: "var(--border-thick)", overflow: "hidden", flexShrink: 0 }}>
                         <Image src={formData.image_url} alt="Preview" fill style={{ objectFit: "cover" }} unoptimized />
                       </div>
                     )}

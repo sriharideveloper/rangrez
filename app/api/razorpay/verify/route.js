@@ -55,13 +55,14 @@ export async function POST(req) {
 
     if (claimError || !sessionData) {
       // If it fails, check if it was ALREADY processed by webhook.
-      const { data: existingSession } = await supabase
-        .from("payment_sessions")
-        .select("status, order_data")
-        .eq("razorpay_order_id", razorpay_order_id)
-        .single();
+      const { data: currentStatus, error: statusError } = await supabase.rpc(
+        "get_payment_session_status",
+        { p_rzp_order_id: razorpay_order_id }
+      );
+      
+      console.log("Fallback check status:", currentStatus);
 
-      if (existingSession && (existingSession.status === "paid" || existingSession.status === "processing")) {
+      if (currentStatus === "paid" || currentStatus === "processing") {
         return NextResponse.json({
           success: true,
           message: "Payment already verified",

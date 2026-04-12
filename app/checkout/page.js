@@ -191,7 +191,7 @@ export default function Checkout() {
             clearCart();
           } else {
             alert(
-              `Order creation delayed. Your payment (ID: ${response.razorpay_payment_id}) was successful, but there was an issue finalizing your order. Please screenshot this and contact support.`,
+              `[DEBUG DBG] (${result.error || "UnknownError"}) Order creation delayed. Payment ID: ${response.razorpay_payment_id} was successful, but there was an issue finalizing. Please screenshot.`,
             );
             setLoading(false);
           }
