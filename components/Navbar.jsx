@@ -61,8 +61,10 @@ export default function Navbar() {
     <>
       <nav className="navbar-container border-b">
         <div className="navbar-brand">
-          <div className="brand-logo-circle" />
-          <Link href="/"><img src="/logo.jpg" alt="Rangrez Logo" style={{ height: "40px" }} /></Link>
+            <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
+              <img src="/logo.jpg" alt="Rangrez Logo" style={{ height: "40px", borderRadius: "50%" }} />
+              <span className="brand-text">RANGREZ</span>
+            </Link>
         </div>
 
         <div className="navbar-links">

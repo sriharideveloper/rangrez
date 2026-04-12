@@ -74,8 +74,9 @@ export async function POST(req) {
     }
 
     // 2. Destructure Data
-    const { user_id, order_data } = sessionData;
+    // Since SQL returns `order_data` directly INTO `sessionData`, sessionData IS the order details jsonb
     const {
+      user_id,
       items,
       subtotal,
       discount_amount,
@@ -83,7 +84,7 @@ export async function POST(req) {
       total,
       shipping_fee,
       address,
-    } = order_data;
+    } = sessionData;
 
     // 3. Place Order (Deducts stock securely only after pay)
     const { data: orderId, error: dbError } = await supabase.rpc(

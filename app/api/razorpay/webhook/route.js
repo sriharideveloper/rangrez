@@ -72,9 +72,17 @@ export async function POST(req) {
       }
 
       // 2. Destructure Data
-      const { user_id, order_data } = sessionData;
-      const { items, subtotal, discount_amount, coupon_code, total, address } =
-        order_data;
+      // SQL returns order_data JSONB directly
+      const {
+        user_id,
+        items,
+        subtotal,
+        discount_amount,
+        coupon_code,
+        total,
+        address,
+        shipping_fee,
+      } = sessionData;
 
       // 3. Place Order (Deducts stock securely)
       const { data: orderId, error: dbError } = await supabase.rpc(
@@ -88,6 +96,7 @@ export async function POST(req) {
           p_subtotal: subtotal || total,
           p_discount: discount_amount || 0,
           p_coupon: coupon_code || null,
+          p_shipping_fee: shipping_fee || 0,
           p_total: total,
           p_items: items,
         },
