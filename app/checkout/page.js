@@ -138,12 +138,10 @@ export default function Checkout() {
         body: JSON.stringify({
           amount: total,
           items: items.map((i) => ({
-            id: i.id,
-            title: i.title,
-            qty: i.quantity,
-            price: i.price,
             product_id: i.id,
+            title: i.title,
             quantity: i.quantity,
+            price: i.price,
           })),
           subtotal: getSubtotal(),
           discount_amount: getSubtotal() - eligibleSubtotal,
@@ -259,7 +257,90 @@ export default function Checkout() {
             <Check size={40} color="var(--cl-bg)" />
           </div>
         </motion.div>
-        <h1 style={{ fontSize: "3rem", fontFamily: "var(--font-heading)", textTransform: "uppercase", marginBottom: "1rem" }}>Order Confirmed!</h1><p style={{ fontSize: "1.1rem", opacity: 0.8, maxWidth: "600px", marginBottom: "1.5rem", lineHeight: 1.6 }}>Thank you for shopping with Rangrez, <b>{address.name.split(" ")[0]}</b>! Your order has been successfully placed.</p><div style={{ background: "var(--cl-section)", padding: "1.5rem", borderRadius: "8px", border: "1px solid var(--cl-border)", marginBottom: "2rem", width: "100%", maxWidth: "500px", fontFamily: "monospace", textAlign: "left" }}><div style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}><strong>Order ID:</strong> {typeof orderComplete === "string" ? orderComplete.split("-")[0].toUpperCase() : "CONFIRMED"}</div><div style={{ marginBottom: "0.5rem" }}><strong>Email:</strong> {address.email}</div><div style={{ padding: "1rem 0", borderTop: "1px dashed var(--cl-border)", borderBottom: "1px dashed var(--cl-border)", margin: "1rem 0" }}>You will receive a confirmation email shortly containing your full receipt.</div><div style={{ color: "var(--cl-muted)", fontSize: "0.9rem", lineHeight: 1.5 }}>Want to check on your delivery? You can track your order status directly from your <b><Link href="/account" style={{ textDecoration: "underline", color: "var(--cl-text)" }}>Account page</Link></b>.</div></div><Link href="/shop" className="brutalist-button brutalist-button--sm" style={{textDecoration:"none"}}>Continue Shopping</Link></div>
+        <h1
+          style={{
+            fontSize: "3rem",
+            fontFamily: "var(--font-heading)",
+            textTransform: "uppercase",
+            marginBottom: "1rem",
+          }}
+        >
+          Order Confirmed!
+        </h1>
+        <p
+          style={{
+            fontSize: "1.1rem",
+            opacity: 0.8,
+            maxWidth: "600px",
+            marginBottom: "1.5rem",
+            lineHeight: 1.6,
+          }}
+        >
+          Thank you for shopping with Rangrez,{" "}
+          <b>{address.name.split(" ")[0]}</b>! Your order has been successfully
+          placed.
+        </p>
+        <div
+          style={{
+            background: "var(--cl-section)",
+            padding: "1.5rem",
+            borderRadius: "8px",
+            border: "1px solid var(--cl-border)",
+            marginBottom: "2rem",
+            width: "100%",
+            maxWidth: "500px",
+            fontFamily: "monospace",
+            textAlign: "left",
+          }}
+        >
+          <div style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}>
+            <strong>Order ID:</strong>{" "}
+            {typeof orderComplete === "string"
+              ? orderComplete.split("-")[0].toUpperCase()
+              : "CONFIRMED"}
+          </div>
+          <div style={{ marginBottom: "0.5rem" }}>
+            <strong>Email:</strong> {address.email}
+          </div>
+          <div
+            style={{
+              padding: "1rem 0",
+              borderTop: "1px dashed var(--cl-border)",
+              borderBottom: "1px dashed var(--cl-border)",
+              margin: "1rem 0",
+            }}
+          >
+            You will receive a confirmation email shortly containing your full
+            receipt.
+          </div>
+          <div
+            style={{
+              color: "var(--cl-muted)",
+              fontSize: "0.9rem",
+              lineHeight: 1.5,
+            }}
+          >
+            Want to check on your delivery? You can track your order status
+            directly from your{" "}
+            <b>
+              <Link
+                href="/account"
+                style={{ textDecoration: "underline", color: "var(--cl-text)" }}
+              >
+                Account page
+              </Link>
+            </b>
+            .
+          </div>
+        </div>
+        <Link
+          href="/shop"
+          className="brutalist-button brutalist-button--sm"
+          style={{ textDecoration: "none" }}
+        >
+          Continue Shopping
+        </Link>
+      </div>
     );
   }
 
@@ -424,62 +505,234 @@ export default function Checkout() {
                   </label>
                   {f.id === "state" ? (
                     <select
-                        id={f.id}
-                        required
-                        className="input-field"
-                        value={address[f.id]}
-                        onChange={(e) =>
-                          setAddress({ ...address, [f.id]: e.target.value })
-                        }
-                        style={{
-                          WebkitAppearance: 'none',
-                          MozAppearance: 'none',
-                          appearance: 'none',
-                          backgroundColor: 'var(--bg)',
-                          color: 'var(--text)',
-                          backgroundImage:
-                            "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"%3e%3cpolyline points=\"6 9 12 15 18 9\"%3e%3c/polyline%3e%3c/svg%3e')",
-                          backgroundRepeat: 'no-repeat',
-                          backgroundPosition: 'right 1rem center',
-                          backgroundSize: '1em',
-                          cursor: 'pointer'
-                        }}
+                      id={f.id}
+                      required
+                      className="input-field"
+                      value={address[f.id]}
+                      onChange={(e) =>
+                        setAddress({ ...address, [f.id]: e.target.value })
+                      }
+                      style={{
+                        WebkitAppearance: "none",
+                        MozAppearance: "none",
+                        appearance: "none",
+                        backgroundColor: "var(--bg)",
+                        color: "var(--text)",
+                        backgroundImage:
+                          'url(\'data:image/svg+xml;charset=UTF-8,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3e%3cpolyline points="6 9 12 15 18 9"%3e%3c/polyline%3e%3c/svg%3e\')',
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "right 1rem center",
+                        backgroundSize: "1em",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <option value="" disabled>
+                        Select State (Shipping within India only)
+                      </option>
+                      <option
+                        value="Andhra Pradesh"
+                        style={{ color: "black", backgroundColor: "white" }}
                       >
-<option value="" disabled>Select State (Shipping within India only)</option>
-                      <option value="Andhra Pradesh" style={{color: 'black', backgroundColor: 'white'}}>Andhra Pradesh</option>
-                      <option value="Arunachal Pradesh" style={{color: 'black', backgroundColor: 'white'}}>Arunachal Pradesh</option>
-                      <option value="Assam" style={{color: 'black', backgroundColor: 'white'}}>Assam</option>
-                      <option value="Bihar" style={{color: 'black', backgroundColor: 'white'}}>Bihar</option>
-                      <option value="Chhattisgarh" style={{color: 'black', backgroundColor: 'white'}}>Chhattisgarh</option>
-                      <option value="Goa" style={{color: 'black', backgroundColor: 'white'}}>Goa</option>
-                      <option value="Gujarat" style={{color: 'black', backgroundColor: 'white'}}>Gujarat</option>
-                      <option value="Haryana" style={{color: 'black', backgroundColor: 'white'}}>Haryana</option>
-                      <option value="Himachal Pradesh" style={{color: 'black', backgroundColor: 'white'}}>Himachal Pradesh</option>
-                      <option value="Jharkhand" style={{color: 'black', backgroundColor: 'white'}}>Jharkhand</option>
-                      <option value="Karnataka" style={{color: 'black', backgroundColor: 'white'}}>Karnataka</option>
-                      <option value="Kerala" style={{color: 'black', backgroundColor: 'white'}}>Kerala</option>
-                      <option value="Madhya Pradesh" style={{color: 'black', backgroundColor: 'white'}}>Madhya Pradesh</option>
-                      <option value="Maharashtra" style={{color: 'black', backgroundColor: 'white'}}>Maharashtra</option>
-                      <option value="Manipur" style={{color: 'black', backgroundColor: 'white'}}>Manipur</option>
-                      <option value="Meghalaya" style={{color: 'black', backgroundColor: 'white'}}>Meghalaya</option>
-                      <option value="Mizoram" style={{color: 'black', backgroundColor: 'white'}}>Mizoram</option>
-                      <option value="Nagaland" style={{color: 'black', backgroundColor: 'white'}}>Nagaland</option>
-                      <option value="Odisha" style={{color: 'black', backgroundColor: 'white'}}>Odisha</option>
-                      <option value="Punjab" style={{color: 'black', backgroundColor: 'white'}}>Punjab</option>
-                      <option value="Rajasthan" style={{color: 'black', backgroundColor: 'white'}}>Rajasthan</option>
-                      <option value="Sikkim" style={{color: 'black', backgroundColor: 'white'}}>Sikkim</option>
-                      <option value="Tamil Nadu" style={{color: 'black', backgroundColor: 'white'}}>Tamil Nadu</option>
-                      <option value="Telangana" style={{color: 'black', backgroundColor: 'white'}}>Telangana</option>
-                      <option value="Tripura" style={{color: 'black', backgroundColor: 'white'}}>Tripura</option>
-                      <option value="Uttar Pradesh" style={{color: 'black', backgroundColor: 'white'}}>Uttar Pradesh</option>
-                      <option value="Uttarakhand" style={{color: 'black', backgroundColor: 'white'}}>Uttarakhand</option>
-                      <option value="West Bengal" style={{color: 'black', backgroundColor: 'white'}}>West Bengal</option>
-                      <option value="Andaman and Nicobar Islands" style={{color: 'black', backgroundColor: 'white'}}>Andaman and Nicobar Islands</option>
-                      <option value="Chandigarh" style={{color: 'black', backgroundColor: 'white'}}>Chandigarh</option>
-                      <option value="Dadra and Nagar Haveli and Daman and Diu" style={{color: 'black', backgroundColor: 'white'}}>Dadra and Nagar Haveli and Daman and Diu</option>
-                      <option value="Lakshadweep" style={{color: 'black', backgroundColor: 'white'}}>Lakshadweep</option>
-                      <option value="Delhi" style={{color: 'black', backgroundColor: 'white'}}>Delhi</option>
-                      <option value="Puducherry" style={{color: 'black', backgroundColor: 'white'}}>Puducherry</option>
+                        Andhra Pradesh
+                      </option>
+                      <option
+                        value="Arunachal Pradesh"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Arunachal Pradesh
+                      </option>
+                      <option
+                        value="Assam"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Assam
+                      </option>
+                      <option
+                        value="Bihar"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Bihar
+                      </option>
+                      <option
+                        value="Chhattisgarh"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Chhattisgarh
+                      </option>
+                      <option
+                        value="Goa"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Goa
+                      </option>
+                      <option
+                        value="Gujarat"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Gujarat
+                      </option>
+                      <option
+                        value="Haryana"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Haryana
+                      </option>
+                      <option
+                        value="Himachal Pradesh"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Himachal Pradesh
+                      </option>
+                      <option
+                        value="Jharkhand"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Jharkhand
+                      </option>
+                      <option
+                        value="Karnataka"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Karnataka
+                      </option>
+                      <option
+                        value="Kerala"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Kerala
+                      </option>
+                      <option
+                        value="Madhya Pradesh"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Madhya Pradesh
+                      </option>
+                      <option
+                        value="Maharashtra"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Maharashtra
+                      </option>
+                      <option
+                        value="Manipur"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Manipur
+                      </option>
+                      <option
+                        value="Meghalaya"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Meghalaya
+                      </option>
+                      <option
+                        value="Mizoram"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Mizoram
+                      </option>
+                      <option
+                        value="Nagaland"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Nagaland
+                      </option>
+                      <option
+                        value="Odisha"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Odisha
+                      </option>
+                      <option
+                        value="Punjab"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Punjab
+                      </option>
+                      <option
+                        value="Rajasthan"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Rajasthan
+                      </option>
+                      <option
+                        value="Sikkim"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Sikkim
+                      </option>
+                      <option
+                        value="Tamil Nadu"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Tamil Nadu
+                      </option>
+                      <option
+                        value="Telangana"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Telangana
+                      </option>
+                      <option
+                        value="Tripura"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Tripura
+                      </option>
+                      <option
+                        value="Uttar Pradesh"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Uttar Pradesh
+                      </option>
+                      <option
+                        value="Uttarakhand"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Uttarakhand
+                      </option>
+                      <option
+                        value="West Bengal"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        West Bengal
+                      </option>
+                      <option
+                        value="Andaman and Nicobar Islands"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Andaman and Nicobar Islands
+                      </option>
+                      <option
+                        value="Chandigarh"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Chandigarh
+                      </option>
+                      <option
+                        value="Dadra and Nagar Haveli and Daman and Diu"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Dadra and Nagar Haveli and Daman and Diu
+                      </option>
+                      <option
+                        value="Lakshadweep"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Lakshadweep
+                      </option>
+                      <option
+                        value="Delhi"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Delhi
+                      </option>
+                      <option
+                        value="Puducherry"
+                        style={{ color: "black", backgroundColor: "white" }}
+                      >
+                        Puducherry
+                      </option>
                     </select>
                   ) : (
                     <input

@@ -11,6 +11,11 @@ export async function POST(req) {
     const body = await req.json();
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
 
+    console.log("Verify payload:", {
+      razorpay_order_id,
+      razorpay_payment_id,
+    });
+
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return NextResponse.json(
         { success: false, error: "Missing payment details" },
@@ -53,13 +58,17 @@ export async function POST(req) {
       },
     );
 
-    if (claimError || !sessionData) {
+    if (claimError) {
+      console.error("Session claim error:", claimError);
+    }
+
+    if (!sessionData) {
       // If it fails, check if it was ALREADY processed by webhook.
       const { data: currentStatus, error: statusError } = await supabase.rpc(
         "get_payment_session_status",
-        { p_rzp_order_id: razorpay_order_id }
+        { p_rzp_order_id: razorpay_order_id },
       );
-      
+
       console.log("Fallback check status:", currentStatus);
 
       if (currentStatus === "paid" || currentStatus === "processing") {
@@ -68,11 +77,15 @@ export async function POST(req) {
           message: "Payment already verified",
         });
       }
-      return NextResponse.json(
-        { success: false, error: "Session invalid or already processed." },
-        { status: 400 },
-      );
+
+      console.log("Session missing, likely webhook will process.");
+      return NextResponse.json({
+        success: true,
+        message: "Verification deferred to webhook",
+      });
     }
+
+    console.log("Session claim result:", sessionData);
 
     // 2. Destructure Data
     // Since SQL returns `order_data` directly INTO `sessionData`, sessionData IS the order details jsonb
