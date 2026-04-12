@@ -22,16 +22,16 @@ BEGIN
     FOR item IN SELECT * FROM jsonb_array_elements(p_items) LOOP
         -- Remove the stock >= quantity restriction so paid orders are never dropped
         UPDATE public.products 
-        SET stock = stock - (item->>'quantity')::INTEGER 
+        SET stock = stock - COALESCE((item->>'quantity')::INTEGER, 1) 
         WHERE id = (item->>'product_id')::UUID;
         
         INSERT INTO public.order_items (order_id, product_id, title, quantity, price_at_time)
         VALUES (
             new_order_id,
             (item->>'product_id')::UUID,
-            item->>'title',
-            (item->>'quantity')::INTEGER,
-            (item->>'price')::DECIMAL
+            COALESCE(item->>'title', 'Rangrez Product'),
+            COALESCE((item->>'quantity')::INTEGER, 1),
+            COALESCE((item->>'price')::DECIMAL, 0)
         );
     END LOOP;
 

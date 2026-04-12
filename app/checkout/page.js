@@ -139,7 +139,7 @@ export default function Checkout() {
           amount: total,
           items: items.map((i) => ({
             product_id: i.id,
-            title: i.title,
+            title: i.title || "Rangrez Product",
             quantity: i.quantity,
             price: i.price,
           })),
