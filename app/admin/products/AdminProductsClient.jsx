@@ -125,10 +125,13 @@ export default function AdminProductsClient({ initialProducts }) {
           slug: item.slug || item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
           price: parseFloat(item.price),
           compare_at_price: item.compare_at_price ? parseFloat(item.compare_at_price) : null,
+          size: item.size || "Bridal",
+          stock: item.stock !== undefined ? parseInt(item.stock, 10) : 0,
           is_featured: !!item.is_featured,
           description: item.description || "",
           image_url: item.image_url || item.image || "",
-          images: Array.isArray(item.gallery_urls) ? item.gallery_urls : (Array.isArray(item.images) ? item.images : [])
+          images: Array.isArray(item.gallery_urls) ? item.gallery_urls : (Array.isArray(item.images) ? item.images : []),
+          status: item.status || undefined
         });
       }
       window.location.reload(); 
