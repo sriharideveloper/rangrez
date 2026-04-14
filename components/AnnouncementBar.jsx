@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export default function AnnouncementBar() {
   const items = [
     "✦ Free Shipping on Orders Over ₹999",
-    "✦ Reusable Up To 8 Times",
+    "✦ No mess, only quick henna bliss",
     "✦ Professional Grade Quality",
     "✦ Made in India",
     "✦ 100% Skin Safe",

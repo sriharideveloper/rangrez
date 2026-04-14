@@ -125,7 +125,7 @@ export default function AdminProductsClient({ initialProducts }) {
           continue;
         }
         try {
-          const result = await upsertProduct({
+          const productPayload = {
             title: item.title,
             slug: item.slug || item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
             price: parseFloat(item.price),
@@ -135,9 +135,9 @@ export default function AdminProductsClient({ initialProducts }) {
             is_featured: !!item.is_featured,
             description: item.description || "",
             image_url: item.image_url || item.image || "",
-            images: Array.isArray(item.gallery_urls) ? item.gallery_urls : (Array.isArray(item.images) ? item.images : []),
-            status: item.status || undefined
-          });
+            images: Array.isArray(item.gallery_urls) ? item.gallery_urls : (Array.isArray(item.images) ? item.images : [])
+          };
+          const result = await upsertProduct(productPayload);
           if (result && result.error) {
             errorMessages.push(`Failed: ${item.title} - ${result.error}`);
           }
