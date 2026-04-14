@@ -117,24 +117,38 @@ export default function AdminProductsClient({ initialProducts }) {
       const parsed = JSON.parse(bulkJson);
       if (!Array.isArray(parsed)) throw new Error("JSON must be an array of product objects.");
       setLoading(true);
-      
+
+      let errorMessages = [];
       for (const item of parsed) {
-        if (!item.title || !item.price) continue;
-        await upsertProduct({
-          title: item.title,
-          slug: item.slug || item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
-          price: parseFloat(item.price),
-          compare_at_price: item.compare_at_price ? parseFloat(item.compare_at_price) : null,
-          size: item.size || "Bridal",
-          stock: item.stock !== undefined ? parseInt(item.stock, 10) : 0,
-          is_featured: !!item.is_featured,
-          description: item.description || "",
-          image_url: item.image_url || item.image || "",
-          images: Array.isArray(item.gallery_urls) ? item.gallery_urls : (Array.isArray(item.images) ? item.images : []),
-          status: item.status || undefined
-        });
+        if (!item.title || !item.price) {
+          errorMessages.push(`Skipped: Missing title or price for item: ${JSON.stringify(item)}`);
+          continue;
+        }
+        try {
+          const result = await upsertProduct({
+            title: item.title,
+            slug: item.slug || item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
+            price: parseFloat(item.price),
+            compare_at_price: item.compare_at_price ? parseFloat(item.compare_at_price) : null,
+            size: item.size || "Bridal",
+            stock: item.stock !== undefined ? parseInt(item.stock, 10) : 0,
+            is_featured: !!item.is_featured,
+            description: item.description || "",
+            image_url: item.image_url || item.image || "",
+            images: Array.isArray(item.gallery_urls) ? item.gallery_urls : (Array.isArray(item.images) ? item.images : []),
+            status: item.status || undefined
+          });
+          if (result && result.error) {
+            errorMessages.push(`Failed: ${item.title} - ${result.error}`);
+          }
+        } catch (itemErr) {
+          errorMessages.push(`Exception: ${item.title} - ${itemErr.message}`);
+        }
       }
-      window.location.reload(); 
+      if (errorMessages.length > 0) {
+        alert("Bulk import completed with issues:\n" + errorMessages.join("\n"));
+      }
+      window.location.reload();
     } catch (err) {
       alert("Import Failed: " + err.message);
       setLoading(false);
