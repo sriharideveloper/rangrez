@@ -104,12 +104,79 @@ export default function About() {
         }}
       >
         <Image
-          src="https://images.unsplash.com/photo-1558000143-b6d85c8e2bd3?q=80&w=1000&auto=format&fit=crop"
-          alt="Henna Mehndi Art"
+          src="/images/products/arab-finesse.jpg"
+          alt="Arab Finesse Henna Stencil"
           fill
           style={{ objectFit: "cover", opacity: 0.5, mixBlendMode: "multiply" }}
           unoptimized
         />
+      </section>
+      {/* Imperium Co. Section */}
+      <section
+        style={{ padding: "4rem 2rem", maxWidth: 700, margin: "0 auto" }}
+      >
+        <div
+          style={{
+            background:
+              "linear-gradient(90deg, var(--cl-surface) 60%, var(--cl-bg) 100%)",
+            borderRadius: 18,
+            boxShadow: "0 2px 16px #0001",
+            padding: "2.5rem 1.5rem 2rem 1.5rem",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 16,
+          }}
+        >
+          <h2
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontSize: "1.7rem",
+              marginBottom: 8,
+            }}
+          >
+            Designed & Developed by Imperium Co.
+          </h2>
+          <p
+            style={{
+              fontSize: "1.1rem",
+              color: "var(--cl-text)",
+              opacity: 0.85,
+              marginBottom: 12,
+            }}
+          >
+            This website and its unique stencil technology are proudly crafted
+            by Imperium Co. — a creative technology studio specializing in
+            beautiful, robust, and scalable digital experiences for modern
+            brands.
+          </p>
+          <a
+            href="https://imperiumco.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-block",
+              background: "var(--cl-primary)",
+              color: "var(--cl-bg)",
+              padding: "0.7rem 2.2rem",
+              borderRadius: 12,
+              fontWeight: 700,
+              fontSize: "1.1rem",
+              marginTop: 8,
+              boxShadow: "0 2px 8px #0002",
+              transition: "background 0.2s",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.background = "var(--cl-accent)")
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.background = "var(--cl-primary)")
+            }
+          >
+            Visit Imperium Co.
+          </a>
+        </div>
       </section>
 
       {/* Stats */}

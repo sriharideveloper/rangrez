@@ -66,30 +66,40 @@ export default function Footer() {
       </div>
       <div style={{ padding: "0 2rem 1.5rem", display: "flex", justifyContent: "center", width: "100%", overflow: "hidden" }}>
         <a
-          href="https://www.linkedin.com/in/sriharithebest/"
+          href="https://imperiumco.in"
           target="_blank"
           rel="noopener noreferrer"
           style={{
             position: "relative",
             display: "inline-flex",
             alignItems: "center",
-            padding: "0.6rem 1.5rem",
-            border: "1px dashed rgba(255, 255, 255, 0.4)",
-            fontSize: "0.7rem",
-            textTransform: "uppercase",
-            letterSpacing: "0.15em",
-            fontFamily: "monospace",
-            color: "rgba(255, 255, 255, 0.6)",
+            padding: "0.7rem 2rem",
+            border: "1.5px solid var(--cl-primary)",
+            fontSize: "1rem",
+            textTransform: "none",
+            letterSpacing: "0.04em",
+            fontFamily: "var(--font-heading)",
+            color: "var(--cl-text)",
             textDecoration: "none",
-            background: "rgba(255, 255, 255, 0.03)",
+            background: "linear-gradient(90deg, var(--cl-surface) 60%, var(--cl-bg) 100%)",
             whiteSpace: "nowrap",
-            boxShadow: "0 0 10px rgba(0,0,0,0.5)"
+            borderRadius: 10,
+            boxShadow: "0 2px 12px #0002",
+            fontWeight: 600,
+            transition: "color 0.2s, background 0.2s, border 0.2s",
+          }}
+          onMouseOver={e => {
+            e.currentTarget.style.background = 'var(--cl-primary)';
+            e.currentTarget.style.color = 'var(--cl-bg)';
+            e.currentTarget.style.border = '1.5px solid var(--cl-accent)';
+          }}
+          onMouseOut={e => {
+            e.currentTarget.style.background = 'linear-gradient(90deg, var(--cl-surface) 60%, var(--cl-bg) 100%)';
+            e.currentTarget.style.color = 'var(--cl-text)';
+            e.currentTarget.style.border = '1.5px solid var(--cl-primary)';
           }}
         >
-          {/* Ticket cutouts */}
-          <span style={{ position: "absolute", top: "50%", left: "-10px", width: "20px", height: "20px", background: "var(--cl-black, #0a0a0a)", borderRadius: "50%", transform: "translateY(-50%)", borderRight: "1px dashed rgba(255, 255, 255, 0.4)" }} />
-          <span style={{ position: "absolute", top: "50%", right: "-10px", width: "20px", height: "20px", background: "var(--cl-black, #0a0a0a)", borderRadius: "50%", transform: "translateY(-50%)", borderLeft: "1px dashed rgba(255, 255, 255, 0.4)" }} />
-          <span>Designed & Developed by <strong style={{ color: "var(--cl-bg, #fff)", fontWeight: 700, marginLeft: "0.25rem" }}>Imperium & Co.</strong></span>
+          Designed & Developed by <span style={{ color: 'var(--cl-primary)', fontWeight: 700, marginLeft: 6 }}>Imperium Co.</span>
         </a>
       </div>
     </footer>
