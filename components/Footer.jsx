@@ -66,7 +66,7 @@ export default function Footer() {
       </div>
       <div style={{ padding: "0 2rem 1.5rem", display: "flex", justifyContent: "center", width: "100%", overflow: "hidden" }}>
         <a
-          href="https://imperiumco.in"
+          href="https://www.linkedin.com/in/sriharithebest/"
           target="_blank"
           rel="noopener noreferrer"
           style={{

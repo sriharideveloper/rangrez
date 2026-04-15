@@ -251,6 +251,23 @@ export default function ProductClient({ product, related, initialReviews }) {
             {product.description || "Indulge in our artisan-grade stencils, designed for the modern henna enthusiast."}
           </p>
 
+          {/* Subtle Stock Indicator - below description, above actions */}
+          <div
+            style={{
+              fontSize: "0.95rem",
+              fontWeight: 400,
+              color: product.stock > 0 ? "var(--cl-success)" : "var(--cl-danger)",
+              opacity: 0.7,
+              margin: "0.5rem 0 0.2rem 0",
+              minHeight: 22,
+              letterSpacing: "0.01em",
+              transition: "all 0.2s",
+            }}
+            className="product-stock-indicator"
+          >
+            {product.stock > 0 ? `In Stock: ${product.stock}` : "Currently Out of Stock"}
+          </div>
+
           {/* QUANTITY & ACTIONS */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginTop: "1rem" }}>
             <div style={{ 
@@ -294,25 +311,7 @@ export default function ProductClient({ product, related, initialReviews }) {
                 {product.stock <= 0 ? "Out of Stock" : (added ? <><Check size={18} /> Added!</> : <><ShoppingBag size={18} /> Add to Cart - ₹{product.price * qty}</>)}
               </button>
             ))}
-            {/* Stock Display - now below Add to Cart, smaller and responsive */}
-            <div
-              style={{
-                marginTop: "0.5rem",
-                fontWeight: 500,
-                fontSize: "0.92rem",
-                color: product.stock > 0 ? "var(--cl-success)" : "var(--cl-danger)",
-                textAlign: "left",
-                letterSpacing: "0.01em",
-                opacity: 0.85,
-                lineHeight: 1.2,
-                transition: "all 0.2s",
-                maxWidth: "100%",
-                wordBreak: "break-word"
-              }}
-              className="product-stock-indicator"
-            >
-              {product.stock > 0 ? `In Stock: ${product.stock}` : "Currently Out of Stock"}
-            </div>
+            {/* ...stock indicator moved and restyled above... */}
           </div>
 
           {/* Trust Badges */}

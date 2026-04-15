@@ -1,6 +1,6 @@
-import { createClient } from "../../../lib/supabase/server";
+import { createClient } from "../../../../lib/supabase/server";
 
-export default async function handler(req, res) {
+export async function GET() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("stock_log")
