@@ -9,6 +9,7 @@ const nextConfig = {
       { protocol: "https", hostname: "*.instagram.com" },
       { protocol: "https", hostname: "*.supabase.co" },
       { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "iili.io" },
     ],
   },
   async headers() {

@@ -92,11 +92,17 @@ export default function Footer() {
             e.currentTarget.style.background = 'var(--cl-primary)';
             e.currentTarget.style.color = 'var(--cl-bg)';
             e.currentTarget.style.border = '1.5px solid var(--cl-accent)';
+            // Change child span color for visibility in light mode
+            const span = e.currentTarget.querySelector('span');
+            if (span) span.style.color = 'var(--cl-accent)';
           }}
           onMouseOut={e => {
             e.currentTarget.style.background = 'linear-gradient(90deg, var(--cl-surface) 60%, var(--cl-bg) 100%)';
             e.currentTarget.style.color = 'var(--cl-text)';
             e.currentTarget.style.border = '1.5px solid var(--cl-primary)';
+            // Reset child span color
+            const span = e.currentTarget.querySelector('span');
+            if (span) span.style.color = 'var(--cl-primary)';
           }}
         >
           Designed & Developed by <span style={{ color: 'var(--cl-primary)', fontWeight: 700, marginLeft: 6 }}>Imperium Co.</span>

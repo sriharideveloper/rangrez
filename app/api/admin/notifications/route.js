@@ -1,4 +1,4 @@
-import { getAdminNotifications } from "../../../lib/supabase/admin_notifications";
+import { getAdminNotifications } from "../../../../lib/supabase/admin_notifications";
 
 export async function GET() {
   const { notifications } = await getAdminNotifications();
