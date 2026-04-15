@@ -32,23 +32,58 @@ export const useCartStore = create(
         const state = get();
         const existing = state.items.find((i) => i.id === product.id);
 
+        // Always include stock in cart item
+        const productWithStock = {
+          ...product,
+          stock: product.stock !== undefined ? product.stock : 99,
+        };
+
         let newItems;
         if (existing) {
           newItems = state.items.map((i) =>
-            i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i,
+            i.id === product.id
+              ? {
+                  ...i,
+                  quantity: i.quantity + 1,
+                  stock: productWithStock.stock,
+                }
+              : i,
           );
         } else {
-          newItems = [...state.items, { ...product, quantity: 1 }];
+          newItems = [...state.items, { ...productWithStock, quantity: 1 }];
         }
 
         set({ items: newItems, isOpen: true });
 
         if (state.userId) {
           await addToCloudCart(state.userId, {
-            ...product,
+            ...productWithStock,
             quantity: existing ? existing.quantity + 1 : 1,
           });
         }
+      },
+      // On cart open, fetch latest stock for all items
+      refreshCartStock: async () => {
+        const state = get();
+        if (!state.items.length) return;
+        // Fetch all product IDs
+        const ids = state.items.map((i) => i.id);
+        // Fetch latest stock from server
+        try {
+          const res = await fetch("/api/products/stock", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ids }),
+          });
+          if (!res.ok) return;
+          const stocks = await res.json(); // { [id]: stock }
+          set((state) => ({
+            items: state.items.map((i) => ({
+              ...i,
+              stock: stocks[i.id] !== undefined ? stocks[i.id] : i.stock,
+            })),
+          }));
+        } catch (e) {}
       },
 
       removeItem: async (id) => {
@@ -67,11 +102,17 @@ export const useCartStore = create(
         const state = get();
         const item = state.items.find((i) => i.id === id);
 
+        if (!item) return;
+        // If stock is not present, allow update (fallback)
+        const maxQty = item.stock !== undefined ? item.stock : 99;
         if (qty <= 0) {
           state.removeItem(id);
           return;
         }
-
+        if (qty > maxQty) {
+          alert(`Only ${maxQty} left in stock.`);
+          qty = maxQty;
+        }
         set((state) => ({
           items: state.items.map((i) =>
             i.id === id ? { ...i, quantity: qty } : i,

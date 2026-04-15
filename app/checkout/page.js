@@ -125,6 +125,27 @@ export default function Checkout() {
   const handlePayment = async () => {
     setLoading(true);
     try {
+      // 1. Validate stock before payment
+      const stockRes = await fetch("/api/products/stock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: items.map((i) => i.id) }),
+      });
+      const stocks = await stockRes.json(); // { [id]: stock }
+      let stockError = "";
+      for (const item of items) {
+        if (stocks[item.id] === undefined) continue;
+        if (item.quantity > stocks[item.id]) {
+          stockError += `\n${item.title}: Only ${stocks[item.id]} left in stock.`;
+        }
+      }
+      if (stockError) {
+        alert("Some items in your cart exceed available stock:" + stockError);
+        setLoading(false);
+        return;
+      }
+
+      // 2. Continue with payment as before
       const loaded = await loadRazorpay();
       if (!loaded) {
         alert("Razorpay failed to load");

@@ -57,6 +57,12 @@ export default function ProductClient({ product, related, initialReviews }) {
   }, [product?.id]);
 
   const handleAdd = () => {
+    if (product.stock <= 0) return;
+    if (qty > product.stock) {
+      alert(`Only ${product.stock} left in stock.`);
+      setQty(product.stock);
+      return;
+    }
     addItem({ ...product, image: product.images?.[0] || product.image_url, quantity: qty });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -249,41 +255,49 @@ export default function ProductClient({ product, related, initialReviews }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginTop: "1rem" }}>
             <div style={{ 
               display: "inline-flex", alignItems: "center", border: "var(--border-thick)", 
-              borderRadius: "100px", padding: "0.25rem" 
+              borderRadius: "100px", padding: "0.25rem", opacity: product.stock <= 0 ? 0.5 : 1
             }}>
               <button 
-                onClick={() => setQty(Math.max(1, qty - 1))} 
+                onClick={() => setQty(q => Math.max(1, q - 1))}
+                disabled={product.stock <= 0 || qty <= 1}
                 style={{ width: "45px", height: "45px", display: "flex", alignItems: "center", justifyContent: "center" }}
               >
                 <Minus size={18} />
               </button>
               <span style={{ padding: "0 1.5rem", fontWeight: 700, fontSize: "1.2rem" }}>{qty}</span>
               <button 
-                onClick={() => setQty(qty + 1)} 
+                onClick={() => setQty(q => Math.min(product.stock, q + 1))}
+                disabled={product.stock <= 0 || qty >= product.stock}
                 style={{ width: "45px", height: "45px", display: "flex", alignItems: "center", justifyContent: "center" }}
               >
                 <Plus size={18} />
               </button>
             </div>
 
-            {mounted ? (
+            {(mounted ? (
               <motion.button
                 className="brutalist-button brutalist-button--sm"
                 onClick={handleAdd}
                 whileTap={{ scale: 0.95 }}
-                style={{ flex: 1, minHeight: "50px", fontSize: "0.65rem", padding: "0 0.75rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", whiteSpace: "normal", textAlign: "center" }}
+                disabled={product.stock <= 0}
+                style={{ flex: 1, minHeight: "50px", fontSize: "0.65rem", padding: "0 0.75rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", whiteSpace: "normal", textAlign: "center", opacity: product.stock <= 0 ? 0.5 : 1 }}
               >
-                {added ? <><Check size={18} /> Added!</> : <><ShoppingBag size={18} /> Add to Cart - ₹{product.price * qty}</>}
+                {product.stock <= 0 ? "Out of Stock" : (added ? <><Check size={18} /> Added!</> : <><ShoppingBag size={18} /> Add to Cart - ₹{product.price * qty}</>)}
               </motion.button>
             ) : (
               <button
                 className="brutalist-button brutalist-button--sm"
                 onClick={handleAdd}
-                style={{ flex: 1, minHeight: "50px", fontSize: "0.65rem", padding: "0 0.75rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", whiteSpace: "normal", textAlign: "center" }}
+                disabled={product.stock <= 0}
+                style={{ flex: 1, minHeight: "50px", fontSize: "0.65rem", padding: "0 0.75rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", whiteSpace: "normal", textAlign: "center", opacity: product.stock <= 0 ? 0.5 : 1 }}
               >
-                {added ? <><Check size={18} /> Added!</> : <><ShoppingBag size={18} /> Add to Cart - ₹{product.price * qty}</>}
+                {product.stock <= 0 ? "Out of Stock" : (added ? <><Check size={18} /> Added!</> : <><ShoppingBag size={18} /> Add to Cart - ₹{product.price * qty}</>)}
               </button>
-            )}
+            ))}
+                    {/* Stock Display */}
+                    <div style={{ marginTop: "1.5rem", fontWeight: 700, fontSize: "1.1rem", color: product.stock > 0 ? "var(--cl-success)" : "var(--cl-danger)" }}>
+                      {product.stock > 0 ? `In Stock: ${product.stock}` : "Currently Out of Stock"}
+                    </div>
           </div>
 
           {/* Trust Badges */}

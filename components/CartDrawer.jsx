@@ -4,11 +4,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useCartStore } from "../store/cartStore";
+import { useEffect } from "react";
+
 
 export default function CartDrawer() {
-  const { isOpen, toggleCart, items, updateQuantity, removeItem, getSubtotal } = useCartStore();
+  const { isOpen, toggleCart, items, updateQuantity, removeItem, getSubtotal, refreshCartStock } = useCartStore();
   const cartItems = Array.isArray(items) ? items : [];
   const subtotal = getSubtotal();
+
+  useEffect(() => {
+    if (isOpen) {
+      refreshCartStock && refreshCartStock();
+    }
+  }, [isOpen, refreshCartStock]);
 
   return (
     <AnimatePresence>
@@ -99,11 +107,25 @@ export default function CartDrawer() {
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.5rem" }}>
                           <div style={{ display: "inline-flex", alignItems: "center", border: "2px solid var(--cl-text)" }}>
-                            <button onClick={() => updateQuantity(item.id, item.quantity - 1)} style={{ padding: "0.2rem 0.4rem", borderRight: "2px solid var(--cl-text)" }}>
+                            <button
+                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              style={{ padding: "0.2rem 0.4rem", borderRight: "2px solid var(--cl-text)" }}
+                              disabled={item.quantity <= 1}
+                            >
                               <Minus size={14} strokeWidth={3} />
                             </button>
                             <span style={{ padding: "0 0.75rem", fontWeight: 700, fontSize: "0.85rem" }}>{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.id, item.quantity + 1)} style={{ padding: "0.2rem 0.4rem", borderLeft: "2px solid var(--cl-text)" }}>
+                            <button
+                              onClick={() => {
+                                if (item.stock !== undefined && item.quantity >= item.stock) {
+                                  alert(`Only ${item.stock} left in stock.`);
+                                  return;
+                                }
+                                updateQuantity(item.id, item.quantity + 1);
+                              }}
+                              style={{ padding: "0.2rem 0.4rem", borderLeft: "2px solid var(--cl-text)" }}
+                              disabled={item.stock !== undefined && item.quantity >= item.stock}
+                            >
                               <Plus size={14} strokeWidth={3} />
                             </button>
                           </div>
