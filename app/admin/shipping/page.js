@@ -79,73 +79,132 @@ export default function ShippingAdmin() {
   if (loading) return <div className="admin-body">Loading...</div>;
 
   return (
-    <div className="admin-body">
-      <div
-        className="admin-header brut-card"
+    <div
+      className="admin-body"
+      style={{ maxWidth: 540, margin: "0 auto", padding: "1rem" }}
+    >
+      <form
+        onSubmit={handleSave}
         style={{
+          background: "#fff",
+          borderRadius: 18,
+          boxShadow: "0 2px 16px #0001",
+          padding: "1.5rem 1.2rem 1.2rem 1.2rem",
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "1rem",
+          flexDirection: "column",
+          gap: "1.5rem",
+          position: "relative",
         }}
       >
-        <h1>Global Shipping Configurations</h1>
+        <h1
+          style={{
+            fontFamily: "var(--font-heading)",
+            fontSize: "2rem",
+            marginBottom: 0,
+          }}
+        >
+          Global Shipping Configurations
+        </h1>
+
+        {/* Sticky Save button for mobile */}
         <button
-          onClick={handleSave}
-          className="brutalist-button brutalist-button--sm"
+          type="submit"
           disabled={saving}
-          style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+          style={{
+            position: "sticky",
+            top: 0,
+            alignSelf: "flex-end",
+            zIndex: 2,
+            background: "var(--cl-text)",
+            color: "var(--cl-bg)",
+            border: "none",
+            borderRadius: 18,
+            fontWeight: 700,
+            fontSize: "1.1rem",
+            padding: "0.7rem 2.2rem 0.7rem 2.2rem",
+            marginBottom: "1.2rem",
+            boxShadow: "0 2px 8px #0002",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            cursor: saving ? "not-allowed" : "pointer",
+          }}
         >
-          <Save size={16} /> {saving ? "Saving..." : "Save"}
+          <Save size={18} style={{ marginRight: 8 }} />{" "}
+          {saving ? "Saving..." : "Save"}
         </button>
-      </div>
 
-      {message && (
+        {message && (
+          <div
+            style={{
+              marginBottom: "0.5rem",
+              color: "var(--cl-success)",
+              fontWeight: 600,
+              textAlign: "center",
+            }}
+          >
+            {message}
+          </div>
+        )}
+
+        {/* Kerala Fee */}
         <div
-          style={{ marginBottom: "1rem", color: "var(--brutalist-primary)" }}
+          style={{
+            background: "#f8f7f4",
+            borderRadius: 12,
+            padding: "1.1rem 1rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+          }}
         >
-          <b>{message}</b>
-        </div>
-      )}
-
-      <form
-        className="brut-card"
-        onSubmit={handleSave}
-        style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-      >
-        <div>
           <label
-            className="brutalist-label"
-            style={{ display: "block", marginBottom: "0.25rem" }}
+            style={{ fontWeight: 700, fontSize: "1.1rem", marginBottom: 2 }}
           >
             Kerala Base Fee (₹)
           </label>
           <input
             type="number"
-            className="brutalist-input"
             value={config.kerala}
             onChange={(e) =>
               setConfig({ ...config, kerala: parseInt(e.target.value) || 0 })
             }
             required
             min="0"
+            style={{
+              fontSize: "1.1rem",
+              padding: "0.7rem 1rem",
+              borderRadius: 8,
+              border: "1.5px solid #e0e0e0",
+              outline: "none",
+              marginBottom: 2,
+              background: "#fff",
+            }}
           />
-          <small style={{ color: "#666" }}>
+          <div style={{ color: "#7a6f5c", fontSize: 13, marginTop: 2 }}>
             Default lowest tier shipping rate within Kerala outline
             jurisdiction.
-          </small>
+          </div>
         </div>
 
-        <div>
+        {/* Rest of India Fee */}
+        <div
+          style={{
+            background: "#f8f7f4",
+            borderRadius: 12,
+            padding: "1.1rem 1rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+          }}
+        >
           <label
-            className="brutalist-label"
-            style={{ display: "block", marginBottom: "0.25rem" }}
+            style={{ fontWeight: 700, fontSize: "1.1rem", marginBottom: 2 }}
           >
             Rest of India Base Fee (₹)
           </label>
           <input
             type="number"
-            className="brutalist-input"
             value={config.rest_of_india}
             onChange={(e) =>
               setConfig({
@@ -155,22 +214,39 @@ export default function ShippingAdmin() {
             }
             required
             min="0"
+            style={{
+              fontSize: "1.1rem",
+              padding: "0.7rem 1rem",
+              borderRadius: 8,
+              border: "1.5px solid #e0e0e0",
+              outline: "none",
+              marginBottom: 2,
+              background: "#fff",
+            }}
           />
-          <small style={{ color: "#666" }}>
+          <div style={{ color: "#7a6f5c", fontSize: 13, marginTop: 2 }}>
             All generic non-KL domestic addresses.
-          </small>
+          </div>
         </div>
 
-        <div>
+        {/* Free Shipping Threshold */}
+        <div
+          style={{
+            background: "#f8f7f4",
+            borderRadius: 12,
+            padding: "1.1rem 1rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+          }}
+        >
           <label
-            className="brutalist-label"
-            style={{ display: "block", marginBottom: "0.25rem" }}
+            style={{ fontWeight: 700, fontSize: "1.1rem", marginBottom: 2 }}
           >
             Free Shipping Offer Threshold (₹)
           </label>
           <input
             type="number"
-            className="brutalist-input"
             value={config.free_shipping_threshold}
             onChange={(e) =>
               setConfig({
@@ -180,23 +256,40 @@ export default function ShippingAdmin() {
             }
             required
             min="0"
+            style={{
+              fontSize: "1.1rem",
+              padding: "0.7rem 1rem",
+              borderRadius: 8,
+              border: "1.5px solid #e0e0e0",
+              outline: "none",
+              marginBottom: 2,
+              background: "#fff",
+            }}
           />
-          <small style={{ color: "#666" }}>
+          <div style={{ color: "#7a6f5c", fontSize: 13, marginTop: 2 }}>
             Currently free shipping forces overrides when final cart passes this
             mark.
-          </small>
+          </div>
         </div>
 
-        <div>
+        {/* International Fee */}
+        <div
+          style={{
+            background: "#f8f7f4",
+            borderRadius: 12,
+            padding: "1.1rem 1rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+          }}
+        >
           <label
-            className="brutalist-label"
-            style={{ display: "block", marginBottom: "0.25rem" }}
+            style={{ fontWeight: 700, fontSize: "1.1rem", marginBottom: 2 }}
           >
             International Fee (₹)
           </label>
           <input
             type="number"
-            className="brutalist-input"
             value={config.international}
             onChange={(e) =>
               setConfig({
@@ -206,11 +299,20 @@ export default function ShippingAdmin() {
             }
             required
             min="0"
+            style={{
+              fontSize: "1.1rem",
+              padding: "0.7rem 1rem",
+              borderRadius: 8,
+              border: "1.5px solid #e0e0e0",
+              outline: "none",
+              marginBottom: 2,
+              background: "#fff",
+            }}
           />
-          <small style={{ color: "#666", display: "block" }}>
+          <div style={{ color: "#7a6f5c", fontSize: 13, marginTop: 2 }}>
             Base rate if International shipping enabled. Checkout currently{" "}
             <b>disabled</b> for out of India IPs regardless of setting.
-          </small>
+          </div>
         </div>
       </form>
     </div>

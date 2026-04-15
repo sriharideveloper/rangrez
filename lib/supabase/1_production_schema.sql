@@ -120,7 +120,7 @@ CREATE POLICY "Users view own order items" ON public.order_items FOR SELECT USIN
 );
 
 -- 5. REALTIME SYNCHRONIZATION
-DO \$\$
+DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'orders') THEN
         ALTER PUBLICATION supabase_realtime ADD TABLE public.orders;
@@ -131,7 +131,7 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'coupons') THEN
         ALTER PUBLICATION supabase_realtime ADD TABLE public.coupons;
     END IF;
-END \$\$;
+END $$;
 
 -- 6. STOCK DEDUCTION TRANSACTION FUNCTION (RPC)
 CREATE OR REPLACE FUNCTION place_order(
@@ -139,7 +139,7 @@ CREATE OR REPLACE FUNCTION place_order(
     p_shipping JSONB, p_subtotal DECIMAL, p_discount DECIMAL,
     p_coupon TEXT, p_total DECIMAL, p_items JSONB
 )
-RETURNS UUID LANGUAGE plpgsql SECURITY DEFINER AS \$\$
+RETURNS UUID LANGUAGE plpgsql SECURITY DEFINER AS $$
 DECLARE
     new_order_id UUID;
     item JSONB;
@@ -154,9 +154,38 @@ BEGIN
     ) RETURNING id INTO new_order_id;
 
     FOR item IN SELECT * FROM jsonb_array_elements(p_items) LOOP
-        UPDATE public.products SET stock = stock - (item->>'quantity')::INTEGER WHERE id = (item->>'product_id')::UUID AND stock >= (item->>'quantity')::INTEGER RETURNING stock INTO current_stock;
+        -- Get current stock
+        SELECT stock INTO current_stock FROM public.products WHERE id = (item->>'product_id')::UUID;
+        IF current_stock IS NULL THEN
+            RAISE EXCEPTION 'Product not found: %', (item->>'title');
+        END IF;
+        IF current_stock < (item->>'quantity')::INTEGER THEN
+            RAISE EXCEPTION 'Insufficient stock for %', (item->>'title');
+        END IF;
 
-        IF current_stock IS NULL THEN RAISE EXCEPTION 'Insufficient stock for %', (item->>'title'); END IF;
+        -- Deduct stock and log
+        UPDATE public.products SET stock = stock - (item->>'quantity')::INTEGER WHERE id = (item->>'product_id')::UUID;
+
+        -- Log stock change
+        INSERT INTO public.stock_log (product_id, order_id, change, old_stock, new_stock, reason)
+        VALUES (
+            (item->>'product_id')::UUID,
+            new_order_id,
+            -(item->>'quantity')::INTEGER,
+            current_stock,
+            current_stock - (item->>'quantity')::INTEGER,
+            'order placed'
+        );
+
+        -- Notify admin if stock is low or out
+        IF (current_stock - (item->>'quantity')::INTEGER) <= 5 THEN
+            INSERT INTO public.admin_notifications (type, message, product_id)
+            VALUES ('stock',
+                CASE WHEN (current_stock - (item->>'quantity')::INTEGER) = 0 THEN 'Product is OUT OF STOCK!'
+                     ELSE 'Product stock is LOW: ' || (current_stock - (item->>'quantity')::INTEGER) END,
+                (item->>'product_id')::UUID
+            );
+        END IF;
 
         INSERT INTO public.order_items (order_id, product_id, title, quantity, price_at_time) VALUES (
             new_order_id, (item->>'product_id')::UUID, item->>'title', (item->>'quantity')::INTEGER, (item->>'price')::DECIMAL
@@ -169,4 +198,4 @@ BEGIN
 
     RETURN new_order_id;
 END;
-\$\$;
+$$;

@@ -52,6 +52,8 @@ export default async function AdminDashboard() {
     },
   ];
 
+  const DashboardStockAudit = (await import("./DashboardStockAudit.jsx"))
+    .default;
   return (
     <div>
       <h1
@@ -64,6 +66,9 @@ export default async function AdminDashboard() {
       >
         Dashboard
       </h1>
+
+      {/* Stock & Notifications Section */}
+      <DashboardStockAudit />
 
       {/* Stats Grid powered by AnimatedCounter */}
       <div
@@ -146,7 +151,7 @@ export default async function AdminDashboard() {
                 order.shipping_address?.email ||
                 "N/A"}
             </span>
-            <span style={{ fontWeight: 600 }}>?{order.total_amount}</span>
+            <span style={{ fontWeight: 600 }}>₹{order.total_amount}</span>
             <span>
               <span
                 style={{
@@ -168,7 +173,7 @@ export default async function AdminDashboard() {
               </span>
             </span>
             <span style={{ opacity: 0.6, fontSize: "0.7rem" }}>
-              ){order.id.slice(-6)}
+              {order.id.slice(-6)}
             </span>
           </div>
         ))}

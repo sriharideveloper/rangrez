@@ -294,10 +294,25 @@ export default function ProductClient({ product, related, initialReviews }) {
                 {product.stock <= 0 ? "Out of Stock" : (added ? <><Check size={18} /> Added!</> : <><ShoppingBag size={18} /> Add to Cart - ₹{product.price * qty}</>)}
               </button>
             ))}
-                    {/* Stock Display */}
-                    <div style={{ marginTop: "1.5rem", fontWeight: 700, fontSize: "1.1rem", color: product.stock > 0 ? "var(--cl-success)" : "var(--cl-danger)" }}>
-                      {product.stock > 0 ? `In Stock: ${product.stock}` : "Currently Out of Stock"}
-                    </div>
+            {/* Stock Display - now below Add to Cart, smaller and responsive */}
+            <div
+              style={{
+                marginTop: "0.5rem",
+                fontWeight: 500,
+                fontSize: "0.92rem",
+                color: product.stock > 0 ? "var(--cl-success)" : "var(--cl-danger)",
+                textAlign: "left",
+                letterSpacing: "0.01em",
+                opacity: 0.85,
+                lineHeight: 1.2,
+                transition: "all 0.2s",
+                maxWidth: "100%",
+                wordBreak: "break-word"
+              }}
+              className="product-stock-indicator"
+            >
+              {product.stock > 0 ? `In Stock: ${product.stock}` : "Currently Out of Stock"}
+            </div>
           </div>
 
           {/* Trust Badges */}
