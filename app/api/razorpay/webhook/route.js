@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { createClient } from "../../../../lib/supabase/server";
+import { sendOrderConfirmationEmail } from "../../../../lib/email";
 
 export async function POST(req) {
   try {
@@ -108,6 +109,11 @@ export async function POST(req) {
           p_order_id: orderId,
           p_rzp_order_id: razorpay_order_id,
           p_payment_id: razorpay_payment_id,
+        });
+
+        // 5. Send Order Confirmation Email (non-blocking)
+        sendOrderConfirmationEmail(sessionData, orderId).catch((err) => {
+          console.error("Failed to send order confirmation email (webhook):", err);
         });
       } else {
         console.error("Webhook Order DB insertion failed:", dbError);

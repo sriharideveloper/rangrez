@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { rateLimit } from "../../middleware/rateLimit";
 import { createClient } from "../../../../lib/supabase/server";
+import { sendOrderConfirmationEmail } from "../../../../lib/email";
 
 export async function POST(req) {
   const rateLimitResponse = rateLimit(req, 10);
@@ -155,6 +156,11 @@ export async function POST(req) {
         { status: 500 },
       );
     }
+
+    // 5. Send Order Confirmation Email (non-blocking)
+    sendOrderConfirmationEmail(sessionData, orderId).catch((err) => {
+      console.error("Failed to send order confirmation email (verify):", err);
+    });
 
     return NextResponse.json({
       success: true,
