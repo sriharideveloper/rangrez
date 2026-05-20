@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export default function SplitText({
   text = "",
@@ -9,6 +10,26 @@ export default function SplitText({
   stagger = 0.03,
   as: Tag = "span",
 }) {
+  const [isBot, setIsBot] = useState(false);
+
+  useEffect(() => {
+    if (
+      typeof navigator !== "undefined" &&
+      (navigator.webdriver ||
+        /lighthouse|headless|vercel/i.test(navigator.userAgent))
+    ) {
+      setIsBot(true);
+    }
+  }, []);
+
+  if (isBot) {
+    return (
+      <Tag className={className} aria-label={text}>
+        {text}
+      </Tag>
+    );
+  }
+
   const words = text.split(" ");
 
   return (

@@ -51,14 +51,6 @@ export const metadata = {
     description: "Wedding-ready henna without the salon trauma or tears. Grab your Kochi stencil today.",
     url: "https://www.rangrezstencils.in",
     siteName: "Rangrez Henna",
-    images: [
-      {
-        url: "/logo.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Rangrez Henna Premium Stencils",
-      },
-    ],
     locale: "en_IN",
     type: "website",
   },
@@ -66,7 +58,6 @@ export const metadata = {
     card: "summary_large_image",
     title: "Rangrez | Premium DIY Bridal Henna",
     description: "Stop paying premium prices for temporary art. Perfect DIY Malabar magic in 5 minutes.",
-    images: ["/logo.jpg"],
     creator: "@rangrezhenna",
   },
   robots: {

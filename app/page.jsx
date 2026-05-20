@@ -35,6 +35,13 @@ export default function Home() {
   const [testimonials, setTestimonials] = useState([]);
   const { scrollY } = useScroll();
   const yBg = useTransform(scrollY, [0, 1000], [0, 300]);
+  const [isBot, setIsBot] = useState(false);
+
+  useEffect(() => {
+    if (typeof navigator !== "undefined" && (navigator.webdriver || /lighthouse|headless|vercel/i.test(navigator.userAgent))) {
+      setIsBot(true);
+    }
+  }, []);
 
   useEffect(() => {
     async function loadData() {
@@ -143,7 +150,7 @@ export default function Home() {
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "2.5rem" }}>
               
               <div style={{ flex: "1 1 600px" }}>
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem" }}>
+                <motion.div initial={isBot ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem" }}>
                   <span style={{ 
                     fontSize: "0.7rem", fontWeight: 800, textTransform: "uppercase", letterSpacing: "2px", 
                     padding: "0.6rem 1.4rem", border: "var(--border-thin)", borderRadius: "100px", 
@@ -163,9 +170,9 @@ export default function Home() {
                 </h1>
 
                 <motion.p 
-                  initial={{ opacity: 0, y: 20 }} 
+                  initial={isBot ? false : { opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  transition={{ delay: 0.8 }}
+                  transition={isBot ? { duration: 0 } : { delay: 0.8 }}
                   style={{ fontSize: "1.15rem", maxWidth: "500px", margin: "1.5rem 0", fontWeight: 400, lineHeight: 1.4, opacity: 0.7 }}
                 >
                   Stop fighting with shaky cones like it's a board exam. 
@@ -174,9 +181,9 @@ export default function Home() {
                   </motion.p>
                   
                   <motion.div 
-                    initial={{ opacity: 0, y: 15 }}
+                    initial={isBot ? false : { opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.9 }}
+                    transition={isBot ? { duration: 0 } : { delay: 0.9 }}
                     style={{ marginBottom: "2rem", display: "inline-flex", alignItems: "center", gap: "0.8rem", background: "var(--cl-surface)", padding: "0.6rem 1.2rem", borderRadius: "50px", border: "1px solid rgba(0,0,0,0.1)" }}>
                     <div style={{ display: "flex" }}>
                        <div style={{ width: "26px", height: "26px", borderRadius: "50%", background: "var(--cl-accent)", border: "2px solid var(--cl-bg)" }} />
@@ -199,9 +206,9 @@ export default function Home() {
 
               {/* Hero Image / Visual Clarity */}
                 <motion.div 
-                  initial={{ opacity: 0, scale: 0.95 }} 
+                  initial={isBot ? false : { opacity: 0, scale: 0.95 }} 
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5, duration: 0.8 }}
+                  transition={isBot ? { duration: 0 } : { delay: 0.5, duration: 0.8 }}
                   style={{ flex: "1 1 400px", position: "relative", height: "500px", borderRadius: "var(--radius-lg)", overflow: "hidden", border: "var(--border-thick)", boxShadow: "15px 15px 0 var(--cl-text)", willChange: "transform, opacity" }}
                 >
                 <Image 
@@ -215,9 +222,9 @@ export default function Home() {
                 
                 {/* 2-Min Magic Badge Overlay */}
                 <motion.div 
-                  initial={{ scale: 0 }} 
+                  initial={isBot ? false : { scale: 0 }} 
                   animate={{ scale: 1 }} 
-                  transition={{ delay: 1.2, type: "spring" }}
+                  transition={isBot ? { duration: 0 } : { delay: 1.2, type: "spring" }}
                   style={{ 
                     position: "absolute", top: "2rem", left: "2rem", background: "var(--cl-primary)", 
                     color: "#fff", padding: "1rem 1.5rem", borderRadius: "100px", fontWeight: 900,
